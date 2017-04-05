@@ -5,7 +5,7 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     EhealthPrintout.Repo.insert!(%EhealthPrintout.SomeModel{})
+#     Printout.Repo.insert!(%Printout.SomeModel{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will halt execution if something goes wrong.

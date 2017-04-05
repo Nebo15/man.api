@@ -1,4 +1,4 @@
-defmodule EhealthPrintout.DataCase do
+defmodule Printout.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -16,20 +16,20 @@ defmodule EhealthPrintout.DataCase do
 
   using do
     quote do
-      alias EhealthPrintout.Repo
+      alias Printout.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import EhealthPrintout.DataCase
+      import Printout.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(EhealthPrintout.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Printout.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(EhealthPrintout.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Printout.Repo, {:shared, self()})
     end
 
     :ok

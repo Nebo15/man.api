@@ -1,6 +1,6 @@
-defmodule EhealthPrintout do
+defmodule Printout do
   @moduledoc """
-  This is an entry point of ehealth_printout application.
+  This is an entry point of printout application.
   """
 
   use Application
@@ -13,23 +13,23 @@ defmodule EhealthPrintout do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
-      supervisor(EhealthPrintout.Repo, []),
+      supervisor(Printout.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(EhealthPrintout.Web.Endpoint, []),
-      # Starts a worker by calling: EhealthPrintout.Worker.start_link(arg1, arg2, arg3)
-      # worker(EhealthPrintout.Worker, [arg1, arg2, arg3]),
+      supervisor(Printout.Web.Endpoint, []),
+      # Starts a worker by calling: Printout.Worker.start_link(arg1, arg2, arg3)
+      # worker(Printout.Worker, [arg1, arg2, arg3]),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: EhealthPrintout.Supervisor]
+    opts = [strategy: :one_for_one, name: Printout.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    EhealthPrintout.Web.Endpoint.config_change(changed, removed)
+    Printout.Web.Endpoint.config_change(changed, removed)
     :ok
   end
 end

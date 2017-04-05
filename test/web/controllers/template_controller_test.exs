@@ -1,8 +1,8 @@
-defmodule EhealthPrintout.Web.TemplateControllerTest do
-  use EhealthPrintout.Web.ConnCase
+defmodule Printout.Web.TemplateControllerTest do
+  use Printout.Web.ConnCase
 
-  alias EhealthPrintout.TemplateAPI
-  alias EhealthPrintout.TemplateAPI.Template
+  alias Printout.TemplateAPI
+  alias Printout.TemplateAPI.Template
 
   @create_attrs %{body: "some body", json_schema: %{}}
   @update_attrs %{body: "some updated body", json_schema: %{}}

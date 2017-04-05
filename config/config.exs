@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :ehealth_printout, key: :value
+#     config :printout, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:ehealth_printout, :key)
+#     Application.get_env(:printout, :key)
 #
 # Or configure a 3rd-party app:
 #
@@ -24,13 +24,13 @@ use Mix.Config
 #
 #     :var_name, "${ENV_VAR_NAME}"
 
-config :ehealth_printout,
-  ecto_repos: [EhealthPrintout.Repo]
+config :printout,
+  ecto_repos: [Printout.Repo]
 
 # Configure your database
-config :ehealth_printout, EhealthPrintout.Repo,
+config :printout, Printout.Repo,
   adapter: Ecto.Adapters.Postgres,
-  database: {:system, "DB_NAME", "ehealth_printout_dev"},
+  database: {:system, "DB_NAME", "printout_dev"},
   username: {:system, "DB_USER", "postgres"},
   password: {:system, "DB_PASSWORD", "postgres"},
   hostname: {:system, "DB_HOST", "localhost"},
@@ -40,7 +40,7 @@ config :ehealth_printout, EhealthPrintout.Repo,
 
 # General application configuration
 # Configures the endpoint
-config :ehealth_printout, EhealthPrintout.Web.Endpoint,
+config :printout, Printout.Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "BN71lljHhjDJP7n8TnIg4f+slrxjkbbV4wQDh7RervDFLd3bqCD1CE8JA5UW1AY7",
   render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)]

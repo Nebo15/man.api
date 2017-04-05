@@ -1,11 +1,11 @@
-defmodule EhealthPrintout.Web.TemplateController do
+defmodule Printout.Web.TemplateController do
   @moduledoc false
-  use EhealthPrintout.Web, :controller
+  use Printout.Web, :controller
 
-  alias EhealthPrintout.TemplateAPI
-  alias EhealthPrintout.TemplateAPI.Template
+  alias Printout.TemplateAPI
+  alias Printout.TemplateAPI.Template
 
-  action_fallback EhealthPrintout.Web.FallbackController
+  action_fallback Printout.Web.FallbackController
 
   def index(conn, _params) do
     templates = TemplateAPI.list_templates()

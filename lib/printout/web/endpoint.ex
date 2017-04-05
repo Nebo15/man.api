@@ -1,11 +1,11 @@
-defmodule EhealthPrintout.Web.Endpoint do
+defmodule Printout.Web.Endpoint do
   @moduledoc """
-  Phoenix Endpoint for ehealth_printout application.
+  Phoenix Endpoint for printout application.
   """
-  use Phoenix.Endpoint, otp_app: :ehealth_printout
+  use Phoenix.Endpoint, otp_app: :printout
 
   # Allow acceptance tests to run in concurrent mode
-  if Application.get_env(:ehealth_printout, :sql_sandbox) do
+  if Application.get_env(:printout, :sql_sandbox) do
     plug Phoenix.Ecto.SQL.Sandbox
   end
 
@@ -21,7 +21,7 @@ defmodule EhealthPrintout.Web.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
 
-  plug EhealthPrintout.Web.Router
+  plug Printout.Web.Router
 
   @doc """
   Dynamically loads configuration from the system environment

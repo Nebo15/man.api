@@ -1,4 +1,4 @@
-defmodule EhealthPrintout.Web.ConnCase do
+defmodule Printout.Web.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -18,22 +18,22 @@ defmodule EhealthPrintout.Web.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      import EhealthPrintout.Web.Router.Helpers
+      import Printout.Web.Router.Helpers
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      alias EhealthPrintout.Repo
+      alias Printout.Repo
 
       # The default endpoint for testing
-      @endpoint EhealthPrintout.Web.Endpoint
+      @endpoint Printout.Web.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(EhealthPrintout.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Printout.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(EhealthPrintout.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Printout.Repo, {:shared, self()})
     end
 
     conn =

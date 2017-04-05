@@ -1,8 +1,8 @@
-defmodule EhealthPrintout.TemplateAPITest do
-  use EhealthPrintout.DataCase
+defmodule Printout.TemplateAPITest do
+  use Printout.DataCase
 
-  alias EhealthPrintout.TemplateAPI
-  alias EhealthPrintout.TemplateAPI.Template
+  alias Printout.TemplateAPI
+  alias Printout.TemplateAPI.Template
 
   @create_attrs %{body: "some body", json_schema: %{}}
   @update_attrs %{body: "some updated body", json_schema: %{}}

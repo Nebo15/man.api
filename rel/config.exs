@@ -14,9 +14,9 @@ environment :default do
   set cookie: cookie
 end
 
-release :ehealth_printout do
-  set version: current_version(:ehealth_printout)
+release :printout do
+  set version: current_version(:printout)
   set applications: [
-    ehealth_printout: :permanent
+    printout: :permanent
   ]
 end

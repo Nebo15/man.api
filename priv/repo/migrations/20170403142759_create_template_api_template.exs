@@ -1,4 +1,4 @@
-defmodule EhealthPrintout.Repo.Migrations.CreateEhealthPrintout.TemplateAPI.Template do
+defmodule Printout.Repo.Migrations.CreatePrintout.TemplateAPI.Template do
   use Ecto.Migration
 
   def change do

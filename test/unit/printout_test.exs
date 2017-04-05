@@ -1,6 +1,6 @@
-defmodule EhealthPrintoutTest do
+defmodule PrintoutTest do
   use ExUnit.Case
-  doctest EhealthPrintout
+  doctest Printout
 
   test "the truth" do
     assert 1 + 1 == 2

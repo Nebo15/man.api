@@ -4,13 +4,13 @@ use Mix.Config
 config :ex_unit, capture_log: true
 
 # Configure your database
-config :ehealth_printout, EhealthPrintout.Repo,
+config :printout, Printout.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
-  database: {:system, "DB_NAME", "ehealth_printout_test"}
+  database: {:system, "DB_NAME", "printout_test"}
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :ehealth_printout, EhealthPrintout.Web.Endpoint,
+config :printout, Printout.Web.Endpoint,
   http: [port: 4001],
   server: true
 
@@ -18,4 +18,4 @@ config :ehealth_printout, EhealthPrintout.Web.Endpoint,
 config :logger, level: :warn
 
 # Run acceptance test in concurrent mode
-config :ehealth_printout, sql_sandbox: true
+config :printout, sql_sandbox: true

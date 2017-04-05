@@ -1,4 +1,4 @@
-defmodule EhealthPrintout.TemplateAPI.Template do
+defmodule Printout.TemplateAPI.Template do
   @moduledoc false
   use Ecto.Schema
 

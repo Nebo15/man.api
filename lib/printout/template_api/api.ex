@@ -1,12 +1,12 @@
-defmodule EhealthPrintout.TemplateAPI do
+defmodule Printout.TemplateAPI do
   @moduledoc """
   The boundary for the TemplateAPI system.
   """
 
   import Ecto.{Query, Changeset}, warn: false
-  alias EhealthPrintout.Repo
+  alias Printout.Repo
 
-  alias EhealthPrintout.TemplateAPI.Template
+  alias Printout.TemplateAPI.Template
 
   @doc """
   Returns the list of templates.

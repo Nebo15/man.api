@@ -1,10 +1,10 @@
-defmodule EhealthPrintout.Mixfile do
+defmodule Printout.Mixfile do
   use Mix.Project
 
   @version "0.1.0"
 
   def project do
-    [app: :ehealth_printout,
+    [app: :printout,
      package: package(),
      version: @version,
      elixir: "~> 1.4",
@@ -27,7 +27,7 @@ defmodule EhealthPrintout.Mixfile do
                           :cowboy, :httpoison, :poison,
                           :phoenix, :multiverse,
                           :eview, :phoenix_ecto],
-     mod: {EhealthPrintout, []}]
+     mod: {Printout, []}]
   end
 
   # Specifies which paths to compile per environment.
@@ -72,7 +72,7 @@ defmodule EhealthPrintout.Mixfile do
     [contributors: ["Nebo #15"],
      maintainers: ["Nebo #15"],
      licenses: ["LISENSE.md"],
-     links: %{github: "https://github.com/Nebo15/ehealth.printout"},
+     links: %{github: "https://github.com/Nebo15/printout"},
      files: ~w(lib LICENSE.md mix.exs README.md)]
   end
 

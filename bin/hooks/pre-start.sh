@@ -1,6 +1,6 @@
 #!/bin/sh
-# `pwd` should be /opt/ehealth_printout
-APP_NAME="ehealth_printout"
+# `pwd` should be /opt/printout
+APP_NAME="printout"
 
 if [ "${DB_MIGRATE}" == "true" ]; then
   echo "[WARNING] Migrating database!"

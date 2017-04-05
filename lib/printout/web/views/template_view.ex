@@ -1,7 +1,7 @@
-defmodule EhealthPrintout.Web.TemplateView do
+defmodule Printout.Web.TemplateView do
   @moduledoc false
-  use EhealthPrintout.Web, :view
-  alias EhealthPrintout.Web.TemplateView
+  use Printout.Web, :view
+  alias Printout.Web.TemplateView
 
   def render("index.json", %{templates: templates}) do
     render_many(templates, TemplateView, "template.json")

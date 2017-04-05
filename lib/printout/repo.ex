@@ -1,10 +1,10 @@
-defmodule EhealthPrintout.Repo do
+defmodule Printout.Repo do
   @moduledoc """
   Repo for Ecto database.
 
   More info: https://hexdocs.pm/ecto/Ecto.Repo.html
   """
-  use Ecto.Repo, otp_app: :ehealth_printout
+  use Ecto.Repo, otp_app: :printout
 
   @doc """
   Dynamically loads the repository configuration from the environment variables.
