@@ -1,11 +1,18 @@
 FORMAT: 1A
 HOST: http://polls.apiblueprint.org/
 
-# Templates Rendering Service
+# Mán Templates Rendering Service
+
+Mán - templates rendeing as a service.
+
+> "Mán" translates from the Sindarin as "Spirit". Sindarin is one of the many languages spoken by the immortal Elves.
 
 ## Introduction
 
-This service allows to store and manage templates and provides API to render them as a service.
+Man consists of two main parts:
+
+- Back-end that stores and renders Templates and provider REST API for them.
+- UI that works on top of REST API and simplifies Templates management.
 
 ## Use Cases
 
@@ -54,15 +61,7 @@ This service allows to store and manage templates and provides API to render the
             + code: 201 (number)
         + data (Template)
 
-### Check Template existance [HEAD /templates/{id}]
-
-+ Parameters
-    + id: 58e2278a84092e61700041a7 (string, optional) - Template ID
-
-+ Request (application/json)
-+ Response 200 (application/json)
-
-### Create Template [GET /templates/{id}]
+### Get Template by ID [GET /templates/{id}]
 
 + Parameters
     + id: 58e2278a84092e61700041a7 (string, optional) - Template ID
