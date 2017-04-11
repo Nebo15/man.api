@@ -24,8 +24,7 @@ defmodule Printout.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [extra_applications: [:logger, :confex, :runtime_tools, :ecto, :postgrex,
-                          :cowboy, :httpoison, :poison,
-                          :phoenix, :multiverse,
+                          :cowboy, :httpoison, :poison, :phoenix, :multiverse,
                           :eview, :phoenix_ecto],
      mod: {Printout, []}]
   end
@@ -60,6 +59,7 @@ defmodule Printout.Mixfile do
      {:eview, "~> 0.10.1"},
      {:phoenix_ecto, "~> 3.2"},
      {:nex_json_schema, "~> 0.6.0"},
+     {:logger_json, "~> 0.4.0"},
      {:benchfella, ">= 0.3.4", only: [:dev, :test]},
      {:ex_doc, ">= 0.15.0", only: [:dev, :test]},
      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},

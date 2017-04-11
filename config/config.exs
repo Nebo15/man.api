@@ -35,6 +35,7 @@ config :printout, Printout.Repo,
   password: {:system, "DB_PASSWORD", "postgres"},
   hostname: {:system, "DB_HOST", "localhost"},
   port: {:system, :integer, "DB_PORT", 5432}
+
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
 
@@ -49,6 +50,12 @@ config :printout, Printout.Web.Endpoint,
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
+
+# Configure JSON Logger back-end
+config :logger_json, :backend,
+  on_init: {Printout, :load_from_system_env, []},
+  json_encoder: Poison,
+  metadata: :all
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

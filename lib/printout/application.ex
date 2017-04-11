@@ -2,7 +2,6 @@ defmodule Printout do
   @moduledoc """
   This is an entry point of printout application.
   """
-
   use Application
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
@@ -31,5 +30,11 @@ defmodule Printout do
   def config_change(changed, _new, removed) do
     Printout.Web.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  # Loads configuration in `:on_init` callbacks and replaces `{:system, ..}` tuples via Confex
+  @doc false
+  def load_from_system_env(config) do
+    {:ok, Confex.process_env(config)}
   end
 end

@@ -41,7 +41,13 @@ config :printout, Printout.Web.Endpoint,
   code_reloader: false
 
 # Do not print debug messages in production
-config :logger, level: :info
+# and handle all other reports by Elixir Logger with JSON back-end
+# SASL reports turned off because of their verbosity.
+config :logger,
+  backends: [LoggerJSON],
+  level: :info,
+  # handle_sasl_reports: true,
+  handle_otp_reports: true
 
 # Do not log passwords, card data and tokens
 config :phoenix, :filter_parameters, ["password", "secret", "token", "password_confirmation", "card", "pan", "cvv"]
