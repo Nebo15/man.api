@@ -111,13 +111,28 @@ Rendering request is validated by JSON Schema that is set in Template.
     + id: 58e2278a84092e61700041a7 (string, optional) - Template ID
 
 + Request (application/json)
+    + Headers
+
+            Accept-Language: en-US
+
     + Attributes (object)
-        + user_name: Alex (string) - Template data that should be used by rendering engine.
+        + locale: en_US (string, optional) - Locale of template that should be rendered. Required when `Accept-Language` header is not set.
+        + data (object, required)
+            + user_name: Alex (string) - Template data that should be used by rendering engine.
 
 + Response 200 (text/plain)
     + Body
 
             <h1>Alex</h1>
+
++ Response 404 (application/json)
+    + Attributes (`Response_Error`)
+        + meta
+            + code: 404
+        + error
+            + type (enum, required)
+                - `locale_not_found`
+                - `template_not_found`
 
 + Response 422 (application/json)
     + Attributes (`Response__Error_ValidationFailed`)
@@ -193,11 +208,18 @@ Rendering request is validated by JSON Schema that is set in Template.
 ## Templates
 ### Template 
 + id: 58e2278a84092e61700041a7 (string, optional)
++ title: `Sign-Up Email` (string, required)
++ description: `Email that is sent on signup process` (string, optional)
 + syntax: mustache (enum, optional) - Syntax processor for a template
     + mustache
     + markdown
-+ body: `<h1>{{user_name}}</h1>` (string, required) - Template that should be rendered with `syntax` processor.
++ sources (array[Template__Source], required)
 + labels (array[string], optional)
-    + `group/emails` (string, required)
-    + `action/signup` (string, required)
+    + `group/emails` (string)
+    + `action/signup` (string)
+    + `other_tag` (string)
 + validation_schema: `{}` (string, optional) - JSON Schema to validate requests to the template.
+
+### `Template__Source`
++ locale: en_US (string, required) - Locale for defined template
++ body: `<h1>{{user_name}}</h1>` (string, required) - Template that should be rendered with `syntax` processor.
