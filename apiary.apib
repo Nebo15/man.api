@@ -38,13 +38,14 @@ Man consists of two main parts:
 
 ## Templates [/templates]
 
-### Search for a Template [GET /templates{?limit,starting_after,ending_before,labels}]
+### Search for a Template [GET /templates{?limit,starting_after,ending_before,labels,title}]
 
 + Parameters
     + labels: `label-name1,label-name2` (string, optional) - Label names to filter Templates list.
     + limit: 20 (number, optional) - A limit on the number of objects to be returned, between 1 and 100. Default: 50.
     + starting_after: 56c31536a60ad644060041af (string, optional) - A cursor to fetch next page. Taken from collection response.
     + ending_before: 56c31536a60ad644060041aa (string, optional) - A cursor to fetch previous page. Taken from collection response.
+    + title: "Signup" (string, optional) - Substring search for a title.
 
 + Response 200 (application/json)
     + Attributes (Response_Collection)
@@ -88,12 +89,13 @@ Man consists of two main parts:
     + id: 58e2278a84092e61700041a7 (string, optional) - Template ID
 
 + Request (application/json)
-    + Attributes (Template)
+    + Attributes (object)
         + body: `<h1>{{user_name}}</h1>` (string, optional)
 
 + Response 200 (application/json)
     + Attributes (Response_OK)
         + data (Template)
+            + body: `<h1>{{user_name}}</h1>` (string, required)
 
 ### Delete Template [DELETE /templates/{id}]
 
@@ -104,6 +106,18 @@ Man consists of two main parts:
 + Response 200 (application/json)
 
 ### Render Template [POST /templates/{id}/actions/render]
+
+#### Localization
+
+You can pass `Accept-Language: <localization>` header or `localization` request attribute.
+
+In case both fields are specified, HTTP header will be preffered.
+
+#### Available variables
+
+Template can use any variables from request attributes as global scoped objects `{{var_name}}` and all available localization fields within `l8n` object `{{l8n.localized_key}}`.
+
+#### Validation
 
 Rendering request is validated by JSON Schema that is set in Template.
 
@@ -117,13 +131,12 @@ Rendering request is validated by JSON Schema that is set in Template.
 
     + Attributes (object)
         + locale: en_US (string, optional) - Locale of template that should be rendered. Required when `Accept-Language` header is not set.
-        + data (object, required)
-            + user_name: Alex (string) - Template data that should be used by rendering engine.
+        + user_name: Alex (string) - Template data that should be used by rendering engine.
 
 + Response 200 (text/plain)
     + Body
 
-            <h1>Alex</h1>
+            <h1>Hello Alex, in en_US</h1>
 
 + Response 404 (application/json)
     + Attributes (`Response_Error`)
@@ -213,7 +226,8 @@ Rendering request is validated by JSON Schema that is set in Template.
 + syntax: mustache (enum, optional) - Syntax processor for a template
     + mustache
     + markdown
-+ sources (array[Template__Source], required)
++ body: `<h1>{{l8n.hello}} {{user_name}}, in {{locale}}</h1>` (string, required) - Template that should be rendered with `syntax` processor.
++ locales (array[Template__Source], optional) - Locale variables that can be used for multilangual templates.
 + labels (array[string], optional)
     + `group/emails` (string)
     + `action/signup` (string)
@@ -222,4 +236,4 @@ Rendering request is validated by JSON Schema that is set in Template.
 
 ### `Template__Source`
 + locale: en_US (string, required) - Locale for defined template
-+ body: `<h1>{{user_name}}</h1>` (string, required) - Template that should be rendered with `syntax` processor.
++ hello: Hello (string, optional) - Localized variable.
