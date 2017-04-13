@@ -121,19 +121,38 @@ Template can use any variables from request attributes as global scoped objects 
 
 Rendering request is validated by JSON Schema that is set in Template.
 
+#### Output Format
+
+Output format is controlled by `Accept: <format>` header.
+
+**Supported formats:**
+
+| `Accept` (format)     | `Content-Type`                    | Description |
+| --------------------- | --------------------------------- | ----------- |
+| `text/html` (default) | `text/html; charset=utf-8`        | Raw HTML Page. |
+| `application/json`    | `application/json; charset=utf-8` | JSON object with `body` field: `{"body":"<h1>Hello Alex, in en_US</h1>"}` |
+| `application/pdf`     | `application/pdf`                 | PDF document rendered from HTML. |
+
+
 + Parameters
     + id: 58e2278a84092e61700041a7 (string, optional) - Template ID
 
 + Request (application/json)
     + Headers
 
+            Accept: text/html
             Accept-Language: en-US
 
     + Attributes (object)
         + locale: en_US (string, optional) - Locale of template that should be rendered. Required when `Accept-Language` header is not set.
+        + format: `text/html` (enum, optional) - Format of output.
+            - `text/html` (string) - Render HTML page.
+            - `application/json` (string) - Render HTML page and returin it in JSON object.
+            - `application/pdf` (string) - Render PDF from HTML template.
+            - Default: text/html
         + user_name: Alex (string) - Template data that should be used by rendering engine.
 
-+ Response 200 (text/plain)
++ Response 200 (text/html)
     + Body
 
             <h1>Hello Alex, in en_US</h1>
@@ -223,9 +242,9 @@ Rendering request is validated by JSON Schema that is set in Template.
 + id: 58e2278a84092e61700041a7 (string, optional)
 + title: `Sign-Up Email` (string, required)
 + description: `Email that is sent on signup process` (string, optional)
-+ syntax: mustache (enum, optional) - Syntax processor for a template
-    + mustache
-    + markdown
++ syntax: `mustache_to_html` (enum, optional) - Syntax processor for a template
+    + `mustache`
+    + `markdown`
 + body: `<h1>{{l8n.hello}} {{user_name}}, in {{locale}}</h1>` (string, required) - Template that should be rendered with `syntax` processor.
 + locales (array[Template__Source], optional) - Locale variables that can be used for multilangual templates.
 + labels (array[string], optional)
