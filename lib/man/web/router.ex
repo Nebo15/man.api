@@ -20,7 +20,14 @@ defmodule Man.Web.Router do
   scope "/", Man.Web do
     pipe_through [:api, :eview]
 
-    resources "/templates", TemplateController, except: [:new, :edit]
+    get "/templates", TemplateController, :index
+    post "/templates", TemplateController, :create
+
+    get "/templates/:id", TemplateController, :show
+    put "/templates/:id", TemplateController, :replace
+    patch "/templates/:id", TemplateController, :update
+    delete "/templates/:id", TemplateController, :delete
+
     get "/labels", LabelController, :index
   end
 

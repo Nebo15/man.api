@@ -6,6 +6,7 @@ defmodule Man.Templates.API do
   import Ecto.{Query, Changeset}, warn: false
   alias Man.Repo
   alias Man.Templates.Template
+  alias Ecto.Multi
 
   @fields [:title, :description, :syntax, :body, :validation_schema, :labels]
   @required_fields [:title, :syntax, :body]
@@ -91,6 +92,33 @@ defmodule Man.Templates.API do
     template
     |> template_changeset(attrs)
     |> Repo.update()
+  end
+
+  @doc """
+  Replace a template.
+
+  ## Examples
+
+      iex> replace_template(template, %{field: new_value})
+      {:ok, %Template{}}
+
+      iex> replace_template(template, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def replace_template(id, attrs) do
+    {id, ""} = Integer.parse(id)
+
+    result =
+      Multi.new
+      |> Multi.delete_all(:delete, from(t in Template, where: t.id == ^id))
+      |> Multi.insert(:insert, template_changeset(%Template{id: id}, attrs))
+      |> Repo.transaction()
+
+    case result do
+      {:ok, %{insert: template}} -> {:ok, template}
+      {:error, %{insert: error}} -> {:error, error}
+    end
   end
 
   @doc """

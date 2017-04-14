@@ -27,6 +27,12 @@ defmodule Man.Web.TemplateController do
     end
   end
 
+  def replace(conn, %{"id" => id} = template_params) do
+    with {:ok, %Template{} = template} <- API.replace_template(id, template_params) do
+      render(conn, "show.json", template: template)
+    end
+  end
+
   def update(conn, %{"id" => id} = template_params) do
     with {:ok, %Template{} = template} <- API.get_template(id),
          {:ok, %Template{} = template} <- API.update_template(template, template_params) do

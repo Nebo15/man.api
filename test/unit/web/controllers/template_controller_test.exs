@@ -5,6 +5,7 @@ defmodule Man.Web.TemplateControllerTest do
 
   @create_attrs %{body: "some body", validation_schema: %{}, title: "some title"}
   @update_attrs %{body: "some updated body", validation_schema: %{}, title: "some title"}
+  @replace_attrs %{body: "some replaced body", validation_schema: %{}, title: "some replaced title"}
   @invalid_attrs %{body: nil, validation_schema: nil, title: nil, labels: [1, 2, 3]}
   @template_body "<div><h1><%= @h1 %></h1><h2><%= @h2 %></h2></div>"
   @all_print_attrs %{h1: "some data", h2: "another data"}
@@ -63,7 +64,7 @@ defmodule Man.Web.TemplateControllerTest do
 
   test "updates chosen template and renders template when data is valid", %{conn: conn} do
     %Template{id: id} = template = fixture(:template)
-    conn = put conn, template_path(conn, :update, template), @update_attrs
+    conn = patch conn, template_path(conn, :update, template), @update_attrs
     assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
     conn = get conn, template_path(conn, :show, id)
@@ -81,9 +82,33 @@ defmodule Man.Web.TemplateControllerTest do
 
   test "does not update chosen template and renders errors when data is invalid", %{conn: conn} do
     template = fixture(:template)
-    conn = put conn, template_path(conn, :update, template), @invalid_attrs
+    conn = patch conn, template_path(conn, :update, template), @invalid_attrs
     assert json_response(conn, 422)["errors"] != %{}
   end
+
+  test "replace chosen template and renders template when data is valid", %{conn: conn} do
+    %Template{id: id} = template = fixture(:template, Map.put(@create_attrs, :description, "Some content"))
+    conn = put conn, template_path(conn, :replace, template), @replace_attrs
+    assert %{"id" => ^id} = json_response(conn, 200)["data"]
+
+    conn = get conn, template_path(conn, :show, id)
+    assert json_response(conn, 200)["data"] == %{
+      "id" => id,
+      "body" => "some replaced body",
+      "validation_schema" => %{},
+      "type" => "template",
+      "description" => nil,
+      "labels" => [],
+      "locales" => [],
+      "syntax" => "mustache",
+      "title" => "some replaced title"}
+  end
+
+  # test "does not replace chosen template and renders errors when data is invalid", %{conn: conn} do
+  #   template = fixture(:template)
+  #   conn = put conn, template_path(conn, :replace, template), @invalid_attrs
+  #   assert json_response(conn, 422)["errors"] != %{}
+  # end
 
   test "deletes chosen template", %{conn: conn} do
     template = fixture(:template)
