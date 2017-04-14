@@ -1,6 +1,7 @@
 defmodule Man.Templates.Renderer do
   @moduledoc false
   alias Man.Templates.Template
+  alias NExJsonSchema.Validator
 
   @doc """
   Prints a template.
@@ -15,7 +16,7 @@ defmodule Man.Templates.Renderer do
 
   """
   def render_template(%Template{body: body, validation_schema: validation_schema}, attrs) do
-    case NExJsonSchema.Validator.validate(validation_schema, attrs) do
+    case Validator.validate(validation_schema, attrs) do
       {:error, _} = errors ->
           errors
       _ ->
