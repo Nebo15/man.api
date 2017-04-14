@@ -38,6 +38,15 @@ defmodule Man.Web.TemplateControllerTest do
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, template_path(conn, :index)
     assert json_response(conn, 200)["data"] == []
+
+    %Template{id: id1} = template = fixture(:template)
+    %Template{id: id2} = template = fixture(:template, Map.put(@create_attrs, :title, "other title"))
+
+    conn = get conn, template_path(conn, :index)
+    assert [%{"id" => ^id1}, %{"id" => ^id2}] = json_response(conn, 200)["data"]
+
+    conn = get conn, template_path(conn, :index, %{"title" => "some"})
+    assert [%{"id" => ^id1}] = json_response(conn, 200)["data"]
   end
 
   test "creates template and renders template when data is valid", %{conn: conn} do

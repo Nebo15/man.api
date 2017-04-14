@@ -7,8 +7,9 @@ defmodule Man.Web.TemplateController do
 
   action_fallback Man.Web.FallbackController
 
-  def index(conn, _params) do
-    templates = API.list_templates()
+  def index(conn, params) do
+    conditions = Map.take(params, ["title", "labels"])
+    templates = API.list_templates(conditions)
     render(conn, "index.json", templates: templates)
   end
 

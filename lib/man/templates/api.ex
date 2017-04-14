@@ -21,8 +21,21 @@ defmodule Man.Templates.API do
       [%Template{}, ...]
 
   """
-  def list_templates,
-    do: Repo.all(Template)
+  def list_templates(conditions \\ %{}) do
+    Template
+    |> maybe_filter_title(conditions)
+    |> Repo.all()
+  end
+
+  defp maybe_filter_title(query, %{"title" => title}) do
+    title_ilike = "%" <> title <> "%"
+
+    query
+    |> where([t], ilike(t.title, ^title_ilike))
+  end
+  defp maybe_filter_title(query, _),
+    do: query
+
 
   @doc """
   Returns the list of labels.
