@@ -21,11 +21,12 @@ defmodule Man.Web.Router do
     pipe_through [:api, :eview]
 
     resources "/templates", TemplateController, except: [:new, :edit]
+    get "/labels", LabelController, :index
   end
 
   scope "/", Man.Web do
     pipe_through :api
 
-    post "/templates/:id/print", TemplateController, :print
+    post "/templates/:id/actions/render", TemplateController, :render
   end
 end

@@ -50,7 +50,7 @@ defmodule Man.Web.TemplateControllerTest do
       "validation_schema" => %{},
       "type" => "template",
       "description" => nil,
-      "labels" => nil,
+      "labels" => [],
       "locales" => [],
       "syntax" => "mustache",
       "title" => "some title"}
@@ -73,7 +73,7 @@ defmodule Man.Web.TemplateControllerTest do
       "validation_schema" => %{},
       "type" => "template",
       "description" => nil,
-      "labels" => nil,
+      "labels" => [],
       "locales" => [],
       "syntax" => "mustache",
       "title" => "some title"}

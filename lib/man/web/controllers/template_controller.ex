@@ -1,7 +1,6 @@
 defmodule Man.Web.TemplateController do
   @moduledoc false
   use Man.Web, :controller
-
   alias Man.Templates.API
   alias Man.Templates.Template
   alias Man.Templates.Renderer

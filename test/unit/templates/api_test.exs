@@ -35,6 +35,12 @@ defmodule Man.TemplatesTest do
     assert API.list_templates() == [template]
   end
 
+  test "list_labels/1 returns all labels" do
+    fixture(:template, Map.put(@create_attrs, :labels, ["a", "b", "c"]))
+    fixture(:template, Map.put(@create_attrs, :labels, ["a", "d", "e"]))
+    assert API.list_labels() == ["b", "e", "a", "c", "d"]
+  end
+
   test "get_template! returns the template with given id" do
     template = fixture(:template)
     assert {:ok, ^template} = API.get_template(template.id)

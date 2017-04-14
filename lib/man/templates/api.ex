@@ -1,3 +1,4 @@
+# TODO: Rename to Man.Templates
 defmodule Man.Templates.API do
   @moduledoc """
   The boundary for the TemplateAPI system.
@@ -21,6 +22,21 @@ defmodule Man.Templates.API do
   """
   def list_templates,
     do: Repo.all(Template)
+
+  @doc """
+  Returns the list of labels.
+
+  ## Examples
+
+      iex> list_labels()
+      ["label", ...]
+
+  """
+  def list_labels do
+    Repo.all from t in Template,
+      distinct: true,
+      select: fragment("unnest(?)", t.labels)
+  end
 
   @doc """
   Gets a single template.
@@ -106,12 +122,14 @@ defmodule Man.Templates.API do
     template_changeset(template, %{})
   end
 
+  # TODO: validations tests
   defp template_changeset(%Template{} = template, attrs) do
     template
     |> cast(attrs, @fields)
     |> validate_required(@required_fields)
     |> validate_length(:title, min: 1, max: 255)
     |> validate_length(:description, max: 510)
+    # TODO: Max labels count
     # |> validate_labels(:labels, max_length: 100)
     |> validate_inclusion(:syntax, @supported_formats)
     |> cast_embed(:locales, with: &locale_changeset/2)

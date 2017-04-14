@@ -8,7 +8,7 @@ defmodule Man.Templates.Template do
     field :syntax, :string, default: "mustache"
     field :body, :string, default: ""
     field :validation_schema, :map
-    field :labels, {:array, :string}
+    field :labels, {:array, :string}, default: []
 
     embeds_many :locales, Locale do
       field :locale, :string
