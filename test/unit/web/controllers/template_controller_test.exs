@@ -120,11 +120,11 @@ defmodule Man.Web.TemplateControllerTest do
       "title" => "some replaced title"}
   end
 
-  # test "does not replace chosen template and renders errors when data is invalid", %{conn: conn} do
-  #   template = fixture(:template)
-  #   conn = put conn, template_path(conn, :replace, template), @invalid_attrs
-  #   assert json_response(conn, 422)["errors"] != %{}
-  # end
+  test "does not replace chosen template and renders errors when data is invalid", %{conn: conn} do
+    template = fixture(:template)
+    conn = put conn, template_path(conn, :replace, template), @invalid_attrs
+    assert json_response(conn, 422)["errors"] != %{}
+  end
 
   test "deletes chosen template", %{conn: conn} do
     template = fixture(:template)

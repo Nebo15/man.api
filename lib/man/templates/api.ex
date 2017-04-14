@@ -130,7 +130,7 @@ defmodule Man.Templates.API do
 
     case result do
       {:ok, %{insert: template}} -> {:ok, template}
-      {:error, %{insert: error}} -> {:error, error}
+      {:error, :insert, changeset, _} -> {:error, changeset}
     end
   end
 
