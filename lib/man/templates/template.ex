@@ -3,8 +3,17 @@ defmodule Man.Templates.Template do
   use Ecto.Schema
 
   schema "templates" do
-    field :body, :string
-    field :json_schema, :map
+    field :title, :string
+    field :description, :string
+    field :syntax, :string, default: "mustache"
+    field :body, :string, default: ""
+    field :validation_schema, :map
+    field :labels, {:array, :string}
+
+    embeds_many :locales, Locale do
+      field :locale, :string
+      field :params, :map
+    end
 
     timestamps()
   end

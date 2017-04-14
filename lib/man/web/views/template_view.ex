@@ -12,8 +12,15 @@ defmodule Man.Web.TemplateView do
   end
 
   def render("template.json", %{template: template}) do
-    %{id: template.id,
+    %{
+      id: template.id,
+      title: template.title,
+      description: template.description,
+      syntax: template.syntax,
       body: template.body,
-      json_schema: template.json_schema}
+      validation_schema: template.validation_schema,
+      labels: template.labels,
+      locales: template.locales
+    }
   end
 end
