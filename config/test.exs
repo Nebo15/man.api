@@ -15,7 +15,7 @@ config :man, Man.Web.Endpoint,
   server: true
 
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :debug
 
 # Run acceptance test in concurrent mode
 config :man, sql_sandbox: true
