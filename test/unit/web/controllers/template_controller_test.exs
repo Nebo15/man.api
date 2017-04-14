@@ -35,16 +35,23 @@ defmodule Man.Web.TemplateControllerTest do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  test "lists all entries on index", %{conn: conn} do
+  test "lists and filters all entries on index", %{conn: conn} do
     conn = get conn, template_path(conn, :index)
     assert json_response(conn, 200)["data"] == []
 
     %Template{id: id1} = template = fixture(:template)
-    %Template{id: id2} = template = fixture(:template, Map.put(@create_attrs, :title, "other title"))
+
+    other_params =
+      @create_attrs
+      |> Map.put(:title, "other title")
+      |> Map.put(:labels, ["label/one", "label/two"])
+
+    %Template{id: id2} = template = fixture(:template, other_params)
 
     conn = get conn, template_path(conn, :index)
     assert [%{"id" => ^id1}, %{"id" => ^id2}] = json_response(conn, 200)["data"]
 
+    # Filter by title
     conn = get conn, template_path(conn, :index, %{"title" => "some"})
     assert [%{"id" => ^id1}] = json_response(conn, 200)["data"]
   end
