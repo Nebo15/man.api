@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :printout, key: :value
+#     config :man, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:printout, :key)
+#     Application.get_env(:man, :key)
 #
 # Or configure a 3rd-party app:
 #
@@ -24,13 +24,13 @@ use Mix.Config
 #
 #     :var_name, "${ENV_VAR_NAME}"
 
-config :printout,
-  ecto_repos: [Printout.Repo]
+config :man,
+  ecto_repos: [Man.Repo]
 
 # Configure your database
-config :printout, Printout.Repo,
+config :man, Man.Repo,
   adapter: Ecto.Adapters.Postgres,
-  database: {:system, "DB_NAME", "printout_dev"},
+  database: {:system, "DB_NAME", "man_dev"},
   username: {:system, "DB_USER", "postgres"},
   password: {:system, "DB_PASSWORD", "postgres"},
   hostname: {:system, "DB_HOST", "localhost"},
@@ -41,7 +41,7 @@ config :printout, Printout.Repo,
 
 # General application configuration
 # Configures the endpoint
-config :printout, Printout.Web.Endpoint,
+config :man, Man.Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "BN71lljHhjDJP7n8TnIg4f+slrxjkbbV4wQDh7RervDFLd3bqCD1CE8JA5UW1AY7",
   render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)]
@@ -53,7 +53,7 @@ config :logger, :console,
 
 # Configure JSON Logger back-end
 config :logger_json, :backend,
-  on_init: {Printout, :load_from_system_env, []},
+  on_init: {Man, :load_from_system_env, []},
   json_encoder: Poison,
   metadata: :all
 

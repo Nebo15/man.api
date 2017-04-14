@@ -1,4 +1,4 @@
-defmodule Printout.Repo.Migrations.CreatePrintout.TemplateAPI.Template do
+defmodule Man.Repo.Migrations.CreateMan.Template.Template do
   use Ecto.Migration
 
   def change do

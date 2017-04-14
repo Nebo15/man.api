@@ -1,4 +1,4 @@
-defmodule Printout.TemplateAPI.Template do
+defmodule Man.Templates.Template do
   @moduledoc false
   use Ecto.Schema
 

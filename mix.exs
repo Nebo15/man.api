@@ -1,10 +1,10 @@
-defmodule Printout.Mixfile do
+defmodule Man.Mixfile do
   use Mix.Project
 
   @version "0.1.0"
 
   def project do
-    [app: :printout,
+    [app: :man,
      package: package(),
      version: @version,
      elixir: "~> 1.4",
@@ -26,7 +26,7 @@ defmodule Printout.Mixfile do
     [extra_applications: [:logger, :confex, :runtime_tools, :ecto, :postgrex,
                           :cowboy, :httpoison, :poison, :phoenix, :multiverse,
                           :eview, :phoenix_ecto],
-     mod: {Printout, []}]
+     mod: {Man, []}]
   end
 
   # Specifies which paths to compile per environment.
@@ -72,7 +72,7 @@ defmodule Printout.Mixfile do
     [contributors: ["Nebo #15"],
      maintainers: ["Nebo #15"],
      licenses: ["LISENSE.md"],
-     links: %{github: "https://github.com/Nebo15/printout"},
+     links: %{github: "https://github.com/Nebo15/man"},
      files: ~w(lib LICENSE.md mix.exs README.md)]
   end
 

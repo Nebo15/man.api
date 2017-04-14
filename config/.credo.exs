@@ -4,7 +4,7 @@
       name: "default",
       files: %{
         included: ["lib/"],
-        excluded: ["lib/printout/tasks.ex"]
+        excluded: ["lib/man/tasks.ex"]
       },
       checks: [
         {Credo.Check.Design.TagTODO, exit_status: 0},

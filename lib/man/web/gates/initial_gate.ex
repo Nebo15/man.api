@@ -1,4 +1,4 @@
-defmodule Printout.Web.InitialGate do
+defmodule Man.Web.InitialGate do
   @moduledoc """
   Sample compatibility layer for generated application.
   See https://github.com/Nebo15/multiverse for more information.

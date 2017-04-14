@@ -1,12 +1,10 @@
-defmodule Printout.TemplateAPI do
+defmodule Man.Templates.API do
   @moduledoc """
   The boundary for the TemplateAPI system.
   """
-
   import Ecto.{Query, Changeset}, warn: false
-  alias Printout.Repo
-
-  alias Printout.TemplateAPI.Template
+  alias Man.Repo
+  alias Man.Templates.Template
 
   @doc """
   Returns the list of templates.

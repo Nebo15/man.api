@@ -1,7 +1,7 @@
 {
   "skip_files": [
     "test/*",
-    "/lib/printout/tasks.ex"
+    "/lib/man/tasks.ex"
   ],
   "custom_stop_words": [
     "field",

@@ -1,8 +1,8 @@
-defmodule Printout.Web.FallbackController do
+defmodule Man.Web.FallbackController do
   @moduledoc """
   This controller should be used as `action_fallback` in rest of controllers to remove duplicated error handling.
   """
-  use Printout.Web, :controller
+  use Man.Web, :controller
 
   def call(conn, {:error, :access_denied}) do
     conn

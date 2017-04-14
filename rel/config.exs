@@ -14,9 +14,9 @@ environment :default do
   set cookie: cookie
 end
 
-release :printout do
-  set version: current_version(:printout)
+release :man do
+  set version: current_version(:man)
   set applications: [
-    printout: :permanent
+    man: :permanent
   ]
 end

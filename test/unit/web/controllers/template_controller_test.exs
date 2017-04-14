@@ -1,8 +1,7 @@
-defmodule Printout.Web.TemplateControllerTest do
-  use Printout.Web.ConnCase
-
-  alias Printout.TemplateAPI
-  alias Printout.TemplateAPI.Template
+defmodule Man.Web.TemplateControllerTest do
+  use Man.Web.ConnCase
+  alias Man.Templates.API
+  alias Man.Templates.Template
 
   @create_attrs %{body: "some body", json_schema: %{}}
   @update_attrs %{body: "some updated body", json_schema: %{}}
@@ -27,7 +26,7 @@ defmodule Printout.Web.TemplateControllerTest do
   }
 
   def fixture(:template, attrs \\ @create_attrs) do
-    {:ok, template} = TemplateAPI.create_template(attrs)
+    {:ok, template} = API.create_template(attrs)
     template
   end
 

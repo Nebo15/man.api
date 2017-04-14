@@ -1,11 +1,11 @@
-defmodule Printout.Web.Endpoint do
+defmodule Man.Web.Endpoint do
   @moduledoc """
-  Phoenix Endpoint for printout application.
+  Phoenix Endpoint for man application.
   """
-  use Phoenix.Endpoint, otp_app: :printout
+  use Phoenix.Endpoint, otp_app: :man
 
   # Allow acceptance tests to run in concurrent mode
-  if Application.get_env(:printout, :sql_sandbox) do
+  if Application.get_env(:man, :sql_sandbox) do
     plug Phoenix.Ecto.SQL.Sandbox
   end
 
@@ -21,7 +21,7 @@ defmodule Printout.Web.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
 
-  plug Printout.Web.Router
+  plug Man.Web.Router
 
   @doc """
   Dynamically loads configuration from the system environment

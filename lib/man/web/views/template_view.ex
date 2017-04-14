@@ -1,7 +1,7 @@
-defmodule Printout.Web.TemplateView do
+defmodule Man.Web.TemplateView do
   @moduledoc false
-  use Printout.Web, :view
-  alias Printout.Web.TemplateView
+  use Man.Web, :view
+  alias Man.Web.TemplateView
 
   def render("index.json", %{templates: templates}) do
     render_many(templates, TemplateView, "template.json")

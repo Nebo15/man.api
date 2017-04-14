@@ -53,13 +53,13 @@ script:
   - RUNNING_CONTAINERS=`docker ps | wc -l`;
     if [ "${RUNNING_CONTAINERS//[[:space:]]/}" == "1" ]; then
       echo "[E] Container is not started\!";
-      docker logs printout --details --since 5h;
+      docker logs man --details --since 5h;
       exit 1;
     fi;
   # Run acceptance tests on Docker container
   - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
 after_failure:
-  - docker logs printout --details --since 5h
+  - docker logs man --details --since 5h
 # Also you can
 # - automatically build images and push them to Docker Hub;
 # - create new git tag with build version and GitHub release on it.

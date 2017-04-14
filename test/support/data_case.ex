@@ -1,4 +1,4 @@
-defmodule Printout.DataCase do
+defmodule Man.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -16,20 +16,20 @@ defmodule Printout.DataCase do
 
   using do
     quote do
-      alias Printout.Repo
+      alias Man.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Printout.DataCase
+      import Man.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Printout.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Man.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Printout.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Man.Repo, {:shared, self()})
     end
 
     :ok

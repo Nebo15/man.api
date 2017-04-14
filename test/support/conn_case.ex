@@ -1,4 +1,4 @@
-defmodule Printout.Web.ConnCase do
+defmodule Man.Web.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -18,22 +18,22 @@ defmodule Printout.Web.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      import Printout.Web.Router.Helpers
+      import Man.Web.Router.Helpers
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      alias Printout.Repo
+      alias Man.Repo
 
       # The default endpoint for testing
-      @endpoint Printout.Web.Endpoint
+      @endpoint Man.Web.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Printout.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Man.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Printout.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Man.Repo, {:shared, self()})
     end
 
     conn =

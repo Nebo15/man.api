@@ -1,15 +1,15 @@
-defmodule :printout_tasks do
+defmodule :man_tasks do
   @moduledoc """
   Nice way to apply migrations inside a released application.
 
   Example:
 
-      printout/bin/printout command printout_tasks migrate!
+      man/bin/man command man_tasks migrate!
   """
   import Mix.Ecto, warn: false
 
   @priv_dir "priv"
-  @repo Printout.Repo
+  @repo Man.Repo
 
   def migrate! do
     # Migrate
@@ -44,7 +44,7 @@ defmodule :printout_tasks do
 
   defp load_app do
     start_applications([:logger, :postgrex, :ecto])
-    :ok = Application.load(:printout)
+    :ok = Application.load(:man)
   end
 
   defp start_applications(apps) do
