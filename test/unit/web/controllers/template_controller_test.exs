@@ -57,6 +57,36 @@ defmodule Man.Web.TemplateControllerTest do
     assert [%{"id" => ^id2}] = json_response(conn, 200)["data"]
   end
 
+  test "paginates entries on index", %{conn: conn} do
+    template_data =
+      @create_attrs
+      |> Map.put(:labels, ["label/one", "label/two"])
+
+    %Template{id: id1} = fixture(:template, template_data)
+    %Template{id: id2} = fixture(:template, template_data)
+    %Template{id: id3} = fixture(:template, template_data)
+    %Template{id: id4} = fixture(:template, template_data)
+    %Template{id: id5} = fixture(:template, template_data)
+
+    conn = get conn, template_path(conn, :index), %{"limit" => 1}
+    assert [%{"id" => ^id1}] = json_response(conn, 200)["data"]
+
+    conn = get conn, template_path(conn, :index), %{"limit" => 2}
+    assert [%{"id" => ^id1}, %{"id" => ^id2}] = json_response(conn, 200)["data"]
+
+    conn = get conn, template_path(conn, :index), %{"limit" => 2, "starting_after" => id2}
+    assert [%{"id" => ^id3}, %{"id" => ^id4}] = json_response(conn, 200)["data"]
+
+    conn = get conn, template_path(conn, :index), %{"limit" => 2, "ending_before" => id5}
+    assert [%{"id" => ^id3}, %{"id" => ^id4}] = json_response(conn, 200)["data"]
+
+    conn = get conn, template_path(conn, :index), %{"limit" => 2, "ending_before" => id5, "title" => "some"}
+    assert [%{"id" => ^id3}, %{"id" => ^id4}] = json_response(conn, 200)["data"]
+
+    conn = get conn, template_path(conn, :index), %{"limit" => 2, "ending_before" => id5, "labels" => "label/one"}
+    assert [%{"id" => ^id3}, %{"id" => ^id4}] = json_response(conn, 200)["data"]
+  end
+
   test "creates template and renders template when data is valid", %{conn: conn} do
     conn = post conn, template_path(conn, :create), @create_attrs
     assert %{"id" => id} = json_response(conn, 201)["data"]

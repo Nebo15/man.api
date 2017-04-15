@@ -5,14 +5,18 @@ defmodule Man.Web.TemplateController do
   alias Man.Templates.Template
   alias Man.Templates.Renderer
   alias Plug.Conn
+  alias Ecto.Paging
 
   action_fallback Man.Web.FallbackController
 
   def index(conn, params) do
-    conditions = Map.take(params, ["title", "labels"])
-    {templates, paging} = API.list_templates(conditions)
+    paging = get_paging(params)
 
-    # TODO: Take limit, etc from connection
+    {templates, paging} =
+      params
+      |> Map.take(["title", "labels"])
+      |> API.list_templates(paging)
+
     render(conn, "index.json", templates: templates, paging: paging)
   end
 
@@ -66,6 +70,21 @@ defmodule Man.Web.TemplateController do
       |> put_resp_content_type(format)
       |> send_resp(200, html)
     end
+  end
+
+  defp get_paging(params) do
+    limit = Map.get(params, "limit", 50)
+    limit = if limit > 50, do: 50, else: limit
+    starting_after = Map.get(params, "starting_after")
+    ending_before = Map.get(params, "ending_before")
+
+    %Paging{
+      limit: limit,
+      cursors: %Ecto.Paging.Cursors{
+        starting_after: starting_after,
+        ending_before: ending_before
+      },
+    }
   end
 
   defp get_consumer_locale(_conn, %{"locale" => locale}),

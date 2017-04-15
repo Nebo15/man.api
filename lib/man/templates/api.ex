@@ -6,6 +6,7 @@ defmodule Man.Templates.API do
   alias Man.Repo
   alias Man.Templates.Template
   alias Ecto.Multi
+  alias Ecto.Paging
 
   @fields [:title, :description, :syntax, :body, :validation_schema, :labels]
   @required_fields [:title, :syntax, :body]
@@ -21,11 +22,11 @@ defmodule Man.Templates.API do
       {[%Template{}, ...], %Ecto.Paging{}}
 
   """
-  def list_templates(conditions \\ %{}) do
+  def list_templates(conditions \\ %{}, %Paging{} = paging \\ %Paging{limit: 50}) do
     Template
     |> maybe_filter_title(conditions)
     |> maybe_filter_labels(conditions)
-    |> Repo.page(%Ecto.Paging{limit: 50})
+    |> Repo.page(paging)
   end
 
   defp maybe_filter_title(query, %{"title" => nil}),
