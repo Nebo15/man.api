@@ -11,15 +11,15 @@ Mán - templates rendeing as a service.
 
 Man consists of two main parts:
 
-- Back-end that stores and renders Templates and provider REST API for them.
-- UI that works on top of REST API and simplifies Templates management.
+- REST API back-end that allows to manage and render Templates;
+- Management UI that simplifies configuration and management.
 
 ## Use Cases
 
 - Rendering reports;
-- Rendering Email or SMS templates before sending them;
-- Generating PDF/HTML printout forms;
-- API to render HTML pages.
+- Central control over Email or/and SMS templates;
+- PDF/HTML printout forms generation;
+- Renderring HTML pages over API.
 
 ## UI
 
@@ -31,12 +31,18 @@ Man consists of two main parts:
 
 ### Docker
 
-- API Docker container;
-- UI Docker container.
+Easiest way to deploy Man is to use docker containers. 
+We constantly are releasing pre-built versions that will reduce time to deploy:
+
+- [Back-End Docker container](https://hub.docker.com/r/nebo15/man/);
+- [PostgreSQL Docker container](https://hub.docker.com/r/nebo15/alpine-postgre/)
+- [UI Docker container](https://hub.docker.com/r/nebo15/man-web/).
 
 ### Heroku
 
-[Install]().
+Template allows to deploy Man to Heroku just in minute (and use it for free within Heroku tiers):
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/nebo15/man.api)
 
 ## Templates [/templates]
 
