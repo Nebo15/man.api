@@ -252,6 +252,7 @@ defmodule Man.Web.TemplateControllerTest do
     end
   end
 
+  # TODO: validate setting via headers
   test "returns error on unsupported format", %{conn: conn} do
     attrs = Map.put(@create_attrs, :body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
     template = fixture(:template, attrs)
@@ -283,6 +284,7 @@ defmodule Man.Web.TemplateControllerTest do
     } = json_response(conn, 422)
   end
 
+  # TODO: validate setting via headers
   test "localizes templates with default locale", %{conn: conn} do
     attrs =
       @create_attrs
