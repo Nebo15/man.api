@@ -236,4 +236,43 @@ defmodule Man.Web.TemplateControllerTest do
       "type" => "validation_failed"
     } = json_response(conn, 422)
   end
+
+  test "localizes templates with default locale", %{conn: conn} do
+    attrs =
+      @create_attrs
+      |> Map.put(:body, "<div><h1>{{l10n.hello}} {{h1}}</h1><h2>{{h2}}</h2></div>")
+      |> Map.put(:locales, [%{"locale" => "es_ES", "params" => %{"hello" => "Hola"}}])
+
+    template = fixture(:template, attrs)
+    conn = post conn, template_path(conn, :render, template), %{"h1" => "world"}
+    assert %{"body" => "<div><h1>Hola world</h1><h2></h2></div>"} == json_response(conn, 200)
+  end
+
+  test "localizes templates with multiple locales", %{conn: conn} do
+    attrs =
+      @create_attrs
+      |> Map.put(:body, "<div><h1>{{l10n.hello}} {{h1}}</h1><h2>{{h2}}</h2></div>")
+      |> Map.put(:locales, [
+        %{"locale" => "es_ES", "params" => %{"hello" => "Hola"}},
+        %{"locale" => "en_US", "params" => %{"hello" => "Hello"}},
+      ])
+
+    template = fixture(:template, attrs)
+    conn = post conn, template_path(conn, :render, template), %{"h1" => "world", "locale" => "en_US"}
+    assert %{"body" => "<div><h1>Hello world</h1><h2></h2></div>"} == json_response(conn, 200)
+  end
+
+  test "returns error when locale is not set", %{conn: conn} do
+    attrs =
+      @create_attrs
+      |> Map.put(:body, "<div><h1>{{l10n.hello}} {{h1}}</h1><h2>{{h2}}</h2></div>")
+      |> Map.put(:locales, [
+        %{"locale" => "es_ES", "params" => %{"hello" => "Hola"}},
+        %{"locale" => "en_US", "params" => %{"hello" => "Hello"}},
+      ])
+
+    template = fixture(:template, attrs)
+    conn = post conn, template_path(conn, :render, template), %{"h1" => "world"}
+    assert %{"type" => "locale_not_found"} == json_response(conn, 404)
+  end
 end

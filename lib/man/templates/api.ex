@@ -178,6 +178,7 @@ defmodule Man.Templates.API do
     |> validate_length(:description, max: 510)
     # TODO: Max labels count
     # |> validate_labels(:labels, max_length: 100)
+    # TODO: Don't allow to set multiple locales with repeated keys
     |> validate_inclusion(:syntax, @supported_formats)
     |> cast_embed(:locales, with: &locale_changeset/2)
   end

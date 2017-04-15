@@ -22,12 +22,19 @@ defmodule Man.Web.FallbackController do
     |> render(EView.Views.Error, :"404")
   end
 
+  def call(conn, {:error, :locale_not_found}) do
+    conn
+    |> put_status(:not_found)
+    |> render(EView.Views.Error, :"404", %{type: :locale_not_found})
+  end
+
   def call(conn, {:error, {:unsupported_format, message}}) do
     # TODO
     conn
     |> put_status(:unprocessable_entity)
     |> render(EView.Views.ValidationError, :"422", %{})
   end
+
 
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn

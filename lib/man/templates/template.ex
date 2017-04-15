@@ -10,7 +10,7 @@ defmodule Man.Templates.Template do
     field :validation_schema, :map
     field :labels, {:array, :string}, default: []
 
-    embeds_many :locales, Locale do
+    embeds_many :locales, Locale, primary_key: false do
       field :locale, :string
       field :params, :map
     end
