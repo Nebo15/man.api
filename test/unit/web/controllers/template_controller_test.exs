@@ -69,7 +69,40 @@ defmodule Man.Web.TemplateControllerTest do
 
   test "does not create template and renders errors when data is invalid", %{conn: conn} do
     conn = post conn, template_path(conn, :create), @invalid_attrs
-    assert json_response(conn, 422)["errors"] != %{}
+    assert %{
+      "error" => %{
+        "invalid" => [
+          %{"entry" => "$.body", "entry_type" => "json_data_property", "rules" => [
+            %{"description" => "can't be blank", "params" => [], "rule" => "required"}
+          ]},
+          %{"entry" => "$.labels", "entry_type" => "json_data_property", "rules" => [
+            %{"description" => "is invalid", "params" => ["strings_array"], "rule" => "cast"}
+          ]},
+          %{"entry" => "$.title", "entry_type" => "json_data_property", "rules" => [
+            %{"description" => "can't be blank", "params" => [], "rule" => "required"}
+          ]},
+        ],
+        "type" => "validation_failed"
+      }
+    } = json_response(conn, 422)
+  end
+
+  test "does not create template and renders errors when locales are duplicated", %{conn: conn} do
+    attrs = Map.put(@create_attrs, :locales, [
+      %{"code" => "en_US", "params" => %{}},
+      %{"code" => "en_US", "params" => %{}},
+    ])
+    conn = post conn, template_path(conn, :create), attrs
+    assert %{
+      "error" => %{
+        "invalid" => [
+          %{"entry" => "$.locales", "entry_type" => "json_data_property", "rules" => [
+            %{"description" => "contains duplicate fields", "params" => [], "rule" => ["unique"]},
+          ]}
+        ],
+        "type" => "validation_failed"
+      }
+    } = json_response(conn, 422)
   end
 
   test "updates chosen template and renders template when data is valid", %{conn: conn} do

@@ -10,6 +10,7 @@ defmodule Man.Templates.API do
   @fields [:title, :description, :syntax, :body, :validation_schema, :labels]
   @required_fields [:title, :syntax, :body]
   @supported_formats ["mustache", "markdown", "iex"]
+  @locale_code_pattern ~r/^[a-z]{2}([-_][A-Z]{2})?$/
 
   @doc """
   Returns the list of templates.
@@ -175,10 +176,10 @@ defmodule Man.Templates.API do
     |> validate_required(@required_fields)
     |> validate_length(:title, min: 1, max: 255)
     |> validate_length(:description, max: 510)
-    # TODO: Max labels count
-    # |> validate_labels(:labels, max_length: 100)
-    # TODO: Don't allow to set multiple locales with repeated keys
+    |> validate_length(:body, min: 1)
+    |> validate_length(:labels, max: 100)
     |> validate_inclusion(:syntax, @supported_formats)
+    |> validate_uniqueness_by(:locales, fn %{"code" => code} -> code end)
     |> cast_embed(:locales, with: &locale_changeset/2)
   end
 
@@ -186,20 +187,23 @@ defmodule Man.Templates.API do
     template
     |> cast(attrs, [:code, :params])
     |> validate_required([:code, :params])
+    |> validate_format(:code, @locale_code_pattern)
   end
 
-  defp validate_labels(changeset, field, opts) do
-    validate_change changeset, field, {:cast, :string}, fn _, labels ->
-      if Enum.all?(labels, &is_binary/1),
-          do: validate_labels_length(labels, field, opts),
-        else: [{field, {"is not a valid label", [cast: :string]}}]
+  defp validate_uniqueness_by(%Ecto.Changeset{params: params} = changeset, field, fun) do
+    case Map.fetch(params, Atom.to_string(field)) do
+      :error ->
+        changeset
+      {:ok, values} ->
+        count = length(values)
+        uniq_count =
+          values
+          |> Enum.uniq_by(fun)
+          |> length()
+
+        if uniq_count == count,
+            do: changeset,
+          else: add_error(changeset, field, "contains duplicate fields", validation: [:unique])
     end
-  end
-
-  defp validate_labels_length(labels, field, opts) do
-    max_length = Keyword.get(opts, :max_length, 100)
-    if Enum.all?(labels, fn label -> String.length(label) > max_length end),
-        do: [],
-      else: [{field, {"should have labels with no more than #{inspect max_length} character(s)", [length: max_length]}}]
   end
 end
