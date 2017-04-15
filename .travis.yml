@@ -7,6 +7,9 @@ services:
   - postgresql
 addons:
   postgresql: "9.5"
+  apt:
+    packages:
+      - wkhtmltopdf
 elixir:
   - 1.4.2
 otp_release:
