@@ -11,44 +11,21 @@
   "website": "http://docs.man2.apiary.io/",
   "repository": "https://github.com/nebo15/man.api",
   "success_url": "/templates",
-  "scripts": {
-    "postdeploy": "bundle exec rake bootstrap"
-  },
   "env": {
-    "ERLANG_COOKIE": {
-      "description": "Erlang distribution cookie.",
-      "generator": "secret"
-    },
-    "DB_NAME": {
-      "description": "Database name.",
-      "value": "man_dev"
-    },
-    "DB_USER": {
-      "description": "Database user.",
-      "value": "postgres"
-    },
-    "DB_PASSWORD": {
-      "description": "Database password.",
-      "value": "postgres"
-    },
-    "DB_HOST": {
-      "description": "Database host.",
-      "value": "travis"
-    },
-    "DB_PORT": {
-      "description": "Database port.",
-      "value": "5432"
+    "HOST": {
+      "description": "HTTP port for web app to listen on.",
+      "value": "localhost"
     },
     "DB_MIGRATE": {
       "description": "Migrate database when container starts.",
       "value": "true"
     },
-    "HOST": {
-      "description": "HTTP port for web app to listen on.",
-      "value": "localhost"
-    },
     "SECRET_KEY": {
       "description": "Phoenix [`:secret_key_base`](https://hexdocs.pm/phoenix/Phoenix.Endpoint.html).",
+      "generator": "secret"
+    },
+    "ERLANG_COOKIE": {
+      "description": "Erlang distribution cookie.",
       "generator": "secret"
     }
   },
