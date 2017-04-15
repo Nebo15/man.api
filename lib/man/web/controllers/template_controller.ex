@@ -59,7 +59,6 @@ defmodule Man.Web.TemplateController do
       |> Map.put("locale", locale)
       |> Map.put("format", format)
 
-
     with {:ok, %Template{} = template} <- API.get_template(id),
          {:ok, {format, html}} <- Renderer.render_template(template, template_params) do
       conn
