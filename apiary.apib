@@ -168,8 +168,8 @@ Output format is controlled by `Accept: <format>` header.
             + code: 404
         + error
             + type (enum, required)
-                - `locale_not_found`
-                - `template_not_found`
+                - `locale_not_found` (string) - Specified locale is not set for a template.
+                - `not_found` (string) - Template not found.
 
 + Response 422 (application/json)
     + Attributes (`Response__Error_ValidationFailed`)
