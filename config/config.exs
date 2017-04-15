@@ -39,6 +39,10 @@ config :man, Man.Repo,
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
 
+config :mime, :types, %{
+  "application/pdf" => ["pdf"]
+}
+
 # General application configuration
 # Configures the endpoint
 config :man, Man.Web.Endpoint,
@@ -57,8 +61,9 @@ config :logger_json, :backend,
   json_encoder: Poison,
   metadata: :all
 
+# This requires installing wkhtmltopdf onto developers machine
 config :pdf_generator,
-    wkhtml_path: "/usr/bin/wkhtmltopdf"
+    wkhtml_path: "/usr/local/bin/wkhtmltopdf"
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

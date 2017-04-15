@@ -23,6 +23,8 @@ defmodule Man.Templates.Renderer do
       do: render_output(html, attrs)
   end
 
+  defp validate_attrs(%Template{validation_schema: nil}, _attrs),
+    do: :ok
   defp validate_attrs(%Template{validation_schema: validation_schema}, attrs) do
     Validator.validate(validation_schema, attrs)
   end
@@ -71,9 +73,10 @@ defmodule Man.Templates.Renderer do
     end
   end
   defp render_output(html, %{"format" => "application/pdf"}) do
-    case PdfGenerator.generate html, page_size: "A5" do
+    case PdfGenerator.generate(html, page_size: "A4") do
       {:ok, html} ->
-        {:ok, {"application/pdf", html}}
+        {:ok, content} = File.read(html)
+        {:ok, {"application/pdf", content}}
       {:error, reason} ->
         {:error, reason}
     end

@@ -11,14 +11,16 @@ defmodule Man.Web.Router do
   pipeline :api do
     plug :accepts, ["json"]
     plug :put_secure_browser_headers
-  end
-
-  pipeline :eview do
     plug EView
   end
 
+  pipeline :rendering_api do
+    plug :accepts, ["json", "html", "pdf"]
+    plug :put_secure_browser_headers
+  end
+
   scope "/", Man.Web do
-    pipe_through [:api, :eview]
+    pipe_through :api
 
     get "/templates", TemplateController, :index
     post "/templates", TemplateController, :create
@@ -32,7 +34,7 @@ defmodule Man.Web.Router do
   end
 
   scope "/", Man.Web do
-    pipe_through :api
+    pipe_through :rendering_api
 
     post "/templates/:id/actions/render", TemplateController, :render
   end

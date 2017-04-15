@@ -221,8 +221,20 @@ defmodule Man.Web.TemplateControllerTest do
       template = fixture(:template, attrs)
       req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "application/pdf"}
       conn = post(conn, template_path(conn, :render, template), req_attrs)
-      file = response(conn, 200)
-      assert {:ok, <<37, 80, 68, 70, 45, 49, 46, 52, 10, _rest::binary>>} = File.read(file)
+      assert <<37, 80, 68, 70, 45, 49, 46, 52, 10, _rest::binary>> = response(conn, 200)
+    end
+
+    test "with PDF format in Accept header", %{raw_conn: conn} do
+      attrs = Map.put(@create_attrs, :body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+      template = fixture(:template, attrs)
+      req_attrs = %{"h1" => "some data", "h2" => "another data"}
+
+      conn =
+        conn
+        |> put_req_header("accept", "application/pdf")
+        |> post(template_path(conn, :render, template), req_attrs)
+
+      assert <<37, 80, 68, 70, 45, 49, 46, 52, 10, _rest::binary>> = response(conn, 200)
     end
 
     test "does not require all attributes", %{conn: conn} do

@@ -90,3 +90,6 @@ config :phoenix, :filter_parameters, ["password", "secret", "token", "password_c
 #     config :sample2, Sample2.Web.Endpoint, server: true
 #
 config :phoenix, :serve_endpoints, true
+
+config :pdf_generator,
+    wkhtml_path: "/bin/wkhtmltopdf"

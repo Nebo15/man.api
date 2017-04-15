@@ -10,6 +10,15 @@ ENV MIX_ENV=prod \
 
 WORKDIR ${HOME}
 
+# Install wkhtmltopdf
+RUN apk add --update --no-cache \
+      libgcc libstdc++ libx11 glib libxrender libxext libintl \
+      libcrypto1.0 libssl1.0 \
+      ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family \
+      fontconfig dbus
+COPY rel/deps/wkhtmltopdf /bin
+RUN chmod +x /bin/wkhtmltopdf
+
 # Install and compile project dependencies
 COPY mix.* ./
 RUN mix do deps.get, deps.compile
