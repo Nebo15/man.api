@@ -17,13 +17,13 @@ defmodule Man.Templates.API do
   ## Examples
 
       iex> list_templates()
-      [%Template{}, ...]
+      {[%Template{}, ...], %Ecto.Paging{}}
 
   """
   def list_templates(conditions \\ %{}) do
     Template
     |> maybe_filter_title(conditions)
-    |> Repo.all()
+    |> Repo.page(%Ecto.Paging{limit: 50})
   end
 
   defp maybe_filter_title(query, %{"title" => title}) do

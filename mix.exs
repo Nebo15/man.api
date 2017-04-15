@@ -62,6 +62,7 @@ defmodule Man.Mixfile do
      {:logger_json, "~> 0.4.0"},
      {:bbmustache, "~> 1.4"},
      {:earmark, "~> 1.2"},
+     {:ecto_paging, "~> 0.6.1"},
      {:ex_doc, ">= 0.15.0", only: [:dev, :test]},
      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
      {:dogma, ">= 0.1.12", only: [:dev, :test]},

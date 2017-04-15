@@ -8,11 +8,10 @@ defmodule Man.Web.TemplateController do
 
   action_fallback Man.Web.FallbackController
 
-  # TODO: Pagination
   def index(conn, params) do
     conditions = Map.take(params, ["title", "labels"])
-    templates = API.list_templates(conditions)
-    render(conn, "index.json", templates: templates)
+    {templates, paging} = API.list_templates(conditions)
+    render(conn, "index.json", templates: templates, paging: paging)
   end
 
   def create(conn, template_params) do

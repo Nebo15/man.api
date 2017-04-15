@@ -5,6 +5,7 @@ defmodule Man.Repo do
   More info: https://hexdocs.pm/ecto/Ecto.Repo.html
   """
   use Ecto.Repo, otp_app: :man
+  use Ecto.Pagging.Repo
 
   @doc """
   Dynamically loads the repository configuration from the environment variables.

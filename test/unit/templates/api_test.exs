@@ -14,7 +14,7 @@ defmodule Man.Templates.APITest do
 
   test "list_templates/1 returns all templates" do
     template = fixture(:template)
-    assert API.list_templates() == [template]
+    assert {[template], _paging} = API.list_templates()
   end
 
   test "list_labels/1 returns all labels" do
