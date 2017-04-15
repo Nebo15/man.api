@@ -2,6 +2,7 @@ language: elixir
 cache:
   directories:
     - deps
+    - _build
 services:
   - docker
   - postgresql
