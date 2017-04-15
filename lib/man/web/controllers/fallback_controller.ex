@@ -22,6 +22,13 @@ defmodule Man.Web.FallbackController do
     |> render(EView.Views.Error, :"404")
   end
 
+  def call(conn, {:error, {:unsupported_format, message}}) do
+    # TODO
+    conn
+    |> put_status(:unprocessable_entity)
+    |> render(EView.Views.ValidationError, :"422", %{})
+  end
+
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn
     |> put_status(:unprocessable_entity)

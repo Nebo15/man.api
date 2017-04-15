@@ -10,7 +10,7 @@ defmodule Man.Templates.API do
 
   @fields [:title, :description, :syntax, :body, :validation_schema, :labels]
   @required_fields [:title, :syntax, :body]
-  @supported_formats ["mustache", "markdown"]
+  @supported_formats ["mustache", "markdown", "iex"]
 
   @doc """
   Returns the list of templates.
@@ -35,7 +35,6 @@ defmodule Man.Templates.API do
   end
   defp maybe_filter_title(query, _),
     do: query
-
 
   @doc """
   Returns the list of labels.

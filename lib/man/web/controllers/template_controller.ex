@@ -4,9 +4,11 @@ defmodule Man.Web.TemplateController do
   alias Man.Templates.API
   alias Man.Templates.Template
   alias Man.Templates.Renderer
+  alias Plug.Conn
 
   action_fallback Man.Web.FallbackController
 
+  # TODO: Pagination
   def index(conn, params) do
     conditions = Map.take(params, ["title", "labels"])
     templates = API.list_templates(conditions)
@@ -49,11 +51,38 @@ defmodule Man.Web.TemplateController do
   end
 
   def render(conn, %{"id" => id} = template_params) do
+    locale = get_consumer_locale(conn, template_params)
+    format = get_output_format(conn, template_params)
+
+    template_params =
+      template_params
+      |> Map.put("locale", locale)
+      |> Map.put("format", format)
+
+
     with {:ok, %Template{} = template} <- API.get_template(id),
-         {:ok, html} <- Renderer.render_template(template, template_params) do
+         {:ok, {format, html}} <- Renderer.render_template(template, template_params) do
       conn
-      |> put_resp_content_type("text/html")
+      |> put_resp_content_type(format)
       |> send_resp(200, html)
+    end
+  end
+
+  defp get_consumer_locale(_conn, %{"locale" => locale}),
+    do: locale
+  defp get_consumer_locale(conn, _params) do
+    case Conn.get_req_header(conn, "accept-language") do
+      [locale | _] -> locale
+      [] -> nil
+    end
+  end
+
+  defp get_output_format(_conn, %{"format" => format}),
+    do: format
+  defp get_output_format(conn, _params) do
+    case Conn.get_req_header(conn, "accept") do
+      [format | _] -> format
+      [] -> nil
     end
   end
 end

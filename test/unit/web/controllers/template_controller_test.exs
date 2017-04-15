@@ -8,10 +8,9 @@ defmodule Man.Web.TemplateControllerTest do
   @replace_attrs %{body: "some replaced body", validation_schema: %{}, title: "some replaced title"}
   @invalid_attrs %{body: nil, validation_schema: nil, title: nil, labels: [1, 2, 3]}
   @template_body "<div><h1><%= @h1 %></h1><h2><%= @h2 %></h2></div>"
-  @all_print_attrs %{h1: "some data", h2: "another data"}
-  @h1_valid_print_attr %{h1: "some data"}
-  @h1_invalid_print_attr %{h1: 111}
-  @full_rendered_template "<div><h1>some data</h1><h2>another data</h2></div>"
+  @all_render_attrs %{h1: "some data", h2: "another data"}
+  @h1_valid_render_attr %{h1: "some data"}
+  @h1_invalid_render_attr %{h1: 111}
   @partially_rendered_template "<div><h1>some data</h1><h2></h2></div>"
   @empty_rendered_template "<div><h1></h1><h2></h2></div>"
   @validation_schema %{
@@ -136,39 +135,110 @@ defmodule Man.Web.TemplateControllerTest do
     assert resp.state == :sent
   end
 
-  # test "prints template with all parameters", %{conn: conn} do
-  #   template = fixture(:template, %{body: @template_body, validation_schema: %{}})
-  #   conn = post conn, template_path(conn, :print, template), @all_print_attrs
-  #   assert @full_rendered_template = html_response(conn, 200)
-  # end
+  describe "mustache renderer" do
+    test "with json format", %{conn: conn} do
+      attrs = Map.put(@create_attrs, :body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+      template = fixture(:template, attrs)
+      conn = post conn, template_path(conn, :render, template), %{"h1" => "some data", "h2" => "another data"}
+      assert %{"body" => "<div><h1>some data</h1><h2>another data</h2></div>"} == json_response(conn, 200)
+    end
 
-  # test "prints template without all parameters", %{conn: conn} do
-  #   template = fixture(:template, %{body: @template_body, validation_schema: %{}})
-  #   conn = post conn, template_path(conn, :print, template), @h1_valid_print_attr
-  #   assert @partially_rendered_template = html_response(conn, 200)
-  # end
+    test "with html format", %{conn: conn} do
+      attrs = Map.put(@create_attrs, :body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+      template = fixture(:template, attrs)
+      req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "text/html"}
+      conn = post(conn, template_path(conn, :render, template), req_attrs)
+      assert "<div><h1>some data</h1><h2>another data</h2></div>" == html_response(conn, 200)
+    end
 
-  # test "prints template without parameters", %{conn: conn} do
-  #   template = fixture(:template, %{body: @template_body, validation_schema: %{}})
-  #   conn = post conn, template_path(conn, :print, template), %{}
-  #   assert @empty_rendered_template = html_response(conn, 200)
-  # end
+    test "does not require all attributes", %{conn: conn} do
+      attrs = Map.put(@create_attrs, :body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+      template = fixture(:template, attrs)
+      conn = post conn, template_path(conn, :render, template), %{}
+      assert %{"body" => "<div><h1></h1><h2></h2></div>"} == json_response(conn, 200)
+    end
+  end
 
-  # test "validates missing print parameter", %{conn: conn} do
-  #   template = fixture(:template, %{body: @template_body, validation_schema: @validation_schema})
-  #   conn = post conn, template_path(conn, :print, template), %{}
-  #   assert %{"invalid" => _} = json_response(conn, 422)
-  # end
+  describe "markdown renderer" do
+    test "with json format", %{conn: conn} do
+      attrs =
+        @create_attrs
+        |> Map.put(:syntax, "markdown")
+        |> Map.put(:body, """
+          # Hello
+          world
+        """)
+      template = fixture(:template, attrs)
+      conn = post conn, template_path(conn, :render, template), %{}
+      assert %{"body" => "<p>  # Hello\n  world</p>\n"} == json_response(conn, 200)
+    end
 
-  # test "validates invalid print parameter", %{conn: conn} do
-  #   template = fixture(:template, %{body: @template_body, validation_schema: @validation_schema})
-  #   conn = post conn, template_path(conn, :print, template), @h1_invalid_print_attr
-  #   assert %{"invalid" => _} = json_response(conn, 422)
-  # end
+    test "with html format", %{conn: conn} do
+      attrs =
+        @create_attrs
+        |> Map.put(:syntax, "markdown")
+        |> Map.put(:body, """
+          # Hello
+          world
+        """)
+      template = fixture(:template, attrs)
+      req_attrs = %{"format" => "text/html"}
+      conn = post(conn, template_path(conn, :render, template), req_attrs)
+      assert "<p>  # Hello\n  world</p>\n" == html_response(conn, 200)
+    end
+  end
 
-  # test "validates valid print parameter", %{conn: conn} do
-  #   template = fixture(:template, %{body: @template_body, validation_schema: @validation_schema})
-  #   conn = post conn, template_path(conn, :print, template), @h1_valid_print_attr
-  #   assert @partially_rendered_template = html_response(conn, 200)
-  # end
+  describe "iex renderer" do
+    test "with json format", %{conn: conn} do
+      attrs =
+        @create_attrs
+        |> Map.put(:syntax, "iex")
+        |> Map.put(:body, "<div><h1><%= @h1 %></h1><h2><%= @h2 %></h2></div>")
+
+      template = fixture(:template, attrs)
+      conn = post conn, template_path(conn, :render, template), %{"h1" => "some data", "h2" => "another data"}
+      assert %{"body" => "<div><h1>some data</h1><h2>another data</h2></div>"} == json_response(conn, 200)
+    end
+
+    test "with html format", %{conn: conn} do
+      attrs =
+        @create_attrs
+        |> Map.put(:syntax, "iex")
+        |> Map.put(:body, "<div><h1><%= @h1 %></h1><h2><%= @h2 %></h2></div>")
+
+      template = fixture(:template, attrs)
+      req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "text/html"}
+      conn = post(conn, template_path(conn, :render, template), req_attrs)
+      assert "<div><h1>some data</h1><h2>another data</h2></div>" == html_response(conn, 200)
+    end
+
+    test "does not require all attributes", %{conn: conn} do
+      attrs =
+        @create_attrs
+        |> Map.put(:syntax, "iex")
+        |> Map.put(:body, "<div><h1><%= @h1 %></h1><h2><%= @h2 %></h2></div>")
+
+      template = fixture(:template, attrs)
+      conn = post conn, template_path(conn, :render, template), %{}
+      assert %{"body" => "<div><h1></h1><h2></h2></div>"} == json_response(conn, 200)
+    end
+  end
+
+  test "validates template attributes with json schema", %{conn: conn} do
+    attrs =
+      @create_attrs
+      |> Map.put(:body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+      |> Map.put(:validation_schema, @validation_schema)
+
+    template = fixture(:template, attrs)
+    conn = post conn, template_path(conn, :render, template), %{"h2" => "another data"}
+    assert %{
+      "invalid" => [
+        %{"entry" => "$", "entry_type" => "json_data_property", "rules" => [
+          %{"description" => "required property h1 was not present", "params" => [], "rule" => "required"}
+        ]}
+      ],
+      "type" => "validation_failed"
+    } = json_response(conn, 422)
+  end
 end
