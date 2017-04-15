@@ -11,7 +11,7 @@ defmodule Man.Templates.Template do
     field :labels, {:array, :string}, default: []
 
     embeds_many :locales, Locale, primary_key: false do
-      field :locale, :string
+      field :code, :string
       field :params, :map
     end
 

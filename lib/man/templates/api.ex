@@ -184,8 +184,8 @@ defmodule Man.Templates.API do
 
   defp locale_changeset(%Template.Locale{} = template, attrs) do
     template
-    |> cast(attrs, [:locale, :params])
-    |> validate_required([:locale, :params])
+    |> cast(attrs, [:code, :params])
+    |> validate_required([:code, :params])
   end
 
   defp validate_labels(changeset, field, opts) do

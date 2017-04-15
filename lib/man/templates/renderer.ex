@@ -29,10 +29,10 @@ defmodule Man.Templates.Renderer do
 
   defp localize_attrs(%Template{locales: []}, %{"locale" => nil} = attrs),
     do: {:ok, attrs}
-  defp localize_attrs(%Template{locales: [%Locale{locale: name, params: params}]}, %{"locale" => nil} = attrs),
-    do: {:ok,  attrs |> Map.put("locale", name) |> Map.put("l10n", params)}
+  defp localize_attrs(%Template{locales: [%Locale{code: code, params: params}]}, %{"locale" => nil} = attrs),
+    do: {:ok,  attrs |> Map.put("locale", code) |> Map.put("l10n", params)}
   defp localize_attrs(%Template{locales: locales}, %{"locale" => locale} = attrs) do
-    case Enum.filter(locales, fn l10n -> l10n.locale == locale end) do
+    case Enum.filter(locales, fn l10n -> l10n.code == locale end) do
       [] ->
         {:error, :locale_not_found}
       [%Locale{params: params}] ->

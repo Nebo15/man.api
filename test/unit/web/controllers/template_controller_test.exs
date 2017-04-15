@@ -254,7 +254,7 @@ defmodule Man.Web.TemplateControllerTest do
     attrs =
       @create_attrs
       |> Map.put(:body, "<div><h1>{{l10n.hello}} {{h1}}</h1><h2>{{h2}}</h2></div>")
-      |> Map.put(:locales, [%{"locale" => "es_ES", "params" => %{"hello" => "Hola"}}])
+      |> Map.put(:locales, [%{"code" => "es_ES", "params" => %{"hello" => "Hola"}}])
 
     template = fixture(:template, attrs)
     conn = post conn, template_path(conn, :render, template), %{"h1" => "world"}
@@ -266,8 +266,8 @@ defmodule Man.Web.TemplateControllerTest do
       @create_attrs
       |> Map.put(:body, "<div><h1>{{l10n.hello}} {{h1}}</h1><h2>{{h2}}</h2></div>")
       |> Map.put(:locales, [
-        %{"locale" => "es_ES", "params" => %{"hello" => "Hola"}},
-        %{"locale" => "en_US", "params" => %{"hello" => "Hello"}},
+        %{"code" => "es_ES", "params" => %{"hello" => "Hola"}},
+        %{"code" => "en_US", "params" => %{"hello" => "Hello"}},
       ])
 
     template = fixture(:template, attrs)
@@ -280,8 +280,8 @@ defmodule Man.Web.TemplateControllerTest do
       @create_attrs
       |> Map.put(:body, "<div><h1>{{l10n.hello}} {{h1}}</h1><h2>{{h2}}</h2></div>")
       |> Map.put(:locales, [
-        %{"locale" => "es_ES", "params" => %{"hello" => "Hola"}},
-        %{"locale" => "en_US", "params" => %{"hello" => "Hello"}},
+        %{"code" => "es_ES", "params" => %{"hello" => "Hola"}},
+        %{"code" => "en_US", "params" => %{"hello" => "Hello"}},
       ])
 
     template = fixture(:template, attrs)
