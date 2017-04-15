@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: https://man-api.herokuapp.com/
 
 # Mán Templates Rendering Service
 
@@ -256,8 +256,9 @@ Output format is controlled by `Accept: <format>` header.
     + `group/emails` (string)
     + `action/signup` (string)
     + `other_tag` (string)
-+ validation_schema: `{}` (string, optional) - JSON Schema to validate requests to the template.
++ validation_schema (object, optional) - JSON Schema to validate requests to the template.
 
 ### `Template__Locale`
-+ locale: en_US (string, required) - Locale for defined template
-+ hello: Hello (string, optional) - Localized variable.
++ code: en_US (string, required) - Locale for defined template
++ params (object, required) - Localized attributrs.
+    + hello: Hello (string, optional) - Localized variable.
