@@ -26,7 +26,7 @@ defmodule Man.Web.TemplateControllerTest do
   end
 
   setup %{conn: conn} do
-    {:ok, conn: put_req_header(conn, "accept", "application/json")}
+    {:ok, conn: put_req_header(conn, "accept", "application/json"), raw_conn: conn}
   end
 
   test "lists and filters all entries on index", %{conn: conn} do
@@ -208,7 +208,7 @@ defmodule Man.Web.TemplateControllerTest do
       assert %{"body" => "<div><h1>some data</h1><h2>another data</h2></div>"} == json_response(conn, 200)
     end
 
-    test "with html format", %{conn: conn} do
+    test "with html format", %{raw_conn: conn} do
       attrs = Map.put(@create_attrs, :body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
       template = fixture(:template, attrs)
       req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "text/html"}
@@ -238,7 +238,7 @@ defmodule Man.Web.TemplateControllerTest do
       assert %{"body" => "<p>  # Hello\n  world</p>\n"} == json_response(conn, 200)
     end
 
-    test "with html format", %{conn: conn} do
+    test "with html format", %{raw_conn: conn} do
       attrs =
         @create_attrs
         |> Map.put(:syntax, "markdown")
@@ -265,7 +265,7 @@ defmodule Man.Web.TemplateControllerTest do
       assert %{"body" => "<div><h1>some data</h1><h2>another data</h2></div>"} == json_response(conn, 200)
     end
 
-    test "with html format", %{conn: conn} do
+    test "with html format", %{raw_conn: conn} do
       attrs =
         @create_attrs
         |> Map.put(:syntax, "iex")
@@ -289,8 +289,19 @@ defmodule Man.Web.TemplateControllerTest do
     end
   end
 
-  # TODO: validate setting via headers
-  test "returns error on unsupported format", %{conn: conn} do
+  test "takes format from Accept header", %{raw_conn: conn} do
+    template = fixture(:template)
+    req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "text/html"}
+
+    conn =
+      conn
+      |> put_req_header("accept", "application/json")
+      |> post(template_path(conn, :render, template), req_attrs)
+
+    assert %{"body" => "some body"} == json_response(conn, 200)
+  end
+
+  test "returns error on unsupported format", %{raw_conn: conn} do
     attrs = Map.put(@create_attrs, :body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
     template = fixture(:template, attrs)
     req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "some/format"}
@@ -321,7 +332,21 @@ defmodule Man.Web.TemplateControllerTest do
     } = json_response(conn, 422)
   end
 
-  # TODO: validate setting via headers
+  test "takes locale from Accept-Language header", %{conn: conn} do
+    attrs =
+      @create_attrs
+      |> Map.put(:body, "<div><h1>{{l10n.hello}} {{h1}}</h1><h2>{{h2}}</h2></div>")
+      |> Map.put(:locales, [%{"code" => "es_ES", "params" => %{"hello" => "Hola"}}])
+
+    template = fixture(:template, attrs)
+    conn =
+      conn
+      |> put_req_header("accept-language", "es_ES")
+      |> post(template_path(conn, :render, template), %{"h1" => "world", "locale" => "en_US"})
+
+    assert %{"body" => "<div><h1>Hola world</h1><h2></h2></div>"} == json_response(conn, 200)
+  end
+
   test "localizes templates with default locale", %{conn: conn} do
     attrs =
       @create_attrs

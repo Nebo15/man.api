@@ -56,8 +56,8 @@ defmodule Man.Web.TemplateController do
   end
 
   def render(conn, %{"id" => id} = template_params) do
-    locale = get_consumer_locale(conn, template_params)
-    format = get_output_format(conn, template_params)
+    locale = get_header_or_param(conn, template_params, "accept-language", "locale")
+    format = get_header_or_param(conn, template_params, "accept", "format")
 
     template_params =
       template_params
@@ -87,21 +87,12 @@ defmodule Man.Web.TemplateController do
     }
   end
 
-  defp get_consumer_locale(_conn, %{"locale" => locale}),
-    do: locale
-  defp get_consumer_locale(conn, _params) do
-    case Conn.get_req_header(conn, "accept-language") do
-      [locale | _] -> locale
-      [] -> nil
-    end
-  end
-
-  defp get_output_format(_conn, %{"format" => format}),
-    do: format
-  defp get_output_format(conn, _params) do
-    case Conn.get_req_header(conn, "accept") do
-      [format | _] -> format
-      [] -> nil
+  defp get_header_or_param(conn, params, header, param) do
+    case Conn.get_req_header(conn, header) do
+      [locale | _] ->
+        locale
+      [] ->
+        Map.get(params, param, nil)
     end
   end
 end
