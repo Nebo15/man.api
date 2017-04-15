@@ -3,10 +3,10 @@ defmodule Man.Repo.Migrations.Create.Templates.Template do
 
   def change do
     create table(:templates) do
-      add :title, :string, null: false, length: 255
-      add :description, :string, length: 510
+      add :title, :string, null: false, size: 255
+      add :description, :string, size: 510
       add :syntax, :string, default: "mustache"
-      add :body, :string, default: ""
+      add :body, :text, default: ""
       add :locales, {:array, :map}
       add :labels, {:array, :string}
       add :validation_schema, :map
