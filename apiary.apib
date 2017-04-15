@@ -16,7 +16,9 @@ Man consists of two main parts:
 
 ## Use Cases
 
+- Rendering reports;
 - Rendering Email or SMS templates before sending them;
+- Generating PDF/HTML printout forms;
 - API to render HTML pages.
 
 ## UI
@@ -113,6 +115,8 @@ You can pass `Accept-Language: <localization>` header or `localization` request 
 
 In case both fields are specified, HTTP header will be preffered.
 
+When there is only one locale set for a template, localization attribute is optional and the onlymost list element will be counted as default.
+
 #### Available variables
 
 Template can use any variables from request attributes as global scoped objects `{{var_name}}` and all available localization fields within `l8n` object `{{l8n.localized_key}}`.
@@ -133,6 +137,7 @@ Output format is controlled by `Accept: <format>` header.
 | `application/json`    | `application/json; charset=utf-8` | JSON object with `body` field: `{"body":"<h1>Hello Alex, in en_US</h1>"}` |
 | `application/pdf`     | `application/pdf`                 | PDF document rendered from HTML. |
 
+**Warning!** Format is applied only when there was no errors during rendering, otherwise - response will be always in json format with `Content-Type: application/json`.
 
 + Parameters
     + id: 58e2278a84092e61700041a7 (string, optional) - Template ID
@@ -240,19 +245,19 @@ Output format is controlled by `Accept: <format>` header.
 ## Templates
 ### Template 
 + id: 58e2278a84092e61700041a7 (string, optional)
-+ title: `Sign-Up Email` (string, required)
-+ description: `Email that is sent on signup process` (string, optional)
-+ syntax: `mustache_to_html` (enum, optional) - Syntax processor for a template
++ title: `Sign-Up Email` (string, required) - Template UI title with max length 255 characters.
++ description: `Email that is sent on signup process` (string, optional) - Template UI description with max length 510 characters.
++ syntax: `mustache` (enum, optional) - Syntax processor for a template
     + `mustache`
     + `markdown`
 + body: `<h1>{{l8n.hello}} {{user_name}}, in {{locale}}</h1>` (string, required) - Template that should be rendered with `syntax` processor.
-+ locales (array[Template__Source], optional) - Locale variables that can be used for multilangual templates.
-+ labels (array[string], optional)
++ locales (array[Template__Locale], optional) - Locale variables that can be used for multilangual templates.
++ labels (array[string], optional) - List of strings. Max length for element is 100 characters.
     + `group/emails` (string)
     + `action/signup` (string)
     + `other_tag` (string)
 + validation_schema: `{}` (string, optional) - JSON Schema to validate requests to the template.
 
-### `Template__Source`
+### `Template__Locale`
 + locale: en_US (string, required) - Locale for defined template
 + hello: Hello (string, optional) - Localized variable.
