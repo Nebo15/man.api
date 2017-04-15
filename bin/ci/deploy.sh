@@ -16,7 +16,7 @@ PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "${PROJECT_DIR}/mix.
 
 # Adjust project naming for Heroku
 # You may want to set it manually
-PROJECT_NAME=${PROJECT_NAME/./-}
+PROJECT_NAME="man-api"
 
 heroku plugins:install heroku-container-registry
 
