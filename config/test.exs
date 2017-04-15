@@ -19,3 +19,7 @@ config :logger, level: :debug
 
 # Run acceptance test in concurrent mode
 config :man, sql_sandbox: true
+
+# This requires installing wkhtmltopdf onto developers machine
+config :pdf_generator,
+    wkhtml_path: "/usr/local/bin/wkhtmltopdf"

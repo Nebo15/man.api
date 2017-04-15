@@ -25,7 +25,7 @@ defmodule Man.Mixfile do
   def application do
     [extra_applications: [:logger, :confex, :runtime_tools, :ecto, :postgrex, :ecto_paging,
                           :cowboy, :httpoison, :poison, :phoenix, :multiverse,
-                          :eview, :phoenix_ecto, :bbmustache, :earmark],
+                          :eview, :phoenix_ecto, :bbmustache, :earmark, :pdf_generator],
      mod: {Man, []}]
   end
 
@@ -63,6 +63,7 @@ defmodule Man.Mixfile do
      {:bbmustache, "~> 1.4"},
      {:earmark, "~> 1.2"},
      {:ecto_paging, "~> 0.6.1"},
+     {:pdf_generator, "~> 0.3.5"},
      {:ex_doc, ">= 0.15.0", only: [:dev, :test]},
      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
      {:dogma, ">= 0.1.12", only: [:dev, :test]},

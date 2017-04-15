@@ -216,6 +216,15 @@ defmodule Man.Web.TemplateControllerTest do
       assert "<div><h1>some data</h1><h2>another data</h2></div>" == html_response(conn, 200)
     end
 
+    test "with PDF format", %{raw_conn: conn} do
+      attrs = Map.put(@create_attrs, :body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+      template = fixture(:template, attrs)
+      req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "application/pdf"}
+      conn = post(conn, template_path(conn, :render, template), req_attrs)
+      file = response(conn, 200)
+      assert {:ok, <<37, 80, 68, 70, 45, 49, 46, 52, 10, _rest::binary>>} = File.read(file)
+    end
+
     test "does not require all attributes", %{conn: conn} do
       attrs = Map.put(@create_attrs, :body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
       template = fixture(:template, attrs)

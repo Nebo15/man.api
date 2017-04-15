@@ -70,14 +70,14 @@ defmodule Man.Templates.Renderer do
         {:error, reason}
     end
   end
-  # defp render_output(html, %{"format" => "application/pdf"}) do
-  #   case PdfGenerator.generate html, page_size: "A5" do
-  #     {:ok, html} ->
-  #       {:ok, {"application/pdf", html}}
-  #     {:error, reason} ->
-  #       {:error, reason}
-  #   end
-  # end
+  defp render_output(html, %{"format" => "application/pdf"}) do
+    case PdfGenerator.generate html, page_size: "A5" do
+      {:ok, html} ->
+        {:ok, {"application/pdf", html}}
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
   defp render_output(_html, %{"format" => format}) do
     {:error, {:unsupported_format, format}}
   end
