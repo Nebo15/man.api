@@ -47,7 +47,7 @@ Man consists of two main parts:
     + limit: 20 (number, optional) - A limit on the number of objects to be returned, between 1 and 100. Default: 50.
     + starting_after: 56c31536a60ad644060041af (string, optional) - A cursor to fetch next page. Taken from collection response.
     + ending_before: 56c31536a60ad644060041aa (string, optional) - A cursor to fetch previous page. Taken from collection response.
-    + title: "Signup" (string, optional) - Substring search for a title.
+    + title: Signup (string, optional) - Substring search for a title.
 
 + Response 200 (application/json)
     + Attributes (Response_Collection)
@@ -119,7 +119,7 @@ When there is only one locale set for a template, localization attribute is opti
 
 #### Available variables
 
-Template can use any variables from request attributes as global scoped objects `{{var_name}}` and all available localization fields within `l8n` object `{{l8n.localized_key}}`.
+Template can use any variables from request attributes as global scoped objects `{{var_name}}` and all available localization fields within `l10n` object `{{l10n.localized_key}}`.
 
 #### Validation
 
@@ -250,7 +250,7 @@ Output format is controlled by `Accept: <format>` header.
 + syntax: `mustache` (enum, optional) - Syntax processor for a template
     + `mustache`
     + `markdown`
-+ body: `<h1>{{l8n.hello}} {{user_name}}, in {{locale}}</h1>` (string, required) - Template that should be rendered with `syntax` processor.
++ body: `<h1>{{l10n.hello}} {{user_name}}, in {{locale}}</h1>` (string, required) - Template that should be rendered with `syntax` processor.
 + locales (array[Template__Locale], optional) - Locale variables that can be used for multilangual templates.
 + labels (array[string], optional) - List of strings. Max length for element is 100 characters.
     + `group/emails` (string)
