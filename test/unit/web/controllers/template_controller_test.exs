@@ -219,6 +219,19 @@ defmodule Man.Web.TemplateControllerTest do
     end
   end
 
+  test "returns error on unsupported format", %{conn: conn} do
+    attrs = Map.put(@create_attrs, :body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+    template = fixture(:template, attrs)
+    req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "some/format"}
+    conn = post(conn, template_path(conn, :render, template), req_attrs)
+    assert %{
+      "invalid" => [
+        %{"entry" => "Content-Type", "entry_type" => "header"}
+      ],
+      "type" => "content_type_invalid"
+    } = json_response(conn, 415)
+  end
+
   test "validates template attributes with json schema", %{conn: conn} do
     attrs =
       @create_attrs

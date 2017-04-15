@@ -29,10 +29,11 @@ defmodule Man.Web.FallbackController do
   end
 
   def call(conn, {:error, {:unsupported_format, message}}) do
-    # TODO
     conn
-    |> put_status(:unprocessable_entity)
-    |> render(EView.Views.ValidationError, :"422", %{})
+    |> put_status(415)
+    |> render(EView.Views.Error, :"415", %{
+      message: "Content-Type #{inspect message} is not supported"
+    })
   end
 
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do

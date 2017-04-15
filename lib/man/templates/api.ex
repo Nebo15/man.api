@@ -1,4 +1,3 @@
-# TODO: Rename to Man.Templates
 defmodule Man.Templates.API do
   @moduledoc """
   The boundary for the TemplateAPI system.
