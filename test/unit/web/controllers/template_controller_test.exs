@@ -48,6 +48,13 @@ defmodule Man.Web.TemplateControllerTest do
     # Filter by title
     conn = get conn, template_path(conn, :index, %{"title" => "some"})
     assert [%{"id" => ^id1}] = json_response(conn, 200)["data"]
+
+    # Filter by label
+    conn = get conn, template_path(conn, :index, %{"labels" => "label/one"})
+    assert [%{"id" => ^id2}] = json_response(conn, 200)["data"]
+
+    conn = get conn, template_path(conn, :index, %{"labels" => "label/one,label/two"})
+    assert [%{"id" => ^id2}] = json_response(conn, 200)["data"]
   end
 
   test "creates template and renders template when data is valid", %{conn: conn} do

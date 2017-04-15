@@ -11,6 +11,8 @@ defmodule Man.Web.TemplateController do
   def index(conn, params) do
     conditions = Map.take(params, ["title", "labels"])
     {templates, paging} = API.list_templates(conditions)
+
+    # TODO: Take limit, etc from connection
     render(conn, "index.json", templates: templates, paging: paging)
   end
 
