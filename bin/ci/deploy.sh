@@ -14,20 +14,24 @@ fi
 PROJECT_NAME=$(sed -n 's/.*app: :\([^, ]*\).*/\1/pg' "${PROJECT_DIR}/mix.exs")
 PROJECT_VERSION=$(sed -n 's/.*@version "\([^"]*\)".*/\1/pg' "${PROJECT_DIR}/mix.exs")
 
+# Adjust project naming for Heroku
+# You may want to set it manually
+PROJECT_NAME=${PROJECT_NAME/./-}
+
 heroku plugins:install heroku-container-registry
 
 echo "Logging in into Heroku"
 heroku container:login
 docker login --email=_ --username=_ --password=$(heroku auth:token) registry.heroku.com
 
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-  if [ "$TRAVIS_BRANCH" == "$RELEASE_BRANCH" ]; then
+if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
+  if [ "${TRAVIS_BRANCH}" == "${RELEASE_BRANCH}" ]; then
     echo "Tagging container to a Heroku CE"
     docker tag "${PROJECT_NAME}:${PROJECT_VERSION}" "registry.heroku.com/${PROJECT_NAME}/web"
   fi;
 
-  if [[ "$MAIN_BRANCHES" =~ "$TRAVIS_BRANCH" ]]; then
+  if [[ "${MAIN_BRANCHES}" =~ "${TRAVIS_BRANCH}" ]]; then
     echo "Pushing container to a Heroku CE"
-    heroku container:push web --app $PROJECT_NAME
+    heroku container:push web --app ${PROJECT_NAME}
   fi;
 fi;
