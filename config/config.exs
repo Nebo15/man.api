@@ -63,7 +63,7 @@ config :logger_json, :backend,
 
 # This requires installing wkhtmltopdf onto developers machine
 config :pdf_generator,
-    wkhtml_path: "/usr/local/bin/wkhtmltopdf"
+    wkhtml_path: "wkhtmltopdf"
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

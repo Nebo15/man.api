@@ -19,4 +19,3 @@ config :logger, level: :debug
 
 # Run acceptance test in concurrent mode
 config :man, sql_sandbox: true
-
