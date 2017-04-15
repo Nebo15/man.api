@@ -119,18 +119,25 @@ defmodule Man.Templates.API do
 
   """
   def replace_template(id, attrs) do
-    {id, ""} = Integer.parse(id)
-
     result =
       Multi.new
       |> Multi.delete_all(:delete, from(t in Template, where: t.id == ^id))
-      |> Multi.insert(:insert, template_changeset(%Template{id: id}, attrs))
+      |> Multi.insert(:insert, template_changeset(build_template_by_id(id), attrs))
       |> Repo.transaction()
 
     case result do
       {:ok, %{insert: template}} -> {:ok, template}
       {:error, :insert, changeset, _} -> {:error, changeset}
     end
+  end
+
+  defp build_template_by_id(nil),
+    do: %Template{}
+  defp build_template_by_id(id) when is_number(id),
+    do: %Template{id: id}
+  defp build_template_by_id(id) when is_binary(id) do
+    {id, ""} = Integer.parse(id)
+    build_template_by_id(id)
   end
 
   @doc """

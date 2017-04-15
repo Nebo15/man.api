@@ -7,11 +7,6 @@ defmodule Man.Web.TemplateControllerTest do
   @update_attrs %{body: "some updated body", validation_schema: %{}, title: "some title"}
   @replace_attrs %{body: "some replaced body", validation_schema: %{}, title: "some replaced title"}
   @invalid_attrs %{body: nil, validation_schema: nil, title: nil, labels: [1, 2, 3]}
-  @template_body "<div><h1><%= @h1 %></h1><h2><%= @h2 %></h2></div>"
-  @all_render_attrs %{h1: "some data", h2: "another data"}
-  @h1_valid_render_attr %{h1: "some data"}
-  @h1_invalid_render_attr %{h1: 111}
-  @partially_rendered_template "<div><h1>some data</h1><h2></h2></div>"
   @empty_rendered_template "<div><h1></h1><h2></h2></div>"
   @validation_schema %{
     "type": "object",
@@ -38,14 +33,14 @@ defmodule Man.Web.TemplateControllerTest do
     conn = get conn, template_path(conn, :index)
     assert json_response(conn, 200)["data"] == []
 
-    %Template{id: id1} = template = fixture(:template)
+    %Template{id: id1} = fixture(:template)
 
     other_params =
       @create_attrs
       |> Map.put(:title, "other title")
       |> Map.put(:labels, ["label/one", "label/two"])
 
-    %Template{id: id2} = template = fixture(:template, other_params)
+    %Template{id: id2} = fixture(:template, other_params)
 
     conn = get conn, template_path(conn, :index)
     assert [%{"id" => ^id1}, %{"id" => ^id2}] = json_response(conn, 200)["data"]
@@ -155,7 +150,7 @@ defmodule Man.Web.TemplateControllerTest do
       attrs = Map.put(@create_attrs, :body, "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
       template = fixture(:template, attrs)
       conn = post conn, template_path(conn, :render, template), %{}
-      assert %{"body" => "<div><h1></h1><h2></h2></div>"} == json_response(conn, 200)
+      assert %{"body" => @empty_rendered_template} == json_response(conn, 200)
     end
   end
 
@@ -220,7 +215,7 @@ defmodule Man.Web.TemplateControllerTest do
 
       template = fixture(:template, attrs)
       conn = post conn, template_path(conn, :render, template), %{}
-      assert %{"body" => "<div><h1></h1><h2></h2></div>"} == json_response(conn, 200)
+      assert %{"body" => @empty_rendered_template} == json_response(conn, 200)
     end
   end
 
