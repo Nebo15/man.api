@@ -23,7 +23,7 @@ defmodule Man.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [extra_applications: [:logger, :confex, :runtime_tools, :ecto, :postgrex,
+    [extra_applications: [:logger, :confex, :runtime_tools, :ecto, :postgrex, :ecto_paging,
                           :cowboy, :httpoison, :poison, :phoenix, :multiverse,
                           :eview, :phoenix_ecto, :bbmustache, :earmark],
      mod: {Man, []}]
