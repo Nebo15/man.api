@@ -1,5 +1,5 @@
 defmodule Man.Web.TemplateControllerTest do
-  use Man.Web.ConnCase
+  use Man.Web.ConnCase, async: true
   alias Man.Templates.API
   alias Man.Templates.Template
 

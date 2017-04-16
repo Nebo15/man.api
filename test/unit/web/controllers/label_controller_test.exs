@@ -1,6 +1,5 @@
 defmodule Man.Web.LabelControllerTest do
   use Man.Web.ConnCase, async: true
-  alias Man.Templates.API
   alias Man.FixturesFactory
 
   setup %{conn: conn} do

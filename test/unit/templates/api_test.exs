@@ -3,6 +3,8 @@ defmodule Man.Templates.APITest do
   alias Man.Templates.API
   alias Man.Templates.Template
   alias Man.FixturesFactory
+  alias Ecto.Paging
+  alias Ecto.Paging.Cursors
 
   @create_attrs %{body: "some body", validation_schema: %{}, title: "some title"}
   @update_attrs %{body: "some updated body", validation_schema: %{}, title: "some title"}
@@ -16,18 +18,62 @@ defmodule Man.Templates.APITest do
     end
 
     test "filters by title" do
-      template = FixturesFactory.create(:template)
-      assert {[^template], _paging} = API.list_templates()
+      template1 = FixturesFactory.create(:template)
+      template2 = FixturesFactory.create(:template, title: "other title")
+
+      assert {[], _paging} = API.list_templates(%{"title" => "unknown title"})
+      assert {[^template1], _paging} = API.list_templates(%{"title" => "some"})
+      assert {[^template2], _paging} = API.list_templates(%{"title" => "other"})
     end
 
     test "filters by labels" do
-      template = FixturesFactory.create(:template)
-      assert {[^template], _paging} = API.list_templates()
+      FixturesFactory.create(:template)
+      template2 = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
+      template3 = FixturesFactory.create(:template, labels: ["label/one", "label/three"])
+
+      assert {[], _paging} = API.list_templates(%{"labels" => "unknown label"})
+      assert {[^template2], _paging} = API.list_templates(%{"labels" => "label/two"})
+      assert {[^template2, ^template3], _paging} = API.list_templates(%{"labels" => "label/one"})
     end
 
     test "paginates results" do
-      template = FixturesFactory.create(:template)
-      assert {[^template], _paging} = API.list_templates()
+      template1 = FixturesFactory.create(:template)
+      template2 = FixturesFactory.create(:template)
+      template3 = FixturesFactory.create(:template)
+      template4 = FixturesFactory.create(:template)
+      template5 = FixturesFactory.create(:template)
+
+      assert {[^template1], _paging} =
+        API.list_templates(%{}, %Paging{limit: 1})
+      assert {[^template1, ^template2], _paging} =
+        API.list_templates(%{}, %Paging{limit: 2})
+      assert {[^template3, ^template4], _paging} =
+        API.list_templates(%{}, %Paging{limit: 2, cursors: %Cursors{starting_after: template2.id}})
+      assert {[^template3, ^template4], _paging} =
+        API.list_templates(%{}, %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}})
+    end
+
+    test "paginates with filters" do
+      FixturesFactory.create(:template, labels: ["label/one", "label/two"], title: "title one")
+      FixturesFactory.create(:template, labels: ["label/one"], title: "title two")
+      template3 = FixturesFactory.create(:template, labels: ["label/one", "label/two"], title: "title three")
+      template4 = FixturesFactory.create(:template, labels: ["label/one"], title: "title four")
+      template5 = FixturesFactory.create(:template, labels: ["label/one"], title: "title five")
+
+      assert {[^template3, ^template4], _paging} =
+        API.list_templates(%{"title" => "title"}, %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}})
+
+      assert {[], _paging} =
+        API.list_templates(%{"title" => "five"}, %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}})
+
+      assert {[^template5], _paging} =
+        API.list_templates(%{"title" => "five"}, %Paging{limit: 2, cursors: %Cursors{starting_after: template4.id}})
+
+      assert {[^template3, ^template4], _paging} =
+        API.list_templates(%{"labels" => "label/one"}, %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}})
+
+      assert {[^template3], _paging} =
+        API.list_templates(%{"labels" => "label/two"}, %Paging{limit: 1, cursors: %Cursors{ending_before: template5.id}})
     end
   end
 
