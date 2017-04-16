@@ -135,8 +135,8 @@ defmodule Man.Templates.API do
   """
   def replace_template(id, attrs) do
     result =
-      Multi.new
-      |> Multi.delete_all(:delete, from(t in Template, where: t.id == ^id))
+      Multi.new()
+      |> Multi.delete_all(:delete, from(t in Template, where: t.id == ^id, limit: 1))
       |> Multi.insert(:insert, template_changeset(build_template_by_id(id), attrs))
       |> Repo.transaction()
 
@@ -146,8 +146,6 @@ defmodule Man.Templates.API do
     end
   end
 
-  defp build_template_by_id(nil),
-    do: %Template{}
   defp build_template_by_id(id) when is_number(id),
     do: %Template{id: id}
   defp build_template_by_id(id) when is_binary(id) do
