@@ -1,32 +1,34 @@
 defmodule Man.Web.LabelControllerTest do
-  use Man.Web.ConnCase
+  use Man.Web.ConnCase, async: true
   alias Man.Templates.API
-
-  @create_attrs %{body: "some body", validation_schema: %{}, title: "some title"}
-
-  def fixture(:template, labels) do
-    {:ok, template} =
-      @create_attrs
-      |> Map.put(:labels, labels)
-      |> API.create_template()
-
-    template
-  end
+  alias Man.FixturesFactory
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
   test "lists all entries on index", %{conn: conn} do
-    conn = get conn, label_path(conn, :index)
-    assert json_response(conn, 200)["data"] == []
+    assert [] ==
+      conn
+      |> get(label_path(conn, :index))
+      |> json_response(200)
+      |> Map.get("data")
 
-    fixture(:template, ["a", "b"])
-    conn = get conn, label_path(conn, :index)
-    assert json_response(conn, 200)["data"] == ["b", "a"]
+    FixturesFactory.create(:template, labels: ["a", "b"])
+    assert ["b", "a"] =
+      conn
+      |> get(label_path(conn, :index))
+      |> json_response(200)
+      |> Map.get("data")
 
-    fixture(:template, ["c", "d"])
-    conn = get conn, label_path(conn, :index)
-    assert json_response(conn, 200)["data"] == ["b", "a", "c", "d"]
+    FixturesFactory.create(:template, labels: ["c", "d"])
+    result =
+      conn
+      |> get(label_path(conn, :index))
+      |> json_response(200)
+      |> Map.get("data")
+
+    assert ["b", "a", "c", "d"] = result
+    assert 4 == length(result)
   end
 end
