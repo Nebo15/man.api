@@ -33,9 +33,7 @@ defmodule Man.Templates.API do
     do: query
   defp maybe_filter_title(query, %{"title" => title}) do
     title_ilike = "%" <> title <> "%"
-
-    query
-    |> where([t], ilike(t.title, ^title_ilike))
+    where(query, [t], ilike(t.title, ^title_ilike))
   end
   defp maybe_filter_title(query, _),
     do: query
@@ -48,8 +46,7 @@ defmodule Man.Templates.API do
       |> String.split(",")
       |> Enum.map(&String.trim/1)
 
-    query
-    |> where([t], fragment("jsonb_build_array(?)->0 \\?& ?::character varying[255][]", t.labels, ^labels))
+    where(query, [t], fragment("jsonb_build_array(?)->0 \\?& ?::character varying[255][]", t.labels, ^labels))
   end
   defp maybe_filter_labels(query, _),
     do: query
