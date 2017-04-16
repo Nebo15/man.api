@@ -4,21 +4,26 @@ defmodule Man.FixturesFactory do
   """
   alias Man.Templates.API
 
-  def create(schema, attrs \\ %{})
-
-  def create(schema, attrs) when is_list(attrs),
-    do: create(schema, Enum.into(attrs, %{}))
-
-  def create(:template, attrs) do
+  def create(:template, attrs \\ %{}) do
     {:ok, template} =
-      %{
-        body: "some body",
-        validation_schema: %{},
-        title: "some title"
-      }
-      |> Map.merge(attrs)
+      :template
+      |> build(attrs)
       |> API.create_template()
 
     template
+  end
+
+  def build(fixture, attrs \\ %{})
+
+  def build(fixture, attrs) when is_list(attrs),
+    do: build(fixture, Enum.into(attrs, %{}))
+
+  def build(:template, attrs) do
+    %{
+      body: "some body",
+      validation_schema: %{},
+      title: "some title"
+    }
+    |> Map.merge(attrs)
   end
 end

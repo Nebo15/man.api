@@ -69,11 +69,13 @@ defmodule Man.Templates.APITest do
       assert {[^template5], _paging} =
         API.list_templates(%{"title" => "five"}, %Paging{limit: 2, cursors: %Cursors{starting_after: template4.id}})
 
+      paging = %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}}
       assert {[^template3, ^template4], _paging} =
-        API.list_templates(%{"labels" => "label/one"}, %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}})
+        API.list_templates(%{"labels" => "label/one"}, paging)
 
+      paging = %Paging{limit: 1, cursors: %Cursors{ending_before: template5.id}}
       assert {[^template3], _paging} =
-        API.list_templates(%{"labels" => "label/two"}, %Paging{limit: 1, cursors: %Cursors{ending_before: template5.id}})
+        API.list_templates(%{"labels" => "label/two"}, paging)
     end
   end
 
