@@ -24,7 +24,7 @@ defmodule Man.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [extra_applications: [:logger, :confex, :runtime_tools, :ecto, :postgrex, :ecto_paging,
-                          :cowboy, :httpoison, :poison, :phoenix, :multiverse, :misc_random,
+                          :cowboy, :httpoison, :poison, :phoenix, :misc_random,
                           :eview, :phoenix_ecto, :bbmustache, :earmark, :pdf_generator],
      mod: {Man, []}]
   end
@@ -55,7 +55,6 @@ defmodule Man.Mixfile do
      {:httpoison, "~> 0.11.1"},
      {:poison, "~> 3.1"},
      {:phoenix, "~> 1.3.0-rc"},
-     {:multiverse, "~> 0.4.3"},
      {:eview, "~> 0.10.1"},
      {:phoenix_ecto, "~> 3.2"},
      {:nex_json_schema, "~> 0.6.0"},
@@ -64,7 +63,6 @@ defmodule Man.Mixfile do
      {:earmark, "~> 1.2"},
      {:ecto_paging, "~> 0.6.1"},
      {:pdf_generator, "~> 0.3.5"},
-     {:ex_doc, ">= 0.15.0", only: [:dev, :test]},
      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
      {:dogma, ">= 0.1.12", only: [:dev, :test]},
      {:credo, ">= 0.5.1", only: [:dev, :test]}]

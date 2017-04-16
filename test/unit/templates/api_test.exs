@@ -21,16 +21,18 @@ defmodule Man.Templates.APITest do
       template1 = FixturesFactory.create(:template)
       template2 = FixturesFactory.create(:template, title: "other title")
 
+      assert {[^template1, ^template2], _paging} = API.list_templates(%{"title" => nil})
       assert {[], _paging} = API.list_templates(%{"title" => "unknown title"})
       assert {[^template1], _paging} = API.list_templates(%{"title" => "some"})
       assert {[^template2], _paging} = API.list_templates(%{"title" => "other"})
     end
 
     test "filters by labels" do
-      FixturesFactory.create(:template)
+      template1 = FixturesFactory.create(:template)
       template2 = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
       template3 = FixturesFactory.create(:template, labels: ["label/one", "label/three"])
 
+      assert {[^template1, ^template2, ^template3], _paging} = API.list_templates(%{"labels" => nil})
       assert {[], _paging} = API.list_templates(%{"labels" => "unknown label"})
       assert {[^template2], _paging} = API.list_templates(%{"labels" => "label/two"})
       assert {[^template2, ^template3], _paging} = API.list_templates(%{"labels" => "label/one"})
@@ -123,12 +125,24 @@ defmodule Man.Templates.APITest do
     end
   end
 
-  test "replace_template/2 with valid data updates the template" do
-    template = FixturesFactory.create(:template)
-    assert {:ok, template} = API.replace_template(template.id, @update_attrs)
-    assert %Template{} = template
-    assert template.body == "some updated body"
-    assert template.validation_schema == %{}
+  describe "replace_template/2" do
+    test "with valid data updates the template" do
+      template = FixturesFactory.create(:template)
+      assert {:ok, %Template{} = template} = API.replace_template(template.id, @update_attrs)
+      assert template.body == "some updated body"
+      assert template.validation_schema == %{}
+    end
+
+    test "with not found template" do
+      id = 1
+      attrs =
+        FixturesFactory.build(:template, @update_attrs)
+        |> Map.put(:id, id)
+
+      assert {:ok, %Template{} = template} = API.replace_template(id, attrs)
+      assert template.body == "some updated body"
+      assert template.validation_schema == %{}
+    end
   end
 
   test "delete_template/1 deletes the template" do
