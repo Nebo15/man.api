@@ -136,7 +136,8 @@ defmodule Man.Templates.APITest do
     test "with not found template" do
       id = 1
       attrs =
-        FixturesFactory.build(:template, @update_attrs)
+        :template
+        |> FixturesFactory.build(@update_attrs)
         |> Map.put(:id, id)
 
       assert {:ok, %Template{} = template} = API.replace_template(id, attrs)
