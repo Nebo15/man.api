@@ -157,23 +157,23 @@ Percentage of the requests served within a certain time (ms)
 ### PDF Generation
 
 ```
-$ ab -n 1000 -c 50 -T 'application/json' -H 'Accept: application/pdf' -p 'payload.json' http://localhost:4000/templates/1/actions/render
+$ ab -n 10000 -c 50 -T 'application/json' -H 'Accept: application/pdf' -p 'payload.json' http://localhost:4000/templates/1/actions/render
 This is ApacheBench, Version 2.3 <$Revision: 1757674 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
 
 Benchmarking localhost (be patient)
-Completed 100 requests
-Completed 200 requests
-Completed 300 requests
-Completed 400 requests
-Completed 500 requests
-Completed 600 requests
-Completed 700 requests
-Completed 800 requests
-Completed 900 requests
 Completed 1000 requests
-Finished 1000 requests
+Completed 2000 requests
+Completed 3000 requests
+Completed 4000 requests
+Completed 5000 requests
+Completed 6000 requests
+Completed 7000 requests
+Completed 8000 requests
+Completed 9000 requests
+Completed 10000 requests
+Finished 10000 requests
 
 
 Server Software:        Cowboy
@@ -184,34 +184,34 @@ Document Path:          /templates/1/actions/render
 Document Length:        5814 bytes
 
 Concurrency Level:      50
-Time taken for tests:   45.283 seconds
-Complete requests:      1000
+Time taken for tests:   442.214 seconds
+Complete requests:      10000
 Failed requests:        0
-Total transferred:      6149000 bytes
-Total body sent:        195000
-HTML transferred:       5814000 bytes
-Requests per second:    22.08 [#/sec] (mean)
-Time per request:       2264.146 [ms] (mean)
-Time per request:       45.283 [ms] (mean, across all concurrent requests)
-Transfer rate:          132.61 [Kbytes/sec] received
-                        4.21 kb/s sent
-                        136.81 kb/s total
+Total transferred:      61490000 bytes
+Total body sent:        1950000
+HTML transferred:       58140000 bytes
+Requests per second:    22.61 [#/sec] (mean)
+Time per request:       2211.070 [ms] (mean)
+Time per request:       44.221 [ms] (mean, across all concurrent requests)
+Transfer rate:          135.79 [Kbytes/sec] received
+                        4.31 kb/s sent
+                        140.10 kb/s total
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0    0   0.5      0       4
-Processing:  1189 2240 259.6   2237    3555
-Waiting:     1189 2236 258.5   2230    3555
-Total:       1192 2240 259.6   2237    3556
+Connect:        0    0   0.1      0       2
+Processing:  1128 2208 184.0   2209    3363
+Waiting:     1055 2204 183.8   2205    3363
+Total:       1129 2208 183.9   2210    3364
 
 Percentage of the requests served within a certain time (ms)
-  50%   2237
-  66%   2309
-  75%   2350
-  80%   2380
-  90%   2467
-  95%   2571
-  98%   2884
-  99%   3307
- 100%   3556 (longest request)
+  50%   2210
+  66%   2284
+  75%   2330
+  80%   2360
+  90%   2439
+  95%   2501
+  98%   2581
+  99%   2629
+ 100%   3364 (longest request)
  ```

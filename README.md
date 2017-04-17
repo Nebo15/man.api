@@ -46,9 +46,9 @@ We encourage you to perform your own tests, because synthetic results are far fr
 
 | **Template Syntax** | Concurrency Level | Time taken for tests | Complete requests | Failed requests | Requests per second [#/sec] (mean) | Time per request | Time per request (mean, across all concurrent requests) |
 | ---------------------------- | -- | -------------- | ----- | - | -------------------------- | ------------- | ----------- |
-| **Mustache**                 | 50 | 8.412 seconds  | 10000 | 0 | **1188.84** | 42.058 [ms]   | 0.841 [ms]  |
-| **Markdown**                 | 50 | 8.142 seconds  | 10000 | 0 | **1228.25** | 40.708 [ms]   | 0.814 [ms]  |
-| **Mustache with PDF format** | 50 | 45.283 seconds | 1000  | 0 | **22.08**   | 2264.146 [ms] | 45.283 [ms] |
+| **Mustache**                 | 50 | 8.412 seconds   | 10000 | 0 | **1188.84** | 42.058 [ms]   | 0.841 [ms]  |
+| **Markdown**                 | 50 | 8.142 seconds   | 10000 | 0 | **1228.25** | 40.708 [ms]   | 0.814 [ms]  |
+| **Mustache with PDF format** | 50 | 442.214 seconds | 10000 | 0 | **22.61**   | 2211.070 [ms] | 44.221 [ms] |
 
 Full console output is available in [`pertest.md`](https://github.com/Nebo15/man.api/blob/master/docs/perftest.md).
 
