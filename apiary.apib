@@ -27,7 +27,28 @@ Man consists of two main parts:
 
 > Screenshots
 
-## Perfomance
+## Performance
+
+We encourage you to perform your own tests, because synthetic results are far from real life situation. We provide them only as starting point in understanding Man's performance.
+
+### Test environment
+
+* MacBook Pro (15-inch, 2016)
+* CPU 2,7 GHz Intel Core i7
+* RAM 16 ГБ 2133 MHz LPDDR3
+* Man v0.1.16 and PostgreSQL v9.6.2 running in Nebo15 Docker contianers (listed below);
+* ApacheBench v2.3;
+* wkhtmltopdf v0.12.4 (with patched qt).
+
+### Results
+
+| **Template Syntax** | Concurrency Level | Time taken for tests | Complete requests | Failed requests | Requests per second [#/sec] (mean) | Time per request | Time per request (mean, across all concurrent requests) |
+| ---------------------------- | -- | -------------- | ----- | - | -------------------------- | ------------- | ----------- |
+| **Mustache**                 | 50 | 8.412 seconds  | 10000 | 0 | **1188.84** | 42.058 [ms]   | 0.841 [ms]  |
+| **Markdown**                 | 50 | 8.142 seconds  | 10000 | 0 | **1228.25** | 40.708 [ms]   | 0.814 [ms]  |
+| **Mustache with PDF format** | 50 | 45.283 seconds | 1000  | 0 | **22.08**   | 2264.146 [ms] | 45.283 [ms] |
+
+Full console output is available in [`pertest.md`](https://github.com/Nebo15/man.api/blob/master/docs/perftest.md).
 
 ## Setup Guide
 
@@ -139,7 +160,7 @@ Output format is controlled by `Accept: <format>` header.
 
 **Supported formats:**
 
-| `Accept` (format)     | `Content-Type`                    | Description |
+| `Accept` (format)     | Response `Content-Type`           | Description |
 | --------------------- | --------------------------------- | ----------- |
 | `text/html` (default) | `text/html; charset=utf-8`        | Raw HTML Page. |
 | `application/json`    | `application/json; charset=utf-8` | JSON object with `body` field: `{"body":"<h1>Hello Alex, in en_US</h1>"}` |
