@@ -5,30 +5,37 @@ defmodule Man.Cache do
   use GenServer
 
   def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, [
-      {:ets_table_name, :man_cache_table},
-      {:log_limit, 10_000}
-    ], opts)
+    GenServer.start_link(__MODULE__, %{
+      ets_table_name: :man_cache_table,
+      log_limit: 10_000
+    }, opts)
   end
 
   @doc false
-  def init(args) do
-    [{:ets_table_name, ets_table_name}, {:log_limit, log_limit}] = args
+  def init(%{ets_table_name: ets_table_name} = state) do
     :ets.new(ets_table_name, [:named_table, :set, :private])
-    {:ok, %{log_limit: log_limit, ets_table_name: ets_table_name}}
+    {:ok, state}
   end
+
+  # API
 
   def fetch(slug, default_value_function) do
     case get(slug) do
-      {:not_found} -> set(slug, default_value_function.())
-      {:found, result} -> result
+      {:not_found} ->
+        set(slug, default_value_function.())
+
+      {:found, result} ->
+        result
     end
   end
 
   defp get(slug) do
     case GenServer.call(__MODULE__, {:get, slug}) do
-      [] -> {:not_found}
-      [{_slug, result}] -> {:found, result}
+      [] ->
+        {:not_found}
+
+      [{_slug, result}] ->
+        {:found, result}
     end
   end
 

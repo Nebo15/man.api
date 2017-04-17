@@ -29,18 +29,14 @@ defmodule Man.Templates.API do
     |> Repo.page(paging)
   end
 
-  defp maybe_filter_title(query, %{"title" => nil}),
-    do: query
-  defp maybe_filter_title(query, %{"title" => title}) do
+  defp maybe_filter_title(query, %{"title" => title}) when is_binary(title) do
     title_ilike = "%" <> title <> "%"
     where(query, [t], ilike(t.title, ^title_ilike))
   end
   defp maybe_filter_title(query, _),
     do: query
 
-  defp maybe_filter_labels(query, %{"labels" => nil}),
-    do: query
-  defp maybe_filter_labels(query, %{"labels" => labels_stirng}) do
+  defp maybe_filter_labels(query, %{"labels" => labels_stirng}) when is_binary(labels_stirng) do
     labels =
       labels_stirng
       |> String.split(",")
@@ -206,6 +202,7 @@ defmodule Man.Templates.API do
     case Map.fetch(params, Atom.to_string(field)) do
       :error ->
         changeset
+
       {:ok, values} ->
         count = length(values)
         uniq_count =
