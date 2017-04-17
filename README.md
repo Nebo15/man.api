@@ -44,11 +44,15 @@ We encourage you to perform your own tests, because synthetic results are far fr
 
 ### Results
 
-| **Template Syntax** | Concurrency Level | Time taken for tests | Complete requests | Failed requests | Requests per second [#/sec] (mean) | Time per request | Time per request (mean, across all concurrent requests) |
-| ---------------------------- | -- | -------------- | ----- | - | -------------------------- | ------------- | ----------- |
-| **Mustache**                 | 50 | 8.412 seconds   | 10000 | 0 | **1188.84** | 42.058 [ms]   | 0.841 [ms]  |
-| **Markdown**                 | 50 | 8.142 seconds   | 10000 | 0 | **1228.25** | 40.708 [ms]   | 0.814 [ms]  |
-| **Mustache with PDF format** | 50 | 442.214 seconds | 10000 | 0 | **22.61**   | 2211.070 [ms] | 44.221 [ms] |
+| **Metric**/**Template Syntax**                          | **Mustache** | **Markdown** | **Mustache with PDF format** |
+| ------------------------------------------------------- | ------------ | ------------ | --------------|
+| Concurrency Level                                       | 50           | 50           | 50            |
+| Time taken for tests                                    | 8.412 sec    | 8.142 sec    | 442.214 sec   |
+| Complete requests                                       | 10000        | 10000        | 10000         |
+| Failed requests                                         | 0            | 0            | 0             |
+| Requests per second [#/sec] (mean)                      | **1188.84**  | **1228.25**  | **22.61**     |
+| Time per request                                        | 42.058 [ms]  | 40.708 [ms]  | 2211.070 [ms] |
+| Time per request (mean, across all concurrent requests) | 0.841 [ms]   | 0.814 [ms]   | 44.221 [ms]   |
 
 Full console output is available in [`pertest.md`](https://github.com/Nebo15/man.api/blob/master/docs/perftest.md).
 
