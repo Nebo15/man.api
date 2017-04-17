@@ -422,7 +422,7 @@ defmodule Man.Web.TemplateControllerTest do
     {time2, result2} = :timer.tc(fn -> post(conn, template_path(conn, :render, template), req_attrs) end)
     {time3, _result} = :timer.tc(fn -> post(conn, template_path(conn, :render, template), req_attrs) end)
 
-    # More than in 20 times faster (600x on my laptop)
+    # More than in 20 times faster (~600x on my laptop, ~50x on Travis-CI)
     assert (time1/time2) > 20
     assert (time1/time3) > 20
 
