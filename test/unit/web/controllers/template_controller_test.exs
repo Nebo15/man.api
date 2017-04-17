@@ -406,4 +406,27 @@ defmodule Man.Web.TemplateControllerTest do
     conn = post(conn, template_path(conn, :render, template), %{"h1" => "world"})
     assert %{"type" => "locale_not_found"} == json_response(conn, 404)
   end
+
+  test "may cache PDF output", %{raw_conn: conn} do
+    Application.put_env(:man, :cache_pdf_output, true)
+    on_exit(fn ->
+      Application.put_env(:man, :cache_pdf_output, false)
+    end)
+
+    template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+    req_attrs = %{"h1" => "some data", "h2" => "another data"}
+
+    conn = put_req_header(conn, "accept", "application/pdf")
+
+    {time1, result1} = :timer.tc(fn -> post(conn, template_path(conn, :render, template), req_attrs) end)
+    {time2, result2} = :timer.tc(fn -> post(conn, template_path(conn, :render, template), req_attrs) end)
+    {time3, _result} = :timer.tc(fn -> post(conn, template_path(conn, :render, template), req_attrs) end)
+
+    # More than in 100 times faster
+    assert (time1/time2) > 100
+    assert (time1/time3) > 100
+
+    assert <<37, 80, 68, 70, 45, 49, 46, 52, 10, _rest::binary>> = response(result1, 200)
+    assert <<37, 80, 68, 70, 45, 49, 46, 52, 10, _rest::binary>> = response(result2, 200)
+  end
 end

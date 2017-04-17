@@ -15,6 +15,8 @@ defmodule Man do
 
     # Define workers and child supervisors to be supervised
     children = [
+      # Start cache supervisor
+      supervisor(Man.Cache.Supervisor, []),
       # Start the Ecto repository
       supervisor(Man.Repo, []),
       # Start the endpoint when the application starts

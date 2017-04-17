@@ -50,6 +50,10 @@ config :man, Man.Web.Endpoint,
   secret_key_base: "BN71lljHhjDJP7n8TnIg4f+slrxjkbbV4wQDh7RervDFLd3bqCD1CE8JA5UW1AY7",
   render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)]
 
+# Cache PDF output that is costly to render
+config :man,
+  cache_pdf_output: {:system, :boolean, "CACHE_PDF_OUTPUT", false}
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

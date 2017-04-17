@@ -215,3 +215,127 @@ Percentage of the requests served within a certain time (ms)
   99%   2629
  100%   3364 (longest request)
  ```
+
+### PDF Generation with enabled PDF cache
+
+**When cache is cold:**
+```
+$ ab -n 10000 -c 50 -T 'application/json' -H 'Accept: application/pdf' -p 'payload.json' http://localhost:4000/templates/1/actions/render
+This is ApacheBench, Version 2.3 <$Revision: 1757674 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 1000 requests
+Completed 2000 requests
+Completed 3000 requests
+Completed 4000 requests
+Completed 5000 requests
+Completed 6000 requests
+Completed 7000 requests
+Completed 8000 requests
+Completed 9000 requests
+Completed 10000 requests
+Finished 10000 requests
+
+
+Server Software:        Cowboy
+Server Hostname:        localhost
+Server Port:            4000
+
+Document Path:          /templates/1/actions/render
+Document Length:        5814 bytes
+
+Concurrency Level:      50
+Time taken for tests:   11.255 seconds
+Complete requests:      10000
+Failed requests:        0
+Total transferred:      61490000 bytes
+Total body sent:        1950000
+HTML transferred:       58140000 bytes
+Requests per second:    888.52 [#/sec] (mean)
+Time per request:       56.274 [ms] (mean)
+Time per request:       1.125 [ms] (mean, across all concurrent requests)
+Transfer rate:          5335.44 [Kbytes/sec] received
+                        169.20 kb/s sent
+                        5504.64 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0  11.4      0    1140
+Processing:     3   50 442.4     22   11252
+Waiting:        3   50 442.4     22   11252
+Total:          4   50 442.6     23   11254
+
+Percentage of the requests served within a certain time (ms)
+  50%     23
+  66%     26
+  75%     27
+  80%     29
+  90%     33
+  95%     38
+  98%     45
+  99%     59
+ 100%  11254 (longest request)
+```
+
+**When cache is hot:**
+```
+ab -n 10000 -c 50 -T 'application/json' -H 'Accept: application/pdf' -p 'payload.json' http://localhost:4000/templates/1/actions/render
+This is ApacheBench, Version 2.3 <$Revision: 1757674 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 1000 requests
+Completed 2000 requests
+Completed 3000 requests
+Completed 4000 requests
+Completed 5000 requests
+Completed 6000 requests
+Completed 7000 requests
+Completed 8000 requests
+Completed 9000 requests
+Completed 10000 requests
+Finished 10000 requests
+
+
+Server Software:        Cowboy
+Server Hostname:        localhost
+Server Port:            4000
+
+Document Path:          /templates/1/actions/render
+Document Length:        5814 bytes
+
+Concurrency Level:      50
+Time taken for tests:   7.917 seconds
+Complete requests:      10000
+Failed requests:        0
+Total transferred:      61490000 bytes
+Total body sent:        1950000
+HTML transferred:       58140000 bytes
+Requests per second:    1263.05 [#/sec] (mean)
+Time per request:       39.587 [ms] (mean)
+Time per request:       0.792 [ms] (mean, across all concurrent requests)
+Transfer rate:          7584.45 [Kbytes/sec] received
+                        240.52 kb/s sent
+                        7824.98 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.4      0      15
+Processing:    12   39  12.0     36     137
+Waiting:       12   38  11.7     35     136
+Total:         13   39  12.1     36     137
+
+Percentage of the requests served within a certain time (ms)
+  50%     36
+  66%     41
+  75%     45
+  80%     49
+  90%     57
+  95%     64
+  98%     71
+  99%     76
+ 100%    137 (longest request)
+```

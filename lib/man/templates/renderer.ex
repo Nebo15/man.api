@@ -2,6 +2,7 @@ defmodule Man.Templates.Renderer do
   @moduledoc false
   alias Man.Templates.Template
   alias Man.Templates.Template.Locale
+  alias Man.Cache
   alias NExJsonSchema.Validator
 
   @doc """
@@ -17,10 +18,12 @@ defmodule Man.Templates.Renderer do
 
   """
   def render_template(%Template{} = template, attrs) do
+    cache_pdf? = Confex.get(:man, :cache_pdf_output, false)
+
     with :ok <- validate_attrs(template, attrs),
          {:ok, localized_attrs} <- localize_attrs(template, attrs),
          {:ok, html} <- render_html(template, localized_attrs),
-      do: render_output(html, attrs)
+      do: render_output(html, attrs, cache_pdf?)
   end
 
   defp validate_attrs(%Template{validation_schema: nil}, _attrs),
@@ -61,10 +64,10 @@ defmodule Man.Templates.Renderer do
     end
   end
 
-  defp render_output(html, %{"format" => "text/html"}) do
+  defp render_output(html, %{"format" => "text/html"}, _cache?) do
     {:ok, {"text/html", html}}
   end
-  defp render_output(html, %{"format" => "application/json"}) do
+  defp render_output(html, %{"format" => "application/json"}, _cache?) do
     case Poison.encode(%{body: html}) do
       {:ok, json} ->
         {:ok, {"application/json", json}}
@@ -72,7 +75,12 @@ defmodule Man.Templates.Renderer do
         {:error, reason}
     end
   end
-  defp render_output(html, %{"format" => "application/pdf"}) do
+  defp render_output(html, %{"format" => "application/pdf"} = attrs, true) do
+    Cache.fetch(:crypto.hash(:sha256, html), fn ->
+      render_output(html, attrs, false)
+    end)
+  end
+  defp render_output(html, %{"format" => "application/pdf"}, false) do
     case PdfGenerator.generate(html, page_size: "A4") do
       {:ok, html} ->
         {:ok, content} = File.read(html)
@@ -81,7 +89,7 @@ defmodule Man.Templates.Renderer do
         {:error, reason}
     end
   end
-  defp render_output(_html, %{"format" => format}) do
+  defp render_output(_html, %{"format" => format}, _cache?) do
     {:error, {:unsupported_format, format}}
   end
 

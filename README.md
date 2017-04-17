@@ -44,17 +44,25 @@ We encourage you to perform your own tests, because synthetic results are far fr
 
 ### Results
 
-| **Metric**/**Template Syntax**                          | **Mustache** | **Markdown** | **Mustache with PDF format** |
-| ------------------------------------------------------- | ------------ | ------------ | --------------|
-| Concurrency Level                                       | 50           | 50           | 50            |
-| Time taken for tests                                    | 8.412 sec    | 8.142 sec    | 442.214 sec   |
-| Complete requests                                       | 10000        | 10000        | 10000         |
-| Failed requests                                         | 0            | 0            | 0             |
-| Requests per second [#/sec] (mean)                      | **1188.84**  | **1228.25**  | **22.61**     |
-| Time per request                                        | 42.058 [ms]  | 40.708 [ms]  | 2211.070 [ms] |
-| Time per request (mean, across all concurrent requests) | 0.841 [ms]   | 0.814 [ms]   | 44.221 [ms]   |
+| **Metric**/**Template Syntax**                          | **Mustache** | **Markdown** | **Mustache with PDF format** | **Mustache with PDF format** **and PDF cache enabled** |
+| ------------------------------------------------------- | ------------ | ------------ | ------------- | ------------- |
+| Concurrency Level                                       | 50           | 50           | 50            | 50 |
+| Time taken for tests                                    | 8.412 sec    | 8.142 sec    | 442.214 sec   | 11.255 sec |
+| Complete requests                                       | 10000        | 10000        | 10000         | 10000 |
+| Failed requests                                         | 0            | 0            | 0             | 0 |
+| Requests per second [#/sec] (mean)                      | **1188.84**  | **1228.25**  | **22.61**     | **888.52** |
+| Time per request                                        | 42.058 [ms]  | 40.708 [ms]  | 2211.070 [ms] | 56.274 [ms] |
+| Time per request (mean, across all concurrent requests) | 0.841 [ms]   | 0.814 [ms]   | 44.221 [ms]   | 1.125 [ms] |
 
 Full console output is available in [`pertest.md`](https://github.com/Nebo15/man.api/blob/master/docs/perftest.md).
+
+### PDF Output Cache
+
+Since generating PDF is slow, Man allows to cache `wkhtmltopdf` output.
+
+This cache can be used when you have less than 1000 of different templates variations (eg. markdown templates, or mustache templates but all variables are continuous or enums). To enable it simply set `CACHE_PDF_OUTPUT=true` in your environment.
+
+Enabling cache when output variety is high will hurt your performance (cache will always be cold, since it's based on HTML checksum) and may lead to node crashes (ETC table may overflow).
 
 ## Setup Guide
 
