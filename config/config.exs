@@ -65,6 +65,9 @@ config :logger_json, :backend,
 config :pdf_generator,
     wkhtml_path: "wkhtmltopdf"
 
+config :porcelain,
+  driver: Porcelain.Driver.Basic
+
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment
 # by uncommenting the line below and defining dev.exs, test.exs and such.
