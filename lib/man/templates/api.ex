@@ -136,7 +136,7 @@ defmodule Man.Templates.API do
   def replace_template(id, attrs) do
     result =
       Multi.new()
-      |> Multi.delete_all(:delete, from(t in Template, where: t.id == ^id, limit: 1))
+      |> Multi.delete_all(:delete, from(t in Template, where: t.id == ^id))
       |> Multi.insert(:insert, template_changeset(build_template_by_id(id), attrs))
       |> Repo.transaction()
 
