@@ -31,7 +31,10 @@ config :man, Man.Repo,
 # which you typically run after static files are built.
 config :man, Man.Web.Endpoint,
   on_init: {Man.Web.Endpoint, :load_from_system_env, []},
-  http: [port: {:system, "PORT", "80"}],
+  http: [
+    port: {:system, "PORT", "80"},
+    protocol_options: [max_keepalive: 1_000_000],
+  ],
   url:  [
     host: {:system, "HOST", "localhost"},
     port: {:system, "PORT", "80"},
