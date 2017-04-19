@@ -6,7 +6,7 @@ defmodule Man.Cache do
 
   def start_link(opts \\ []) do
     GenServer.start_link(__MODULE__, %{
-      ets_table_name: :man_cache_table,
+      ets_table_name: :man_api_cache_table,
       log_limit: 10_000
     }, opts)
   end

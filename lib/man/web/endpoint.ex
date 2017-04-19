@@ -2,10 +2,10 @@ defmodule Man.Web.Endpoint do
   @moduledoc """
   Phoenix Endpoint for man application.
   """
-  use Phoenix.Endpoint, otp_app: :man
+  use Phoenix.Endpoint, otp_app: :man_api
 
   # Allow acceptance tests to run in concurrent mode
-  if Application.get_env(:man, :sql_sandbox) do
+  if Application.get_env(:man_api, :sql_sandbox) do
     plug Phoenix.Ecto.SQL.Sandbox
   end
 

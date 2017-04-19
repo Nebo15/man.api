@@ -4,7 +4,7 @@ defmodule Man.Mixfile do
   @version "0.1.22"
 
   def project do
-    [app: :man,
+    [app: :man_api,
      package: package(),
      version: @version,
      elixir: "~> 1.4",
@@ -23,7 +23,7 @@ defmodule Man.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [extra_applications: [:logger, :confex, :runtime_tools, :ecto, :postgrex, :ecto_paging,
+    [extra_applications: [:logger, :logger_json, :confex, :runtime_tools, :ecto, :postgrex, :ecto_paging,
                           :cowboy, :httpoison, :poison, :phoenix, :misc_random,
                           :eview, :phoenix_ecto, :bbmustache, :earmark, :pdf_generator],
      mod: {Man, []}]

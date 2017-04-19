@@ -408,9 +408,9 @@ defmodule Man.Web.TemplateControllerTest do
   end
 
   test "may cache PDF output", %{raw_conn: conn} do
-    Application.put_env(:man, :cache_pdf_output, true)
+    Application.put_env(:man_api, :cache_pdf_output, true)
     on_exit(fn ->
-      Application.put_env(:man, :cache_pdf_output, false)
+      Application.put_env(:man_api, :cache_pdf_output, false)
     end)
 
     template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")

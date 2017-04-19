@@ -4,7 +4,7 @@ defmodule Man.Repo do
 
   More info: https://hexdocs.pm/ecto/Ecto.Repo.html
   """
-  use Ecto.Repo, otp_app: :man
+  use Ecto.Repo, otp_app: :man_api
   use Ecto.Pagging.Repo
 
   @doc """

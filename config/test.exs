@@ -4,13 +4,13 @@ use Mix.Config
 config :ex_unit, capture_log: true
 
 # Configure your database
-config :man, Man.Repo,
+config :man_api, Man.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   database: {:system, "DB_NAME", "man_test"}
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :man, Man.Web.Endpoint,
+config :man_api, Man.Web.Endpoint,
   http: [port: 4001],
   server: true
 
@@ -18,4 +18,4 @@ config :man, Man.Web.Endpoint,
 config :logger, level: :debug
 
 # Run acceptance test in concurrent mode
-config :man, sql_sandbox: true
+config :man_api, sql_sandbox: true

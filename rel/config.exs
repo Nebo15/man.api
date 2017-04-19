@@ -14,8 +14,8 @@ environment :default do
   set cookie: cookie
 end
 
-release :man do
-  set version: current_version(:man)
+release :man_api do
+  set version: current_version(:man_api)
   set applications: [
     man: :permanent
   ]

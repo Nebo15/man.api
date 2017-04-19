@@ -1,7 +1,7 @@
 {
   "skip_files": [
     "test/*",
-    "lib/man/tasks.ex"
+    "lib/man/release_tasks.ex"
   ],
   "custom_stop_words": [
     "field",

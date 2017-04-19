@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :man, key: :value
+#     config :man_api, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:man, :key)
+#     Application.get_env(:man_api, :key)
 #
 # Or configure a 3rd-party app:
 #
@@ -24,11 +24,11 @@ use Mix.Config
 #
 #     :var_name, "${ENV_VAR_NAME}"
 
-config :man,
+config :man_api,
   ecto_repos: [Man.Repo]
 
 # Configure your database
-config :man, Man.Repo,
+config :man_api, Man.Repo,
   adapter: Ecto.Adapters.Postgres,
   database: {:system, "DB_NAME", "man_dev"},
   username: {:system, "DB_USER", "postgres"},
@@ -45,13 +45,13 @@ config :mime, :types, %{
 
 # General application configuration
 # Configures the endpoint
-config :man, Man.Web.Endpoint,
+config :man_api, Man.Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "BN71lljHhjDJP7n8TnIg4f+slrxjkbbV4wQDh7RervDFLd3bqCD1CE8JA5UW1AY7",
   render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)]
 
 # Cache PDF output that is costly to render
-config :man,
+config :man_api,
   cache_pdf_output: {:system, :boolean, "CACHE_PDF_OUTPUT", false}
 
 # Configures Elixir's Logger
