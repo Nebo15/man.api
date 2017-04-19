@@ -35,7 +35,7 @@
       "size": "Standard-1X"
     }
   },
-  "image": "nebo15/man",
+  "image": "nebo15/man.api",
   "addons": [
     {
       "plan": "heroku-postgresql",

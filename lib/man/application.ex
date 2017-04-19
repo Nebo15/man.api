@@ -1,6 +1,6 @@
 defmodule Man do
   @moduledoc """
-  This is an entry point of man application.
+  This is an entry point of Man application.
   """
   use Application
   alias Man.Web.Endpoint

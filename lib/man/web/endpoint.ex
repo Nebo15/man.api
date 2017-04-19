@@ -1,6 +1,6 @@
 defmodule Man.Web.Endpoint do
   @moduledoc """
-  Phoenix Endpoint for man application.
+  Phoenix Endpoint for Man application.
   """
   use Phoenix.Endpoint, otp_app: :man_api
 

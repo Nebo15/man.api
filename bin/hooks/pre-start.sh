@@ -1,6 +1,6 @@
 #!/bin/sh
-# `pwd` should be /opt/man
-APP_NAME="man"
+# `pwd` should be /opt/man_api
+APP_NAME="man_api"
 
 if [ "${DB_MIGRATE}" == "true" ]; then
   echo "[WARNING] Migrating database!"

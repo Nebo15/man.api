@@ -73,7 +73,7 @@ defmodule Man.Mixfile do
     [contributors: ["Nebo #15"],
      maintainers: ["Nebo #15"],
      licenses: ["LISENSE.md"],
-     links: %{github: "https://github.com/Nebo15/man"},
+     links: %{github: "https://github.com/Nebo15/man.api"},
      files: ~w(lib LICENSE.md mix.exs README.md)]
   end
 
