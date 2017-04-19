@@ -71,7 +71,7 @@ Enabling cache when output variety is high will hurt your performance (cache wil
 Easiest way to deploy Man is to use docker containers.
 We constantly are releasing pre-built versions that will reduce time to deploy:
 
-- [Back-End Docker container](https://hub.docker.com/r/nebo15/man.api/);
+- [Back-End Docker container](https://hub.docker.com/r/nebo15/man_api/);
 - [PostgreSQL Docker container](https://hub.docker.com/r/nebo15/alpine-postgre/);
 - [UI Docker container](https://hub.docker.com/r/nebo15/man-web/).
 
