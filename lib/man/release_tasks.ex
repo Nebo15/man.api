@@ -6,6 +6,8 @@ defmodule Man.ReleaseTasks do
 
       man_api/bin/man_api command Elixir.Postboy.ReleaseTasks migrate!
   """
+  alias Ecto.Migrator
+
   @start_apps [
     :logger,
     :logger_json,
@@ -53,7 +55,7 @@ defmodule Man.ReleaseTasks do
 
   defp run_migrations_for(app) do
     IO.puts "Running migrations for #{app}"
-    Enum.each(@repos, &Ecto.Migrator.run(&1, migrations_path(app), :up, all: true))
+    Enum.each(@repos, &Migrator.run(&1, migrations_path(app), :up, all: true))
   end
 
   defp migrations_path(app), do: Path.join([priv_dir(app), "repo", "migrations"])
