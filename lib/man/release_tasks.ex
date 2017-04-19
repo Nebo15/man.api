@@ -4,7 +4,7 @@ defmodule Man.ReleaseTasks do
 
   Example:
 
-      man_api/bin/man_api command Elixir.Postboy.ReleaseTasks migrate!
+      man_api/bin/man_api command Elixir.Man.ReleaseTasks migrate!
   """
   alias Ecto.Migrator
 
@@ -20,7 +20,7 @@ defmodule Man.ReleaseTasks do
   ]
 
   @repos [
-    Postboy.Repo
+    Man.Repo
   ]
 
   def migrate! do
