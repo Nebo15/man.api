@@ -89,7 +89,7 @@ defmodule Man.Web.TemplateControllerTest do
   test "creates template and renders template when data is valid", %{conn: conn} do
     fixture = FixturesFactory.build(:template)
 
-    conn = post(conn, template_path(conn, :create), fixture)
+    conn = post(conn, template_path(conn, :create), %{template: fixture})
     assert %{"id" => id} =
       conn
       |> json_response(201)
@@ -116,7 +116,7 @@ defmodule Man.Web.TemplateControllerTest do
   test "does not create template and renders errors when data is invalid", %{conn: conn} do
     fixture = FixturesFactory.build(:template, @invalid_attrs)
 
-    conn = post(conn, template_path(conn, :create), fixture)
+    conn = post(conn, template_path(conn, :create), %{template: fixture})
 
     assert %{
       "error" => %{
@@ -142,7 +142,7 @@ defmodule Man.Web.TemplateControllerTest do
       %{"code" => "en_US", "params" => %{}},
     ])
 
-    conn = post(conn, template_path(conn, :create), fixture)
+    conn = post(conn, template_path(conn, :create), %{template: fixture})
 
     assert %{
       "error" => %{
@@ -162,7 +162,7 @@ defmodule Man.Web.TemplateControllerTest do
 
     assert %{"id" => ^id} =
       conn
-      |> patch(template_path(conn, :update, template), update_attrs)
+      |> patch(template_path(conn, :update, template), %{template: update_attrs})
       |> json_response(200)
       |> Map.get("data")
 
@@ -186,7 +186,7 @@ defmodule Man.Web.TemplateControllerTest do
   test "does not update chosen template and renders errors when data is invalid", %{conn: conn} do
     template = FixturesFactory.create(:template)
     invalid_attrs = FixturesFactory.build(:template, @invalid_attrs)
-    conn = patch(conn, template_path(conn, :update, template), invalid_attrs)
+    conn = patch(conn, template_path(conn, :update, template), %{template: invalid_attrs})
     assert json_response(conn, 422)["errors"] != %{}
   end
 
@@ -196,7 +196,7 @@ defmodule Man.Web.TemplateControllerTest do
 
     assert %{"id" => ^id} =
       conn
-      |> put(template_path(conn, :replace, template), replace_attrs)
+      |> put(template_path(conn, :replace, template), %{template: replace_attrs})
       |> json_response(200)
       |> Map.get("data")
 
@@ -223,7 +223,7 @@ defmodule Man.Web.TemplateControllerTest do
 
     assert %{} !=
       conn
-      |> put(template_path(conn, :replace, template), invalid_attrs)
+      |> put(template_path(conn, :replace, template), %{template: invalid_attrs})
       |> json_response(422)
       |> Map.get("errors")
   end

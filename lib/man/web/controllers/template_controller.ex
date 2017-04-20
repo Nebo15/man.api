@@ -20,7 +20,7 @@ defmodule Man.Web.TemplateController do
     render(conn, "index.json", templates: templates, paging: paging)
   end
 
-  def create(conn, template_params) do
+  def create(conn, %{"template" => template_params}) do
     with {:ok, %Template{} = template} <- API.create_template(template_params) do
       conn
       |> put_status(:created)
@@ -35,13 +35,13 @@ defmodule Man.Web.TemplateController do
     end
   end
 
-  def replace(conn, %{"id" => id} = template_params) do
+  def replace(conn, %{"id" => id, "template" => template_params}) do
     with {:ok, %Template{} = template} <- API.replace_template(id, template_params) do
       render(conn, "show.json", template: template)
     end
   end
 
-  def update(conn, %{"id" => id} = template_params) do
+  def update(conn, %{"id" => id, "template" => template_params}) do
     with {:ok, %Template{} = template} <- API.get_template(id),
          {:ok, %Template{} = template} <- API.update_template(template, template_params) do
       render(conn, "show.json", template: template)
@@ -55,17 +55,17 @@ defmodule Man.Web.TemplateController do
     end
   end
 
-  def render(conn, %{"id" => id} = template_params) do
-    locale = get_header_or_param(conn, template_params, "accept-language", "locale")
-    format = get_header_or_param(conn, template_params, "accept", "format")
+  def render(conn, %{"id" => id} = render_params) do
+    locale = get_header_or_param(conn, render_params, "accept-language", "locale")
+    format = get_header_or_param(conn, render_params, "accept", "format")
 
-    template_params =
-      template_params
+    render_params =
+      render_params
       |> Map.put("locale", locale)
       |> Map.put("format", format)
 
     with {:ok, %Template{} = template} <- API.get_template(id),
-         {:ok, {format, html}} <- Renderer.render_template(template, template_params) do
+         {:ok, {format, html}} <- Renderer.render_template(template, render_params) do
       conn
       |> put_resp_content_type(format)
       |> send_resp(200, html)
