@@ -95,12 +95,13 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
 
 + Response 200 (application/json)
     + Attributes (Response_Collection)
-        + data (array[Template])
+        + data (array[Template], fixed-type)
 
 ### Create Template [POST]
 
 + Request (application/json)
-    + Attributes (Template)
+    + Attributes (object)
+        + template (Template)
 
 + Response 201 (application/json)
     + Headers
@@ -127,7 +128,8 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
     + id: 58e2278a84092e61700041a7 (string) - Template ID
 
 + Request (application/json)
-    + Attributes (Template)
+    + Attributes (object)
+        + template (Template)
 
 + Response 200 (application/json)
     + Attributes (Response_OK)
@@ -140,7 +142,8 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
 
 + Request (application/json)
     + Attributes (object)
-        + body: `<h1>{{user_name}}</h1>` (string, optional)
+        + template (object)
+            + body: `<h1>{{user_name}}</h1>` (string, optional)
 
 + Response 200 (application/json)
     + Attributes (Response_OK)
@@ -229,7 +232,7 @@ Output format is controlled by `Accept: <format>` header.
 + Request (application/json)
 + Response 200 (application/json)
     + Attributes (Response_OK)
-        + data (array[string])
+        + data (array[string], fixed-type)
             + `group/emails` (string, required)
             + `action/signup` (string, required)
 
