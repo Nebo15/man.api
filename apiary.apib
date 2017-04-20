@@ -95,7 +95,7 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
 
 + Response 200 (application/json)
     + Attributes (Response_Collection)
-        + data (array[Template], fixed-type)
+        + data (array[Template_Response], fixed-type)
 
 ### Create Template [POST]
 
@@ -111,7 +111,7 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
     + Attributes (Response_OK)
         + meta (Response__Meta)
             + code: 201 (number)
-        + data (Template)
+        + data (Template_Response)
 
 ### Get Template by ID [GET /templates/{id}]
 
@@ -120,7 +120,7 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
 
 + Response 200 (application/json)
     + Attributes (Response_OK)
-        + data (Template)
+        + data (Template_Response)
 
 ### Replace Template [PUT /templates/{id}]
 
@@ -133,7 +133,7 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
 
 + Response 200 (application/json)
     + Attributes (Response_OK)
-        + data (Template)
+        + data (Template_Response)
 
 ### Update Template [PATCH /templates/{id}]
 
@@ -147,7 +147,7 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
 
 + Response 200 (application/json)
     + Attributes (Response_OK)
-        + data (Template)
+        + data (Template_Response)
             + body: `<h1>{{user_name}}</h1>` (string, required)
 
 ### Delete Template [DELETE /templates/{id}]
@@ -290,7 +290,6 @@ Output format is controlled by `Accept: <format>` header.
 
 ## Templates
 ### Template
-+ id: 58e2278a84092e61700041a7 (string, optional)
 + title: `Sign-Up Email` (string, required) - Template UI title with max length 255 characters.
 + description: `Email that is sent on signup process` (string, optional) - Template UI description with max length 510 characters.
 + syntax: `mustache` (enum, optional) - Syntax processor for a template
@@ -304,6 +303,11 @@ Output format is controlled by `Accept: <format>` header.
     + `other_tag` (string)
 + validation_schema (object, optional) - JSON Schema to validate requests to the template.
 
+### `Template_Response` (Template)
++ id: 58e2278a84092e61700041a7 (string, optional)
++ created_at: `2017-04-20T19:14:13Z` (string, required) - ISO 8601 date and time in UTC timezone.
++ updated_at: `2017-04-20T19:14:13Z` (string, required) - ISO 8601 date and time in UTC timezone.
+            
 ### `Template__Locale`
 + code: en_US (string, required) - Locale for defined template
 + params (object, required) - Localized attributrs.
