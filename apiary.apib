@@ -185,8 +185,10 @@ Output format is controlled by `Accept: <format>` header.
 | `Accept` (format)     | Response `Content-Type`           | Description |
 | --------------------- | --------------------------------- | ----------- |
 | `text/html` (default) | `text/html; charset=utf-8`        | Raw HTML Page. |
-| `application/json`    | `application/json; charset=utf-8` | JSON object with `body` field: `{"body":"<h1>Hello Alex, in en_US</h1>"}` |
+| `application/json`    | `application/json; charset=utf-8` | JSON object with `body` and `params` fields: `{"body":"<h1>Hello Alex, in en_US</h1>"}` |
 | `application/pdf`     | `application/pdf`                 | PDF document rendered from HTML. |
+
+**Notice.** You can use `params` field from JSON response to localize fields that should be used elsewhere, even if template does not contain matched fields. For example, you can localize email subjects in this way.
 
 **Warning!** Format is applied only when there was no errors during rendering, otherwise - response will be always in json format with `Content-Type: application/json`.
 
