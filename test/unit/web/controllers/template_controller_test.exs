@@ -89,11 +89,12 @@ defmodule Man.Web.TemplateControllerTest do
   test "creates template and renders template when data is valid", %{conn: conn} do
     fixture = FixturesFactory.build(:template)
 
+    conn = post(conn, template_path(conn, :create), fixture)
     assert %{"id" => id} =
       conn
-      |> post(template_path(conn, :create), fixture)
       |> json_response(201)
       |> Map.get("data")
+    assert [template_path(conn, :show, id)] == get_resp_header(conn, "location")
 
     assert %{
       "id" => ^id,
