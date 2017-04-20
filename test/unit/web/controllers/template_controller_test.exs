@@ -423,9 +423,9 @@ defmodule Man.Web.TemplateControllerTest do
     {time2, result2} = :timer.tc(fn -> post(conn, template_path(conn, :render, template), req_attrs) end)
     {time3, _result} = :timer.tc(fn -> post(conn, template_path(conn, :render, template), req_attrs) end)
 
-    # More than in 20 times faster (~600x on my laptop, ~50x on Travis-CI)
-    assert (time1/time2) > 20
-    assert (time1/time3) > 20
+    # More than in 10 times faster (~600x on my laptop, ~50x on Travis-CI)
+    assert (time1/time2) > 10
+    assert (time1/time3) > 10
 
     assert <<37, 80, 68, 70, 45, 49, 46, 52, 10, _rest::binary>> = response(result1, 200)
     assert <<37, 80, 68, 70, 45, 49, 46, 52, 10, _rest::binary>> = response(result2, 200)
