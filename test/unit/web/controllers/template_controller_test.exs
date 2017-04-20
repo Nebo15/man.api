@@ -243,7 +243,10 @@ defmodule Man.Web.TemplateControllerTest do
     test "renders mustache templates in json format", %{conn: conn} do
       template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
       conn = post(conn, template_path(conn, :render, template), %{"h1" => "some data", "h2" => "another data"})
-      assert %{"body" => "<div><h1>some data</h1><h2>another data</h2></div>"} == json_response(conn, 200)
+      assert %{
+        "body" => "<div><h1>some data</h1><h2>another data</h2></div>",
+        "params" => %{}
+      } = json_response(conn, 200)
     end
 
     test "renders mustache templates in html format", %{raw_conn: conn} do
@@ -281,7 +284,7 @@ defmodule Man.Web.TemplateControllerTest do
       """
       template = FixturesFactory.create(:template, syntax: "markdown", body: body)
       conn = post(conn, template_path(conn, :render, template), %{})
-      assert %{"body" => "<p>  # Hello\n  world</p>\n"} == json_response(conn, 200)
+      assert %{"body" => "<p>  # Hello\n  world</p>\n", "params" => %{}} = json_response(conn, 200)
     end
 
     test "in html format", %{raw_conn: conn} do
@@ -301,7 +304,10 @@ defmodule Man.Web.TemplateControllerTest do
       body = "<div><h1><%= @h1 %></h1><h2><%= @h2 %></h2></div>"
       template = FixturesFactory.create(:template, syntax: "iex", body: body)
       conn = post(conn, template_path(conn, :render, template), %{"h1" => "some data", "h2" => "another data"})
-      assert %{"body" => "<div><h1>some data</h1><h2>another data</h2></div>"} == json_response(conn, 200)
+      assert %{
+        "body" => "<div><h1>some data</h1><h2>another data</h2></div>",
+        "params" => %{}
+      } = json_response(conn, 200)
     end
 
     test "in html format", %{raw_conn: conn} do
@@ -316,14 +322,14 @@ defmodule Man.Web.TemplateControllerTest do
       body = "<div><h1><%= @h1 %></h1><h2><%= @h2 %></h2></div>"
       template = FixturesFactory.create(:template, syntax: "iex", body: body)
       conn = post(conn, template_path(conn, :render, template), %{})
-      assert %{"body" => @empty_rendered_template} == json_response(conn, 200)
+      assert %{"body" => @empty_rendered_template} = json_response(conn, 200)
     end
   end
 
   test "renders templates with missing attributes", %{conn: conn} do
     template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
     conn = post(conn, template_path(conn, :render, template), %{})
-    assert %{"body" => @empty_rendered_template} == json_response(conn, 200)
+    assert %{"body" => @empty_rendered_template} = json_response(conn, 200)
   end
 
   test "takes format from Accept header", %{raw_conn: conn} do
@@ -335,7 +341,7 @@ defmodule Man.Web.TemplateControllerTest do
       |> put_req_header("accept", "application/json")
       |> post(template_path(conn, :render, template), req_attrs)
 
-    assert %{"body" => "some body"} == json_response(conn, 200)
+    assert %{"body" => "some body"} = json_response(conn, 200)
   end
 
   test "returns error on unsupported format", %{raw_conn: conn} do
@@ -373,7 +379,7 @@ defmodule Man.Web.TemplateControllerTest do
       |> put_req_header("accept-language", "es_ES")
       |> post(template_path(conn, :render, template), %{"h1" => "world", "locale" => "en_US"})
 
-    assert %{"body" => "<div><h1>Hola world</h1><h2></h2></div>"} == json_response(conn, 200)
+    assert %{"body" => "<div><h1>Hola world</h1><h2></h2></div>"} = json_response(conn, 200)
   end
 
   test "localizes templates with default locale", %{conn: conn} do
@@ -381,7 +387,10 @@ defmodule Man.Web.TemplateControllerTest do
     locales = [%{"code" => "es_ES", "params" => %{"hello" => "Hola"}}]
     template = FixturesFactory.create(:template, body: body, locales: locales)
     conn = post(conn, template_path(conn, :render, template), %{"h1" => "world"})
-    assert %{"body" => "<div><h1>Hola world</h1><h2></h2></div>"} == json_response(conn, 200)
+    assert %{
+      "body" => "<div><h1>Hola world</h1><h2></h2></div>",
+      "params" => %{"l10n" => %{"hello" => "Hola"}}
+    } = json_response(conn, 200)
   end
 
   test "localizes templates with multiple locales", %{conn: conn} do
@@ -393,7 +402,10 @@ defmodule Man.Web.TemplateControllerTest do
 
     template = FixturesFactory.create(:template, body: body, locales: locales)
     conn = post(conn, template_path(conn, :render, template), %{"h1" => "world", "locale" => "en_US"})
-    assert %{"body" => "<div><h1>Hello world</h1><h2></h2></div>"} == json_response(conn, 200)
+    assert %{
+      "body" => "<div><h1>Hello world</h1><h2></h2></div>",
+      "params" => %{"l10n" => %{"hello" => "Hello"}}
+    } = json_response(conn, 200)
   end
 
   test "returns error when locale is not set", %{conn: conn} do

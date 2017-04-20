@@ -65,10 +65,10 @@ defmodule Man.Web.TemplateController do
       |> Map.put("format", format)
 
     with {:ok, %Template{} = template} <- API.get_template(id),
-         {:ok, {format, html}} <- Renderer.render_template(template, render_params) do
+         {:ok, {format, output}} <- Renderer.render_template(template, render_params) do
       conn
       |> put_resp_content_type(format)
-      |> send_resp(200, html)
+      |> send_resp(200, output)
     end
   end
 

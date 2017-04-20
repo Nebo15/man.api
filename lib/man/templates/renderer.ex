@@ -23,7 +23,7 @@ defmodule Man.Templates.Renderer do
     with :ok <- validate_attrs(template, attrs),
          {:ok, localized_attrs} <- localize_attrs(template, attrs),
          {:ok, html} <- render_html(template, localized_attrs),
-      do: render_output(html, attrs, cache_pdf?)
+      do: render_output(html, localized_attrs, cache_pdf?)
   end
 
   defp validate_attrs(%Template{validation_schema: nil}, _attrs),
@@ -67,8 +67,8 @@ defmodule Man.Templates.Renderer do
   defp render_output(html, %{"format" => "text/html"}, _cache?) do
     {:ok, {"text/html", html}}
   end
-  defp render_output(html, %{"format" => "application/json"}, _cache?) do
-    case Poison.encode(%{body: html}) do
+  defp render_output(html, %{"format" => "application/json"} = attrs, _cache?) do
+    case Poison.encode(%{body: html, params: attrs}) do
       {:ok, json} ->
         {:ok, {"application/json", json}}
       {:error, reason} ->
