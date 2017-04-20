@@ -115,7 +115,7 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
 ### Get Template by ID [GET /templates/{id}]
 
 + Parameters
-    + id: 58e2278a84092e61700041a7 (string, optional) - Template ID
+    + id: 58e2278a84092e61700041a7 (string) - Template ID
 
 + Response 200 (application/json)
     + Attributes (Response_OK)
@@ -124,7 +124,7 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
 ### Replace Template [PUT /templates/{id}]
 
 + Parameters
-    + id: 58e2278a84092e61700041a7 (string, optional) - Template ID
+    + id: 58e2278a84092e61700041a7 (string) - Template ID
 
 + Request (application/json)
     + Attributes (Template)
@@ -136,7 +136,7 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
 ### Update Template [PATCH /templates/{id}]
 
 + Parameters
-    + id: 58e2278a84092e61700041a7 (string, optional) - Template ID
+    + id: 58e2278a84092e61700041a7 (string) - Template ID
 
 + Request (application/json)
     + Attributes (object)
@@ -150,7 +150,7 @@ Template allows to deploy Man to Heroku just in minute (and use it for free with
 ### Delete Template [DELETE /templates/{id}]
 
 + Parameters
-    + id: 58e2278a84092e61700041a7 (string, optional) - Template ID
+    + id: 58e2278a84092e61700041a7 (string) - Template ID
 
 + Request (application/json)
 + Response 200 (application/json)
@@ -188,7 +188,7 @@ Output format is controlled by `Accept: <format>` header.
 **Warning!** Format is applied only when there was no errors during rendering, otherwise - response will be always in json format with `Content-Type: application/json`.
 
 + Parameters
-    + id: 58e2278a84092e61700041a7 (string, optional) - Template ID
+    + id: 58e2278a84092e61700041a7 (string) - Template ID
 
 + Request (application/json)
     + Headers
