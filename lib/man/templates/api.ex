@@ -203,7 +203,7 @@ defmodule Man.Templates.API do
       :error ->
         changeset
 
-      {:ok, values} ->
+      {:ok, values} when is_list(values) ->
         count = length(values)
         uniq_count =
           values
@@ -213,6 +213,9 @@ defmodule Man.Templates.API do
         if uniq_count == count,
             do: changeset,
           else: add_error(changeset, field, "contains duplicate fields", validation: [:unique])
+
+      {:ok, _values} ->
+        changeset
     end
   end
 end
