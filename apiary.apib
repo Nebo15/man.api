@@ -3,8 +3,6 @@ HOST: https://man-api.herokuapp.com/
 
 # Mán Templates Rendering Service
 
-Mán - templates rendering as a service.
-
 It is capable to store templates (in `iex`, `mustache`) or `markdown`, render it and dispatch in PDF, JSON or HTML formats.
 
 > "Mán" translates from the Sindarin as "Spirit". Sindarin is one of the many languages spoken by the immortal Elves.
@@ -22,6 +20,10 @@ Man consists of two main parts:
 - Central control over Email or/and SMS templates;
 - PDF/HTML printout forms generation;
 - Rendering HTML pages over API.
+
+## License
+
+Man is distributed under MIT license. See [README.md](https://github.com/Nebo15/man.api/blob/master/LICENSE.md) in GitHub repositories.
 
 ## UI
 
@@ -81,6 +83,17 @@ They are built on top of Alpine Linux, to reduce container size and memory consu
 Template allows to deploy Man to Heroku just in minute (and use it for free within Heroku tiers):
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/nebo15/man.api)
+
+## Common errors
+
+> I'm getting HTTP 400 (Mailformed JSON) responses.
+
+Make sure that JSON is valid with [JSON Formatter](jsonformatter.curiousconcept.com).
+If request is valid, probably your request body structure is invalid. In most cases you forgot to send root `template` object when updating Templates.
+
+> I'm getting HTTP 415 responses.
+
+You MUST always set `Content-Type: application/json` header when requesting Man's API.
 
 ## Templates [/templates]
 
