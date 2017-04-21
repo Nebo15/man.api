@@ -1,11 +1,12 @@
-# Mán - templates rendering engine microservice
+# Templates rendering engine microservice
+
 [![Deps Status](https://beta.hexfaktor.org/badge/all/github/Nebo15/man.api.svg)](https://beta.hexfaktor.org/github/Nebo15/man.api) [![Build Status](https://travis-ci.org/Nebo15/man.api.svg?branch=master)](https://travis-ci.org/Nebo15/man.api) [![Coverage Status](https://coveralls.io/repos/github/Nebo15/man.api/badge.svg?branch=master)](https://coveralls.io/github/Nebo15/man.api?branch=master) [![Ebert](https://ebertapp.io/github/Nebo15/man.api.svg)](https://ebertapp.io/github/Nebo15/man.api)
 
-Stores templates (in `iex`, `mustache`) or `markdown` documents, renders it over HTTP API with dispatch in PDF, JSON or HTML formats.
+![Man Logo](https://github.com/Nebo15/man.api/raw/master/docs/images/logo.png)
+
+Mán stores templates (in `iex`, `mustache`) or `markdown` documents, renders it over HTTP API with dispatch in PDF, JSON or HTML formats.
 
 > "Mán" translates from the Sindarin as "Spirit". Sindarin is one of the many languages spoken by the immortal Elves.
-
-[![Build history](https://buildstats.info/travisci/chart/Nebo15/man.api)](https://travis-ci.org/Nebo15/man.api)
 
 ## Docs
 
@@ -63,6 +64,10 @@ Since generating PDF is slow, Man allows to cache `wkhtmltopdf` output.
 This cache can be used when you have less than 1000 of different templates variations (eg. markdown templates, or mustache templates but all variables are continuous or enums). To enable it simply set `CACHE_PDF_OUTPUT=true` in your environment.
 
 Enabling cache when output variety is high will hurt your performance (cache will always be cold, since it's based on HTML checksum) and may lead to node crashes (ETC table may overflow).
+
+## Build history
+
+[![Build history](https://buildstats.info/travisci/chart/Nebo15/man.api)](https://travis-ci.org/Nebo15/man.api)
 
 ## Setup Guide
 
