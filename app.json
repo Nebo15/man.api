@@ -14,7 +14,7 @@
   "env": {
     "HOST": {
       "description": "HTTP host for web app to listen on.",
-      "value": "my-man-api.herokuapp.com"
+      "value": "localhost"
     },
     "DB_MIGRATE": {
       "description": "Migrate database when container starts.",
@@ -55,6 +55,9 @@
       "url": "https://github.com/HashNuke/heroku-buildpack-elixir.git"
     }
   ],
+  "scripts": {
+    "postdeploy": "if [ \"${DB_MIGRATE}\" == \"true\" ]; then _build/${MIX_ENV}/rel/man_api/bin/man_api command Elixir.Man.ReleaseTasks migrate!; fi;"
+  },
   "addons": [
     {
       "plan": "heroku-postgresql",
