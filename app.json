@@ -35,7 +35,7 @@
       "description": "Mix environment to use: test, dev, prod.",
       "required": true,
       "value": "prod"
-    },
+    }
   },
   "environments": {
     "test": {
