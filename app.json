@@ -18,17 +18,24 @@
     },
     "DB_MIGRATE": {
       "description": "Migrate database when container starts.",
+      "required": true,
       "value": "true"
     },
     "SECRET_KEY": {
       "description": "Phoenix `:secret_key_base`.",
+      "required": true,
       "generator": "secret"
     },
     "ERLANG_COOKIE": {
       "description": "Erlang distribution cookie.",
+      "required": true,
       "generator": "secret"
     },
-    "MIX_ENV": "prod"
+    "MIX_ENV": {
+      "description": "Mix environment to use: test, dev, prod.",
+      "required": true,
+      "value": "prod"
+    },
   },
   "environments": {
     "test": {
