@@ -13,8 +13,8 @@
   "success_url": "/templates",
   "env": {
     "HOST": {
-      "description": "HTTP port for web app to listen on.",
-      "value": "localhost"
+      "description": "HTTP host for web app to listen on.",
+      "value": "my-man-api.herokuapp.com"
     },
     "DB_MIGRATE": {
       "description": "Migrate database when container starts.",
