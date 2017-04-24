@@ -28,9 +28,13 @@
       "description": "Erlang distribution cookie.",
       "generator": "secret"
     },
-    "MIX_ENV": {
-      "description": "Mix Environment: test, dev, prod.",
-      "value": "prod"
+    "MIX_ENV": "prod"
+  },
+  "environments": {
+    "test": {
+      "env": {
+        "MIX_ENV": "test"
+      }
     }
   },
   "formation": {
