@@ -35,7 +35,11 @@
       "size": "Standard-1X"
     }
   },
-  "image": "nebo15/man.api",
+  "buildpacks": [
+    {
+      "url": "https://github.com/HashNuke/heroku-buildpack-elixir.git"
+    }
+  ],
   "addons": [
     {
       "plan": "heroku-postgresql",
