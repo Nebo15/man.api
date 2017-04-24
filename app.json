@@ -21,7 +21,7 @@
       "value": "true"
     },
     "SECRET_KEY": {
-      "description": "Phoenix [`:secret_key_base`](https://hexdocs.pm/phoenix/Phoenix.Endpoint.html).",
+      "description": "Phoenix `:secret_key_base`.",
       "generator": "secret"
     },
     "ERLANG_COOKIE": {
@@ -32,7 +32,7 @@
   "formation": {
     "web": {
       "quantity": 1,
-      "size": "Standard-1X"
+      "size": "free"
     }
   },
   "buildpacks": [
