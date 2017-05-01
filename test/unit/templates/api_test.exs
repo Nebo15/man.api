@@ -105,6 +105,14 @@ defmodule Man.Templates.APITest do
       assert template.validation_schema == %{}
     end
 
+    test "with long body creates a template" do
+      body = String.duplicate("Hello World", 600)
+      atts = Map.put(@create_attrs, :body, body)
+      assert {:ok, %Template{} = template} = API.create_template(atts)
+      assert template.body == body
+      assert template.validation_schema == %{}
+    end
+
     test "with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = API.create_template(@invalid_attrs)
     end
