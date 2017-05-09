@@ -1,7 +1,7 @@
 {
   "skip_files": [
     "test/*",
-    "lib/man/release_tasks.ex"
+    "lib/man_api/release_tasks.ex"
   ],
   "custom_stop_words": [
     "field",
@@ -10,7 +10,8 @@
     "embeds_one",
     "embeds_many",
     "schema",
-    "send"
+    "send",
+    "defmacro"
   ],
   "treat_no_relevant_lines_as_covered": true
 }
