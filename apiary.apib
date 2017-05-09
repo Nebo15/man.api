@@ -27,7 +27,7 @@ Man is distributed under MIT license. See [README.md](https://github.com/Nebo15/
 
 ## UI
 
-> Screenshots
+![UI Demo](https://github.com/Nebo15/man.web/raw/master/docs/images/ui-animated.gif)
 
 ## Performance
 
@@ -169,7 +169,7 @@ You MUST always set `Content-Type: application/json` header when requesting Man'
     + id: 58e2278a84092e61700041a7 (string) - Template ID
 
 + Request (application/json)
-+ Response 200 (application/json)
++ Response 204 (application/json)
 
 ### Render Template [POST /templates/{id}/actions/render]
 
@@ -322,7 +322,7 @@ Output format is controlled by `Accept: <format>` header.
 + id: 58e2278a84092e61700041a7 (string, optional)
 + created_at: `2017-04-20T19:14:13Z` (string, required) - ISO 8601 date and time in UTC timezone.
 + updated_at: `2017-04-20T19:14:13Z` (string, required) - ISO 8601 date and time in UTC timezone.
-            
+
 ### `Template__Locale`
 + code: en_US (string, required) - Locale for defined template
 + params (object, required) - Localized attributrs.
