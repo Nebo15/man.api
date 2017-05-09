@@ -28,7 +28,7 @@ Man consists of two main parts:
 
 ## UI
 
-> Screenshots
+![UI Demo](https://github.com/Nebo15/man.web/raw/master/docs/images/ui-animated.gif)
 
 ## Performance
 
