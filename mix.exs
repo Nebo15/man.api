@@ -48,7 +48,7 @@ defmodule Man.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:distillery, "~> 1.2"},
-     {:confex, "~> 1.4"},
+     {:confex, "~> 2.0"},
      {:ecto, "~> 2.1"},
      {:postgrex, "~> 0.13.2"},
      {:cowboy, "~> 1.1"},
