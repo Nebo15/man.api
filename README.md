@@ -87,3 +87,11 @@ We constantly are releasing pre-built versions that will reduce time to deploy:
 Template allows to deploy Man to Heroku just in minute (and use it for free within Heroku tiers):
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/nebo15/man.api)
+
+## Binary dependencies
+
+`wkhtmltopdf` is used for HTML to PDF conversion.
+
+## License
+
+See [LICENSE.md](LICENSE.md).
