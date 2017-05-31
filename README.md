@@ -71,6 +71,8 @@ Enabling cache when output variety is high will hurt your performance (cache wil
 
 ## Setup Guide
 
+Application is configured via environment variables. List of supported keys and their default values can be found in [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md).
+
 ### Docker
 
 Easiest way to deploy Man is to use docker containers.
