@@ -15,7 +15,8 @@ RUN apk add --update --no-cache \
       libgcc libstdc++ libx11 glib libxrender libxext libintl \
       libcrypto1.0 libssl1.0 \
       ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family \
-      fontconfig dbus
+      fontconfig dbus \
+      make g++
 COPY rel/deps/wkhtmltopdf /bin
 RUN chmod +x /bin/wkhtmltopdf
 
