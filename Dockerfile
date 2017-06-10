@@ -1,6 +1,4 @@
 FROM nebo15/alpine-elixir:latest
-
-# Maintainers
 MAINTAINER Nebo#15 support@nebo15.com
 
 # Configure environment variables and other settings
@@ -8,12 +6,9 @@ ENV MIX_ENV=prod \
     APP_NAME=man_api \
     APP_PORT=4000
 
-WORKDIR ${HOME}
-
 # Install wkhtmltopdf
 RUN apk add --update --no-cache \
       libgcc libstdc++ libx11 glib libxrender libxext libintl \
-      libcrypto1.0 libssl1.0 \
       ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family \
       fontconfig dbus \
       make g++
@@ -29,6 +24,9 @@ COPY . .
 
 # Compile project for Erlang VM
 RUN mix do compile, release --verbose
+
+# Reduce container size
+RUN apk del --no-cache make g++
 
 # Move release to /opt/$APP_NAME
 RUN \
