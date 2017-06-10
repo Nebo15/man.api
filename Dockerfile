@@ -6,12 +6,28 @@ ENV MIX_ENV=prod \
     APP_NAME=man_api \
     APP_PORT=4000
 
+WORKDIR ${HOME}
+
 # Install wkhtmltopdf
 RUN apk add --update --no-cache \
-      libgcc libstdc++ libx11 glib libxrender libxext libintl \
+      libgcc \
+      libstdc++ \
+      libx11 \
+      glib \
+      libxrender \
+      libxext \
+      libintl \
       ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family \
-      fontconfig dbus \
-      make g++
+      fontconfig \
+      dbus
+
+# Install build deps
+RUN apk add --update --no-cache --virtual .build-deps \
+  libcrypto1.0 \
+  libssl1.0 \
+  make \
+  g++
+
 COPY rel/deps/wkhtmltopdf /bin
 RUN chmod +x /bin/wkhtmltopdf
 
@@ -26,7 +42,7 @@ COPY . .
 RUN mix do compile, release --verbose
 
 # Reduce container size
-RUN apk del --no-cache make g++
+RUN apk del  --no-cache .build-deps
 
 # Move release to /opt/$APP_NAME
 RUN \
