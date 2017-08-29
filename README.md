@@ -12,7 +12,7 @@ Mán stores templates (in `iex`, `mustache`) or `markdown` documents, renders it
 
 Full API and installation description available on [dedicated page](http://docs.man2.apiary.io/).
 
-## Introduction
+## Introduction 
 
 Man consists of two main parts:
 
