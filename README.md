@@ -30,7 +30,7 @@ Man consists of two main parts:
 
 ![UI Demo](https://github.com/Nebo15/man.web/raw/master/docs/images/ui-animated.gif)
 
-## Performance
+## Performance 
 
 We encourage you to perform your own tests, because synthetic results are far from real life situation. We provide them only as starting point in understanding Man's performance.
 
