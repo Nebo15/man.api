@@ -47,18 +47,11 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 script:
   # Increment version in mix.exs
-  - ./bin/ci/version-increment.sh
+  - ./bin/ci/version-increment.sh || travis_terminate 1
   # Install dependencies
-  - mix deps.get
+  - mix deps.get || travis_terminate 1
   # Run all tests except pending ones
-  - mix test --exclude pending --trace
-  # Submit code coverage report to Coveralls
-  # Add --pro if you using private repo.
-  - mix coveralls.travis --exclude pending
-  # Run static code analysis
-  - mix credo --strict
-  # Check code style
-  - mix dogma
+  - ./bin/mix_tests.sh || travis_terminate 1
   # Build Docker container
   - ./bin/build.sh || travis_terminate 1
   # Initialize DB for Docker container
