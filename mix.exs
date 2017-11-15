@@ -23,7 +23,7 @@ defmodule Man.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [extra_applications: [:logger, :logger_json, :confex, :runtime_tools, :ecto, :postgrex, :ecto_paging,
+    [extra_applications: [:logger, :confex, :runtime_tools, :ecto, :postgrex, :ecto_paging,
                           :cowboy, :httpoison, :poison, :phoenix, :misc_random,
                           :eview, :phoenix_ecto, :bbmustache, :earmark, :pdf_generator],
      mod: {Man, []}]
@@ -58,7 +58,6 @@ defmodule Man.Mixfile do
      {:eview, "~> 0.10.1"},
      {:phoenix_ecto, "~> 3.2"},
      {:nex_json_schema, "~> 0.6.0"},
-     {:logger_json, "~> 0.4.0"},
      {:bbmustache, "~> 1.4"},
      {:earmark, "~> 1.2"},
      {:ecto_paging, "~> 0.6.1"},
