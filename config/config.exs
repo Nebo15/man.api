@@ -59,12 +59,6 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-# Configure JSON Logger back-end
-config :logger_json, :backend,
-  on_init: {Man, :load_from_system_env, []},
-  json_encoder: Poison,
-  metadata: :all
-
 # This requires installing wkhtmltopdf onto developers machine
 config :pdf_generator,
     wkhtml_path: "wkhtmltopdf"
