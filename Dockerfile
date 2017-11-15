@@ -1,4 +1,5 @@
-FROM nebo15/alpine-elixir:latest
+FROM edenlabllc/alpine-elixir
+
 MAINTAINER Nebo#15 support@nebo15.com
 
 # Configure environment variables and other settings
