@@ -62,6 +62,8 @@ defmodule Man.Mixfile do
      {:earmark, "~> 1.2"},
      {:ecto_paging, "~> 0.6.1"},
      {:pdf_generator, "~> 0.3.5"},
+     {:plug_logger_json, "~> 0.5"},
+     {:ecto_logger_json, "~> 0.1"},
      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
      {:dogma, ">= 0.1.12", only: [:dev, :test]},
      {:credo, ">= 0.5.1", only: [:dev, :test]}]

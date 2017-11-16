@@ -34,7 +34,8 @@ config :man_api, Man.Repo,
   username: {:system, "DB_USER", "postgres"},
   password: {:system, "DB_PASSWORD", "postgres"},
   hostname: {:system, "DB_HOST", "localhost"},
-  port: {:system, :integer, "DB_PORT", 5432}
+  port: {:system, :integer, "DB_PORT", 5432},
+  loggers: [{Ecto.LoggerJSON, :log, [:info]}]
 
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
