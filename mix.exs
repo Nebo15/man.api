@@ -1,7 +1,7 @@
 defmodule Man.Mixfile do
   use Mix.Project
 
-  @version "0.1.42"
+  @version "0.1.43"
 
   def project do
     [app: :man_api,
