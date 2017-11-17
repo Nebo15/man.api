@@ -9,6 +9,8 @@ defmodule Man.Web.Router do
   use Man.Web, :router
   use Plug.ErrorHandler
 
+  alias Plug.LoggerJSON
+
   require Logger
 
   pipeline :api do
@@ -43,7 +45,7 @@ defmodule Man.Web.Router do
   end
 
   defp handle_errors(%Plug.Conn{status: 500} = conn, %{kind: kind, reason: reason, stack: stacktrace}) do
-    Plug.LoggerJSON.log_error(kind, reason, stacktrace)
+    LoggerJSON.log_error(kind, reason, stacktrace)
     send_resp(conn, 500, Poison.encode!(%{errors: %{detail: "Internal server error"}}))
   end
 
