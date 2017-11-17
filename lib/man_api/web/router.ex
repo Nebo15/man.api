@@ -7,6 +7,9 @@ defmodule Man.Web.Router do
   More info at: https://hexdocs.pm/phoenix/Phoenix.Router.html
   """
   use Man.Web, :router
+  use Plug.ErrorHandler
+
+  require Logger
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -38,4 +41,11 @@ defmodule Man.Web.Router do
 
     post "/templates/:id/actions/render", TemplateController, :render
   end
+
+  defp handle_errors(%Plug.Conn{status: 500} = conn, %{kind: kind, reason: reason, stack: stacktrace}) do
+    Plug.LoggerJSON.log_error(kind, reason, stacktrace)
+    send_resp(conn, 500, Poison.encode!(%{errors: %{detail: "Internal server error"}}))
+  end
+
+  defp handle_errors(_, _), do: nil
 end
