@@ -87,3 +87,5 @@ config :phoenix, :serve_endpoints, true
 
 config :pdf_generator,
     wkhtml_path: "/bin/wkhtmltopdf"
+
+config :logger, level: :error, handle_otp_reports: true
