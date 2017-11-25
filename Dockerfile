@@ -1,86 +1,40 @@
-FROM edenlabllc/alpine-elixir
+FROM edenlabllc/elixir:1.5.2 as builder
 
-MAINTAINER Nebo#15 support@nebo15.com
+ARG APP_NAME
+ARG APP_VERSION
 
-# Configure environment variables and other settings
-ENV MIX_ENV=prod \
-    APP_NAME=man_api \
-    APP_PORT=4000
+ADD . /app
 
-WORKDIR ${HOME}
+WORKDIR /app
 
-# Install wkhtmltopdf
-RUN apk add --update --no-cache \
-      libgcc \
-      libstdc++ \
-      libx11 \
-      glib \
-      libxrender \
-      libxext \
-      libintl \
-      ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family \
-      fontconfig \
-      dbus
+ENV MIX_ENV=prod
 
-# Install build deps
-RUN apk add --update --no-cache --virtual .build-deps \
-  libcrypto1.0 \
-  libssl1.0 \
-  make \
-  g++
+RUN mix do \
+      local.hex --force, \
+      local.rebar --force, \
+      deps.get, \
+      deps.compile, \
+      release
 
-COPY rel/deps/wkhtmltopdf /bin
-RUN chmod +x /bin/wkhtmltopdf
+FROM alpine:edge
 
-# Install and compile project dependencies
-COPY mix.* ./
-RUN mix do deps.get, deps.compile
+ARG APP_NAME
+ARG APP_VERSION
 
-# Add project sources
-COPY . .
+RUN apk add --no-cache \
+      ncurses-libs \
+      zlib \
+      ca-certificates \
+      openssl \
+      bash
 
-# Compile project for Erlang VM
-RUN mix do compile, release --verbose
+WORKDIR /app
 
-# Reduce container size
-RUN apk del  --no-cache .build-deps
+COPY --from=builder /app/_build/prod/rel/${APP_NAME}/releases/${APP_VERSION}/${APP_NAME}.tar.gz /app
 
-# Move release to /opt/$APP_NAME
-RUN \
-    mkdir -p $HOME/priv && \
-    mkdir -p /opt/$APP_NAME/log && \
-    mkdir -p /var/log && \
-    mkdir -p /opt/$APP_NAME/priv && \
-    mkdir -p /opt/$APP_NAME/hooks && \
-    mkdir -p /opt/$APP_NAME/uploads && \
-    cp -R $HOME/priv /opt/$APP_NAME/ && \
-    cp -R $HOME/bin/hooks /opt/$APP_NAME/ && \
-    APP_TARBALL=$(find $HOME/_build/$MIX_ENV/rel/$APP_NAME/releases -maxdepth 2 -name ${APP_NAME}.tar.gz) && \
-    cp $APP_TARBALL /opt/$APP_NAME/ && \
-    cd /opt/$APP_NAME && \
-    tar -xzf $APP_NAME.tar.gz && \
-    rm $APP_NAME.tar.gz && \
-    rm -rf /opt/app/* && \
-    chmod -R 777 $HOME && \
-    chmod -R 777 /opt/$APP_NAME && \
-    chmod -R 777 /var/log
+RUN tar -xzf ${APP_NAME}.tar.gz; rm ${APP_NAME}.tar.gz
 
-# Change user to "default"
-USER default
+ENV REPLACE_OS_VARS=true \
+    APP=${APP_NAME}
 
-# Allow to read ENV vars for mix configs
-ENV REPLACE_OS_VARS=true
-
-# Exposes this port from the docker container to the host machine
-EXPOSE ${APP_PORT}
-
-# Change workdir to a released directory
-WORKDIR /opt
-
-# Pre-run hook that allows you to add initialization scripts.
-# All Docker hooks should be located in bin/hooks directory.
-RUN $APP_NAME/hooks/pre-run.sh
-
-# The command to run when this image starts up.
-# To run migrations on start set DB_MIGRATE=true env when starting container.
-CMD $APP_NAME/bin/$APP_NAME foreground
+CMD ./bin/${APP} foreground
