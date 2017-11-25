@@ -11,6 +11,7 @@ addons:
   apt:
     packages:
       - wkhtmltopdf
+      - docker-ce
 elixir:
   - 1.4.2
 otp_release:
