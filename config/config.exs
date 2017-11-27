@@ -58,7 +58,7 @@ config :man_api,
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$message\n",
-  metadata: [:request_id],
+  handle_otp_reports: true,
   level: :info
 
 # This requires installing wkhtmltopdf onto developers machine
