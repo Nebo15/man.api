@@ -7,7 +7,7 @@ defmodule Man.Mixfile do
     [app: :man_api,
      package: package(),
      version: @version,
-     elixir: "~> 1.4",
+     elixir: "~> 1.5",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
@@ -47,7 +47,7 @@ defmodule Man.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:distillery, "~> 1.2"},
+    [{:distillery, "~> 1.4.0"},
      {:confex, "~> 2.0"},
      {:ecto, "~> 2.1"},
      {:postgrex, "~> 0.13.2"},

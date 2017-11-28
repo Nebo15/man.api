@@ -13,9 +13,9 @@ addons:
       - wkhtmltopdf
       - docker-ce
 elixir:
-  - 1.4.2
+  - 1.5.2
 otp_release:
-  - 19.2
+  - 20.1
 notifications:
   slack: 
     rooms:
