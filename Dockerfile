@@ -26,7 +26,13 @@ RUN apk add --no-cache \
       zlib \
       ca-certificates \
       openssl \
+      xvfb \
+      dbus \
       bash
+
+RUN apk add wkhtmltopdf \
+      --update-cache \
+      --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
 
 WORKDIR /app
 
