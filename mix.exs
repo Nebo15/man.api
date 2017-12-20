@@ -65,8 +65,8 @@ defmodule Man.Mixfile do
      {:plug_logger_json, "~> 0.5"},
      {:ecto_logger_json, "~> 0.1"},
      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
-     {:dogma, ">= 0.1.12", only: [:dev, :test]},
-     {:credo, ">= 0.5.1", only: [:dev, :test]}]
+     {:dogma, ">= 0.1.12", only: [:dev, :test], runtime: false},
+     {:credo, ">= 0.5.1", only: [:dev, :test], runtime: false}]
   end
 
   # Settings for publishing in Hex package manager:
