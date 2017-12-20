@@ -84,7 +84,7 @@ defmodule Man.Templates.APITest do
   test "list_labels/1 returns all labels" do
     FixturesFactory.create(:template, labels: ["a", "b", "c"])
     FixturesFactory.create(:template, labels: ["a", "d", "e"])
-    assert ["b", "e", "a", "c", "d"] = API.list_labels()
+    assert Enum.sort(["b", "e", "a", "c", "d"]) == Enum.sort(API.list_labels())
   end
 
   describe "get_template/1" do
