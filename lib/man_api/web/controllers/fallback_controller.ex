@@ -20,7 +20,7 @@ defmodule Man.Web.FallbackController do
     conn
     |> put_status(415)
     |> render(EView.Views.Error, :"415", %{
-      message: "Content-Type #{inspect message} is not supported"
+      message: "Content-Type #{inspect(message)} is not supported"
     })
   end
 

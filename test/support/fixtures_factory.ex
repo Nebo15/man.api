@@ -15,8 +15,7 @@ defmodule Man.FixturesFactory do
 
   def build(fixture, attrs \\ %{})
 
-  def build(fixture, attrs) when is_list(attrs),
-    do: build(fixture, Enum.into(attrs, %{}))
+  def build(fixture, attrs) when is_list(attrs), do: build(fixture, Enum.into(attrs, %{}))
 
   def build(:template, attrs) do
     %{

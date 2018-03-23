@@ -45,14 +45,14 @@ defmodule Man.Templates.APITest do
       template4 = FixturesFactory.create(:template)
       template5 = FixturesFactory.create(:template)
 
-      assert {[^template1], _paging} =
-        API.list_templates(%{}, %Paging{limit: 1})
-      assert {[^template1, ^template2], _paging} =
-        API.list_templates(%{}, %Paging{limit: 2})
+      assert {[^template1], _paging} = API.list_templates(%{}, %Paging{limit: 1})
+      assert {[^template1, ^template2], _paging} = API.list_templates(%{}, %Paging{limit: 2})
+
       assert {[^template3, ^template4], _paging} =
-        API.list_templates(%{}, %Paging{limit: 2, cursors: %Cursors{starting_after: template2.id}})
+               API.list_templates(%{}, %Paging{limit: 2, cursors: %Cursors{starting_after: template2.id}})
+
       assert {[^template3, ^template4], _paging} =
-        API.list_templates(%{}, %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}})
+               API.list_templates(%{}, %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}})
     end
 
     test "paginates with filters" do
@@ -63,21 +63,28 @@ defmodule Man.Templates.APITest do
       template5 = FixturesFactory.create(:template, labels: ["label/one"], title: "title five")
 
       assert {[^template3, ^template4], _paging} =
-        API.list_templates(%{"title" => "title"}, %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}})
+               API.list_templates(%{"title" => "title"}, %Paging{
+                 limit: 2,
+                 cursors: %Cursors{ending_before: template5.id}
+               })
 
       assert {[], _paging} =
-        API.list_templates(%{"title" => "five"}, %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}})
+               API.list_templates(%{"title" => "five"}, %Paging{
+                 limit: 2,
+                 cursors: %Cursors{ending_before: template5.id}
+               })
 
       assert {[^template5], _paging} =
-        API.list_templates(%{"title" => "five"}, %Paging{limit: 2, cursors: %Cursors{starting_after: template4.id}})
+               API.list_templates(%{"title" => "five"}, %Paging{
+                 limit: 2,
+                 cursors: %Cursors{starting_after: template4.id}
+               })
 
       paging = %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}}
-      assert {[^template3, ^template4], _paging} =
-        API.list_templates(%{"labels" => "label/one"}, paging)
+      assert {[^template3, ^template4], _paging} = API.list_templates(%{"labels" => "label/one"}, paging)
 
       paging = %Paging{limit: 1, cursors: %Cursors{ending_before: template5.id}}
-      assert {[^template3], _paging} =
-        API.list_templates(%{"labels" => "label/two"}, paging)
+      assert {[^template3], _paging} = API.list_templates(%{"labels" => "label/two"}, paging)
     end
   end
 
@@ -143,6 +150,7 @@ defmodule Man.Templates.APITest do
 
     test "with not found template" do
       id = 1
+
       attrs =
         :template
         |> FixturesFactory.build(@update_attrs)
