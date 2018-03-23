@@ -7,7 +7,7 @@ defmodule Man.Web.TemplateController do
   alias Plug.Conn
   alias Ecto.Paging
 
-  action_fallback Man.Web.FallbackController
+  action_fallback(Man.Web.FallbackController)
 
   def index(conn, params) do
     paging = get_paging(params)
@@ -83,7 +83,7 @@ defmodule Man.Web.TemplateController do
       cursors: %Ecto.Paging.Cursors{
         starting_after: starting_after,
         ending_before: ending_before
-      },
+      }
     }
   end
 
@@ -91,6 +91,7 @@ defmodule Man.Web.TemplateController do
     case Conn.get_req_header(conn, header) do
       [locale | _] ->
         locale
+
       [] ->
         Map.get(params, param, nil)
     end

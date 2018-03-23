@@ -5,10 +5,14 @@ defmodule Man.Cache do
   use GenServer
 
   def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, %{
-      ets_table_name: :man_api_cache_table,
-      log_limit: 10_000
-    }, opts)
+    GenServer.start_link(
+      __MODULE__,
+      %{
+        ets_table_name: :man_api_cache_table,
+        log_limit: 10_000
+      },
+      opts
+    )
   end
 
   @doc false

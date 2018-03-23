@@ -14,34 +14,34 @@ defmodule Man.Web.Router do
   require Logger
 
   pipeline :api do
-    plug :accepts, ["json"]
-    plug :put_secure_browser_headers
-    plug EView
+    plug(:accepts, ["json"])
+    plug(:put_secure_browser_headers)
+    plug(EView)
   end
 
   pipeline :rendering_api do
-    plug :accepts, ["json", "html", "pdf"]
-    plug :put_secure_browser_headers
+    plug(:accepts, ["json", "html", "pdf"])
+    plug(:put_secure_browser_headers)
   end
 
   scope "/", Man.Web do
-    pipe_through :api
+    pipe_through(:api)
 
-    get "/templates", TemplateController, :index
-    post "/templates", TemplateController, :create
+    get("/templates", TemplateController, :index)
+    post("/templates", TemplateController, :create)
 
-    get "/templates/:id", TemplateController, :show
-    put "/templates/:id", TemplateController, :replace
-    patch "/templates/:id", TemplateController, :update
-    delete "/templates/:id", TemplateController, :delete
+    get("/templates/:id", TemplateController, :show)
+    put("/templates/:id", TemplateController, :replace)
+    patch("/templates/:id", TemplateController, :update)
+    delete("/templates/:id", TemplateController, :delete)
 
-    get "/labels", LabelController, :index
+    get("/labels", LabelController, :index)
   end
 
   scope "/", Man.Web do
-    pipe_through :rendering_api
+    pipe_through(:rendering_api)
 
-    post "/templates/:id/actions/render", TemplateController, :render
+    post("/templates/:id/actions/render", TemplateController, :render)
   end
 
   defp handle_errors(%Plug.Conn{status: 500} = conn, %{kind: kind, reason: reason, stack: stacktrace}) do

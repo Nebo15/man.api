@@ -29,11 +29,11 @@ config :man_api, Man.Web.Endpoint,
   on_init: {Man.Web.Endpoint, :load_from_system_env, []},
   http: [
     port: {:system, "PORT", "80"},
-    protocol_options: [max_keepalive: 1_000_000],
+    protocol_options: [max_keepalive: 1_000_000]
   ],
-  url:  [
+  url: [
     host: {:system, "HOST", "localhost"},
-    port: {:system, "PORT", "80"},
+    port: {:system, "PORT", "80"}
   ],
   secret_key_base: {:system, "SECRET_KEY"},
   debug_errors: false,
@@ -81,7 +81,6 @@ config :phoenix, :filter_parameters, ["password", "secret", "token", "password_c
 #
 config :phoenix, :serve_endpoints, true
 
-config :pdf_generator,
-    wkhtml_path: "/bin/wkhtmltopdf"
+config :pdf_generator, wkhtml_path: "/bin/wkhtmltopdf"
 
 config :logger, level: :error, handle_otp_reports: true

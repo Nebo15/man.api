@@ -33,8 +33,8 @@ defmodule Man.Templates.API do
     title_ilike = "%" <> title <> "%"
     where(query, [t], ilike(t.title, ^title_ilike))
   end
-  defp maybe_filter_title(query, _),
-    do: query
+
+  defp maybe_filter_title(query, _), do: query
 
   defp maybe_filter_labels(query, %{"labels" => labels_stirng}) when is_binary(labels_stirng) do
     labels =
@@ -44,8 +44,8 @@ defmodule Man.Templates.API do
 
     where(query, [t], fragment("jsonb_build_array(?)->0 \\?& ?::character varying[255][]", t.labels, ^labels))
   end
-  defp maybe_filter_labels(query, _),
-    do: query
+
+  defp maybe_filter_labels(query, _), do: query
 
   @doc """
   Returns the list of labels.
@@ -57,9 +57,13 @@ defmodule Man.Templates.API do
 
   """
   def list_labels do
-    Repo.all from t in Template,
-      distinct: true,
-      select: fragment("unnest(?)", t.labels)
+    Repo.all(
+      from(
+        t in Template,
+        distinct: true,
+        select: fragment("unnest(?)", t.labels)
+      )
+    )
   end
 
   @doc """
@@ -142,8 +146,8 @@ defmodule Man.Templates.API do
     end
   end
 
-  defp build_template_by_id(id) when is_number(id),
-    do: %Template{id: id}
+  defp build_template_by_id(id) when is_number(id), do: %Template{id: id}
+
   defp build_template_by_id(id) when is_binary(id) do
     {id, ""} = Integer.parse(id)
     build_template_by_id(id)
@@ -205,13 +209,14 @@ defmodule Man.Templates.API do
 
       {:ok, values} when is_list(values) ->
         count = length(values)
+
         uniq_count =
           values
           |> Enum.uniq_by(fun)
           |> length()
 
         if uniq_count == count,
-            do: changeset,
+          do: changeset,
           else: add_error(changeset, field, "contains duplicate fields", validation: [:unique])
 
       {:ok, _values} ->
