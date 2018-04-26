@@ -1,7 +1,7 @@
 defmodule Man.Mixfile do
   use Mix.Project
 
-  @version "1.65.1"
+  @version "1.66.1"
 
   def project do
     [
