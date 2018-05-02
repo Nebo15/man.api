@@ -102,7 +102,6 @@ defmodule Man.Web.TemplateControllerTest do
              "id" => ^id,
              "body" => "some body",
              "validation_schema" => %{},
-             "type" => "template",
              "description" => nil,
              "labels" => [],
              "locales" => [],
@@ -192,7 +191,6 @@ defmodule Man.Web.TemplateControllerTest do
              "id" => ^id,
              "body" => "some updated body",
              "validation_schema" => %{},
-             "type" => "template",
              "description" => nil,
              "labels" => [],
              "locales" => [],
@@ -226,7 +224,6 @@ defmodule Man.Web.TemplateControllerTest do
              "id" => ^id,
              "body" => "some replaced body",
              "validation_schema" => %{},
-             "type" => "template",
              "description" => nil,
              "labels" => [],
              "locales" => [],
@@ -391,7 +388,7 @@ defmodule Man.Web.TemplateControllerTest do
     assert %{
              "invalid" => [
                %{
-                 "entry" => "$",
+                 "entry" => "$.h1",
                  "entry_type" => "json_data_property",
                  "rules" => [
                    %{"description" => "required property h1 was not present", "params" => [], "rule" => "required"}
