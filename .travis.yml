@@ -17,7 +17,7 @@ elixir:
 otp_release:
   - 20.1
 notifications:
-  slack: 
+  slack:
     rooms:
       - secure: "X1blJFdb5wpHSOinf25Do2JeOSHJZKH4mi+tjgdllABOFVi0bQpsiUa2DeMNeZ11mYuiwur48IPkpVJI/CjgLiZxGldrRwp+7zav0WXB6kLcWgK2dR1I1f9qhWOAojAnbnzcQ/kKCYJ2GGnA+mO/Pf6yi+qYaJVjkMZTr0QxKFXHx8+4X7lLJkw9r1C2Q0KlgwQ08hrLjXG3a77+dnc214aMN3Y8z9pDaqwx5szHEkHV/uJVWJSPiQD3xQRhEpadS5SykOAxlIzggPvDpplW+xcUmvVl5RtEw9RXJ+0/nwNwauexzk9Xj3RKYv0tt5QFubQRY7WhbijTabtS8Gp6Mvle4CohV2IbAhK7byRJ+iJ4Abmi4taz/iPBIlRESvK1NeX1Dn+EpznWRd1LvUnK/G6j2M0W2/tnn3XCl0IcWbtsL4oEeH4aXIDI8o3FQ1nhbe0WzfuLcC5JrSzp80zbWvidOR3J7LzKBGj+id2eMNN+uEf/eOiuP0FylJbxLBsLA5fIIbdkkDmRd9VtgfAI05FeHSCbHCnpBfuOGrRHU61DroYsGUkvFI+ZTuCVT6nKpSKfwyxYkaPpr3FUy4hNFvS2C3Noj4JVrkfbAGIw336e84PO4lfnwwjW9AefpgD6SMNu7q0x3dyRMjTWJpSQbdJQOZJMRmuU3q9uwIBafCw="
     on_success: always
@@ -25,8 +25,8 @@ env:
   global:
     - Chart=man
     - MIX_ENV=test
-    - MAIN_BRANCHES="master develop staging" # Branches on which you want version to be incremented
-    - RELEASE_BRANCH="master"
+    - MAIN_BRANCHES="master develop preprod" # Branches on which you want version to be incremented
+    - RELEASE_BRANCH="develop"
     # Docker
     - DOCKER_HUB_ACCOUNT=edenlabllc
     - secure: "sK/G0Xf1vkNa+tYFU/zKqvuqupfd9xFRJoULXbC1THlOkP57W+Btt6pVRtKmn1L7ZTCf+QPHO/uNLuwzu5e7w5A4oQjiNDLQwVhsAa0C2w8LPW4ujJiBYec+Y0nGwZgreVVUAG5OAj3Cm2caibumN6u3Zxngu9vJ3uF/QyoFD9XYqVq48+o/ydabNieTgvHIhaw1vE0wF3kUzzqDAW2VgCtE1lFEd0wtuliUH9R0wztQSOqPIBD98ckJTxwFssFCLxQgpDYJvdHGi9uZxWeD5YLO7DAmZJDf6xs2QL90xUKivYBJ5qytbEoycTSVkgeYwF5bh0pdBno5u0qk5qPFeOi4jx+e8miugoLc2SMsTrH1G/dkkxbktNLB5cQhEPPxT6MWWFWuv9BZfp80slPDQ6W/e8+Q9Zzf9k8Si5nIPDRzBXSZ9FqUlJg7FtXBA9MCxUXHT4Hxjz6DDeO/fEHrRKuH1Ms6UVQBoQiMxsDpAvaTrcrQwV9AvJdVp1Txom3kotZ1UjJUTm9xQ8JVAlxEJ1pXYFVutMlKVOBcWLihl5SnbjdYW17Ilgu0QIVOuuy9mRtp1PXDC8uso5ZTegn3DhS/5UHP8DD+LcMkNLi74frozaAIGUFm0Lygx8vH/bkYG0+rqip5HoiHUldGOIN8G0mXJLMPNjLcArpr2tr46BE="
