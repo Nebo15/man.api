@@ -24,7 +24,7 @@ defmodule Man.Web.TemplateControllerTest do
   end
 
   test "lists and filters all entries on index", %{conn: conn} do
-    assert [] ==
+    assert [_] =
              conn
              |> get(template_path(conn, :index))
              |> json_response(200)
@@ -33,7 +33,7 @@ defmodule Man.Web.TemplateControllerTest do
     %Template{id: id1} = FixturesFactory.create(:template)
     %Template{id: id2} = FixturesFactory.create(:template, title: "other title", labels: ["label/one", "label/two"])
 
-    assert [%{"id" => ^id1}, %{"id" => ^id2}] =
+    assert [_, %{"id" => ^id1}, %{"id" => ^id2}] =
              conn
              |> get(template_path(conn, :index))
              |> json_response(200)
@@ -61,9 +61,9 @@ defmodule Man.Web.TemplateControllerTest do
     %Template{id: id4} = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
     %Template{id: id5} = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
 
-    assert [%{"id" => ^id1}] =
+    assert [_, %{"id" => ^id1}] =
              conn
-             |> get(template_path(conn, :index), %{"limit" => 1})
+             |> get(template_path(conn, :index), %{"limit" => 2})
              |> json_response(200)
              |> Map.get("data")
 
@@ -79,9 +79,9 @@ defmodule Man.Web.TemplateControllerTest do
              |> json_response(200)
              |> Map.get("data")
 
-    assert [%{"id" => ^id1}] =
+    assert [_, %{"id" => ^id1}] =
              conn
-             |> get(template_path(conn, :index), %{"limit" => 1})
+             |> get(template_path(conn, :index), %{"limit" => 2})
              |> json_response(200)
              |> Map.get("data")
   end
