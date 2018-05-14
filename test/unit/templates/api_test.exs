@@ -12,16 +12,16 @@ defmodule Man.Templates.APITest do
 
   describe "list_templates/1" do
     test "returns all templates" do
-      assert {[], _paging} = API.list_templates()
+      assert {[_], _paging} = API.list_templates()
       template = FixturesFactory.create(:template)
-      assert {[^template], _paging} = API.list_templates()
+      assert {[_, ^template], _paging} = API.list_templates()
     end
 
     test "filters by title" do
       template1 = FixturesFactory.create(:template)
       template2 = FixturesFactory.create(:template, title: "other title")
 
-      assert {[^template1, ^template2], _paging} = API.list_templates(%{"title" => nil})
+      assert {[_, ^template1, ^template2], _paging} = API.list_templates(%{"title" => nil})
       assert {[], _paging} = API.list_templates(%{"title" => "unknown title"})
       assert {[^template1], _paging} = API.list_templates(%{"title" => "some"})
       assert {[^template2], _paging} = API.list_templates(%{"title" => "other"})
@@ -32,7 +32,7 @@ defmodule Man.Templates.APITest do
       template2 = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
       template3 = FixturesFactory.create(:template, labels: ["label/one", "label/three"])
 
-      assert {[^template1, ^template2, ^template3], _paging} = API.list_templates(%{"labels" => nil})
+      assert {[_, ^template1, ^template2, ^template3], _paging} = API.list_templates(%{"labels" => nil})
       assert {[], _paging} = API.list_templates(%{"labels" => "unknown label"})
       assert {[^template2], _paging} = API.list_templates(%{"labels" => "label/two"})
       assert {[^template2, ^template3], _paging} = API.list_templates(%{"labels" => "label/one"})
@@ -45,8 +45,8 @@ defmodule Man.Templates.APITest do
       template4 = FixturesFactory.create(:template)
       template5 = FixturesFactory.create(:template)
 
-      assert {[^template1], _paging} = API.list_templates(%{}, %Paging{limit: 1})
-      assert {[^template1, ^template2], _paging} = API.list_templates(%{}, %Paging{limit: 2})
+      assert {[_, ^template1], _paging} = API.list_templates(%{}, %Paging{limit: 2})
+      assert {[_, ^template1, ^template2], _paging} = API.list_templates(%{}, %Paging{limit: 3})
 
       assert {[^template3, ^template4], _paging} =
                API.list_templates(%{}, %Paging{limit: 2, cursors: %Cursors{starting_after: template2.id}})
@@ -101,7 +101,7 @@ defmodule Man.Templates.APITest do
     end
 
     test "with invalid template id returns error" do
-      assert {:error, :not_found} = API.get_template(1)
+      assert {:error, :not_found} = API.get_template(0)
     end
   end
 
