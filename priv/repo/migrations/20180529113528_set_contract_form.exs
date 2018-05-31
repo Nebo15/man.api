@@ -729,7 +729,7 @@ defmodule Man.Repo.Migrations.SetContractForm do
         <th class="fte">Штатна одиниця</th>
         <th class="patientCount">Максимальна кількість пацієнтів, які можуть подати декларації про вибір такого лікаря за договором, осіб</th>
       </tr>
-      <%= assigns |> get_in(~w(contractor_employee_divisions)a |> Enum.filter(fn contractor_employee_division -> contractor_employee_division.division_id == get_in(contractor_division, ~w(id)a) end)) |> Enum.map(fn contractor_employee_division -> %>
+      <%= assigns |> get_in(~w(contractor_employee_divisions)a) |> Enum.filter(fn contractor_employee_division -> contractor_employee_division["division_id"] == get_in(contractor_division, ~w(id)a) end) |> Enum.map(fn contractor_employee_division -> %>
         <tr>
           <td class="name">
             <p>
@@ -797,7 +797,7 @@ defmodule Man.Repo.Migrations.SetContractForm do
                 <td class="divisionsId">
                     <p>
                         <ul>
-                        <%= Enum.map(external_contractor.divisions, fn division -> %>
+                        <%= Enum.map(external_contractor["divisions"], fn division -> %>
                             <li><%= get_in(division, ~w(id)a) %></li>
                         <% end) %>
                         </ul>
@@ -806,7 +806,7 @@ defmodule Man.Repo.Migrations.SetContractForm do
                 <td class="speciality">
                     <p>
                         <ul>
-                        <%= Enum.map(external_contractor.divisions, fn division -> %>
+                        <%= Enum.map(external_contractor["divisions"], fn division -> %>
                             <li><%= get_in(division, ~w(medical_service)a) %></li>
                         <% end) %>
                         </ul>
