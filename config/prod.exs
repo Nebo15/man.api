@@ -3,10 +3,6 @@ use Mix.Config
 # Configuration for production environment.
 # It should read environment variables to follow 12 factor apps convention.
 
-# Sometimes you might want to improve production performance by stripping logger debug calls during compilation
-# config :logger,
-#   compile_time_purge_level: :info
-
 # Configure your database
 config :man_api, Man.Repo,
   adapter: Ecto.Adapters.Postgres,
@@ -33,24 +29,15 @@ config :man_api, Man.Web.Endpoint,
   on_init: {Man.Web.Endpoint, :load_from_system_env, []},
   http: [
     port: {:system, "PORT", "80"},
-    protocol_options: [max_keepalive: 1_000_000],
+    protocol_options: [max_keepalive: 1_000_000]
   ],
-  url:  [
+  url: [
     host: {:system, "HOST", "localhost"},
-    port: {:system, "PORT", "80"},
+    port: {:system, "PORT", "80"}
   ],
   secret_key_base: {:system, "SECRET_KEY"},
   debug_errors: false,
   code_reloader: false
-
-# Do not print debug messages in production
-# and handle all other reports by Elixir Logger with JSON back-end
-# SASL reports turned off because of their verbosity.
-config :logger,
-  backends: [LoggerJSON],
-  level: :info,
-  # handle_sasl_reports: true,
-  handle_otp_reports: true
 
 # Do not log passwords, card data and tokens
 config :phoenix, :filter_parameters, ["password", "secret", "token", "password_confirmation", "card", "pan", "cvv"]
@@ -94,5 +81,6 @@ config :phoenix, :filter_parameters, ["password", "secret", "token", "password_c
 #
 config :phoenix, :serve_endpoints, true
 
-config :pdf_generator,
-    wkhtml_path: "/bin/wkhtmltopdf"
+config :pdf_generator, wkhtml_path: "/bin/wkhtmltopdf"
+
+config :logger, level: :error, handle_otp_reports: true

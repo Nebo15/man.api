@@ -3,7 +3,7 @@
 # You need to specify $DOCKER_HUB_ACCOUNT, $DOCKER_USERNAME and $DOCKER_PASSWORD before using this script.
 
 echo "Logging in into Docker Hub";
-docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD;
+echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
 
 echo "Setting Gih user/password";
 git config --global user.email "travis@travis-ci.com";

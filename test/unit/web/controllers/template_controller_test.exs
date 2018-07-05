@@ -8,13 +8,13 @@ defmodule Man.Web.TemplateControllerTest do
   @invalid_attrs %{body: nil, validation_schema: nil, title: nil, labels: [1, 2, 3]}
   @empty_rendered_template "<div><h1></h1><h2></h2></div>"
   @validation_schema %{
-    "type": "object",
-    "required": [
+    type: "object",
+    required: [
       "h1"
     ],
-    "properties": %{
-      "h1": %{
-        "type": "string"
+    properties: %{
+      h1: %{
+        type: "string"
       }
     }
   }
@@ -24,34 +24,34 @@ defmodule Man.Web.TemplateControllerTest do
   end
 
   test "lists and filters all entries on index", %{conn: conn} do
-    assert [] ==
-      conn
-      |> get(template_path(conn, :index))
-      |> json_response(200)
-      |> Map.get("data")
+    assert [_] =
+             conn
+             |> get(template_path(conn, :index))
+             |> json_response(200)
+             |> Map.get("data")
 
     %Template{id: id1} = FixturesFactory.create(:template)
     %Template{id: id2} = FixturesFactory.create(:template, title: "other title", labels: ["label/one", "label/two"])
 
-    assert [%{"id" => ^id1}, %{"id" => ^id2}] =
-      conn
-      |> get(template_path(conn, :index))
-      |> json_response(200)
-      |> Map.get("data")
+    assert [_, %{"id" => ^id1}, %{"id" => ^id2}] =
+             conn
+             |> get(template_path(conn, :index))
+             |> json_response(200)
+             |> Map.get("data")
 
     # Filter by title
     assert [%{"id" => ^id1}] =
-      conn
-      |> get(template_path(conn, :index), %{"title" => "some"})
-      |> json_response(200)
-      |> Map.get("data")
+             conn
+             |> get(template_path(conn, :index), %{"title" => "some"})
+             |> json_response(200)
+             |> Map.get("data")
 
     # Filter by label
     assert [%{"id" => ^id2}] =
-      conn
-      |> get(template_path(conn, :index), %{"labels" => "label/one"})
-      |> json_response(200)
-      |> Map.get("data")
+             conn
+             |> get(template_path(conn, :index), %{"labels" => "label/one"})
+             |> json_response(200)
+             |> Map.get("data")
   end
 
   test "paginates entries on index", %{conn: conn} do
@@ -61,56 +61,57 @@ defmodule Man.Web.TemplateControllerTest do
     %Template{id: id4} = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
     %Template{id: id5} = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
 
-    assert [%{"id" => ^id1}] =
-      conn
-      |> get(template_path(conn, :index), %{"limit" => 1})
-      |> json_response(200)
-      |> Map.get("data")
+    assert [_, %{"id" => ^id1}] =
+             conn
+             |> get(template_path(conn, :index), %{"limit" => 2})
+             |> json_response(200)
+             |> Map.get("data")
 
     assert [%{"id" => ^id3}, %{"id" => ^id4}] =
-      conn
-      |> get(template_path(conn, :index), %{"limit" => 2, "starting_after" => id2})
-      |> json_response(200)
-      |> Map.get("data")
+             conn
+             |> get(template_path(conn, :index), %{"limit" => 2, "starting_after" => id2})
+             |> json_response(200)
+             |> Map.get("data")
 
     assert [%{"id" => ^id3}, %{"id" => ^id4}] =
-      conn
-      |> get(template_path(conn, :index), %{"limit" => 2, "ending_before" => id5})
-      |> json_response(200)
-      |> Map.get("data")
+             conn
+             |> get(template_path(conn, :index), %{"limit" => 2, "ending_before" => id5})
+             |> json_response(200)
+             |> Map.get("data")
 
-    assert [%{"id" => ^id1}] =
-      conn
-      |> get(template_path(conn, :index), %{"limit" => 1})
-      |> json_response(200)
-      |> Map.get("data")
+    assert [_, %{"id" => ^id1}] =
+             conn
+             |> get(template_path(conn, :index), %{"limit" => 2})
+             |> json_response(200)
+             |> Map.get("data")
   end
 
   test "creates template and renders template when data is valid", %{conn: conn} do
     fixture = FixturesFactory.build(:template)
 
     conn = post(conn, template_path(conn, :create), %{template: fixture})
+
     assert %{"id" => id} =
-      conn
-      |> json_response(201)
-      |> Map.get("data")
+             conn
+             |> json_response(201)
+             |> Map.get("data")
+
     assert [template_path(conn, :show, id)] == get_resp_header(conn, "location")
 
     assert %{
-      "id" => ^id,
-      "body" => "some body",
-      "validation_schema" => %{},
-      "type" => "template",
-      "description" => nil,
-      "labels" => [],
-      "locales" => [],
-      "syntax" => "mustache",
-      "title" => "some title"
-    } =
-      conn
-      |> get(template_path(conn, :show, id))
-      |> json_response(200)
-      |> Map.get("data")
+             "id" => ^id,
+             "body" => "some body",
+             "validation_schema" => %{},
+             "description" => nil,
+             "labels" => [],
+             "locales" => [],
+             "syntax" => "mustache",
+             "title" => "some title"
+           } =
+             conn
+             |> get(template_path(conn, :show, id))
+             |> json_response(200)
+             |> Map.get("data")
   end
 
   test "does not create template and renders errors when data is invalid", %{conn: conn} do
@@ -119,41 +120,61 @@ defmodule Man.Web.TemplateControllerTest do
     conn = post(conn, template_path(conn, :create), %{template: fixture})
 
     assert %{
-      "error" => %{
-        "invalid" => [
-          %{"entry" => "$.body", "entry_type" => "json_data_property", "rules" => [
-            %{"description" => "can't be blank", "params" => [], "rule" => "required"}
-          ]},
-          %{"entry" => "$.labels", "entry_type" => "json_data_property", "rules" => [
-            %{"description" => "is invalid", "params" => ["strings_array"], "rule" => "cast"}
-          ]},
-          %{"entry" => "$.title", "entry_type" => "json_data_property", "rules" => [
-            %{"description" => "can't be blank", "params" => [], "rule" => "required"}
-          ]},
-        ],
-        "type" => "validation_failed"
-      }
-    } = json_response(conn, 422)
+             "error" => %{
+               "invalid" => [
+                 %{
+                   "entry" => "$.body",
+                   "entry_type" => "json_data_property",
+                   "rules" => [
+                     %{"description" => "can't be blank", "params" => [], "rule" => "required"}
+                   ]
+                 },
+                 %{
+                   "entry" => "$.labels",
+                   "entry_type" => "json_data_property",
+                   "rules" => [
+                     %{"description" => "is invalid", "params" => ["strings_array"], "rule" => "cast"}
+                   ]
+                 },
+                 %{
+                   "entry" => "$.title",
+                   "entry_type" => "json_data_property",
+                   "rules" => [
+                     %{"description" => "can't be blank", "params" => [], "rule" => "required"}
+                   ]
+                 }
+               ],
+               "type" => "validation_failed"
+             }
+           } = json_response(conn, 422)
   end
 
   test "does not create template and renders errors when locales are duplicated", %{conn: conn} do
-    fixture = FixturesFactory.build(:template, locales: [
-      %{"code" => "en_US", "params" => %{}},
-      %{"code" => "en_US", "params" => %{}},
-    ])
+    fixture =
+      FixturesFactory.build(
+        :template,
+        locales: [
+          %{"code" => "en_US", "params" => %{}},
+          %{"code" => "en_US", "params" => %{}}
+        ]
+      )
 
     conn = post(conn, template_path(conn, :create), %{template: fixture})
 
     assert %{
-      "error" => %{
-        "invalid" => [
-          %{"entry" => "$.locales", "entry_type" => "json_data_property", "rules" => [
-            %{"description" => "contains duplicate fields", "params" => [], "rule" => ["unique"]},
-          ]}
-        ],
-        "type" => "validation_failed"
-      }
-    } = json_response(conn, 422)
+             "error" => %{
+               "invalid" => [
+                 %{
+                   "entry" => "$.locales",
+                   "entry_type" => "json_data_property",
+                   "rules" => [
+                     %{"description" => "contains duplicate fields", "params" => [], "rule" => ["unique"]}
+                   ]
+                 }
+               ],
+               "type" => "validation_failed"
+             }
+           } = json_response(conn, 422)
   end
 
   test "updates chosen template and renders template when data is valid", %{conn: conn} do
@@ -161,26 +182,25 @@ defmodule Man.Web.TemplateControllerTest do
     update_attrs = FixturesFactory.build(:template, @update_attrs)
 
     assert %{"id" => ^id} =
-      conn
-      |> patch(template_path(conn, :update, template), %{template: update_attrs})
-      |> json_response(200)
-      |> Map.get("data")
+             conn
+             |> patch(template_path(conn, :update, template), %{template: update_attrs})
+             |> json_response(200)
+             |> Map.get("data")
 
     assert %{
-      "id" => ^id,
-      "body" => "some updated body",
-      "validation_schema" => %{},
-      "type" => "template",
-      "description" => nil,
-      "labels" => [],
-      "locales" => [],
-      "syntax" => "mustache",
-      "title" => "some title"
-    } =
-      conn
-      |> get(template_path(conn, :show, id))
-      |> json_response(200)
-      |> Map.get("data")
+             "id" => ^id,
+             "body" => "some updated body",
+             "validation_schema" => %{},
+             "description" => nil,
+             "labels" => [],
+             "locales" => [],
+             "syntax" => "mustache",
+             "title" => "some title"
+           } =
+             conn
+             |> get(template_path(conn, :show, id))
+             |> json_response(200)
+             |> Map.get("data")
   end
 
   test "does not update chosen template and renders errors when data is invalid", %{conn: conn} do
@@ -195,26 +215,25 @@ defmodule Man.Web.TemplateControllerTest do
     replace_attrs = FixturesFactory.build(:template, @replace_attrs)
 
     assert %{"id" => ^id} =
-      conn
-      |> put(template_path(conn, :replace, template), %{template: replace_attrs})
-      |> json_response(200)
-      |> Map.get("data")
+             conn
+             |> put(template_path(conn, :replace, template), %{template: replace_attrs})
+             |> json_response(200)
+             |> Map.get("data")
 
     assert %{
-      "id" => ^id,
-      "body" => "some replaced body",
-      "validation_schema" => %{},
-      "type" => "template",
-      "description" => nil,
-      "labels" => [],
-      "locales" => [],
-      "syntax" => "mustache",
-      "title" => "some replaced title"
-    } =
-      conn
-      |> get(template_path(conn, :show, id))
-      |> json_response(200)
-      |> Map.get("data")
+             "id" => ^id,
+             "body" => "some replaced body",
+             "validation_schema" => %{},
+             "description" => nil,
+             "labels" => [],
+             "locales" => [],
+             "syntax" => "mustache",
+             "title" => "some replaced title"
+           } =
+             conn
+             |> get(template_path(conn, :show, id))
+             |> json_response(200)
+             |> Map.get("data")
   end
 
   test "does not replace chosen template and renders errors when data is invalid", %{conn: conn} do
@@ -222,10 +241,10 @@ defmodule Man.Web.TemplateControllerTest do
     invalid_attrs = FixturesFactory.build(:template, @invalid_attrs)
 
     assert %{} !=
-      conn
-      |> put(template_path(conn, :replace, template), %{template: invalid_attrs})
-      |> json_response(422)
-      |> Map.get("errors")
+             conn
+             |> put(template_path(conn, :replace, template), %{template: invalid_attrs})
+             |> json_response(422)
+             |> Map.get("errors")
   end
 
   test "deletes chosen template", %{conn: conn} do
@@ -243,10 +262,11 @@ defmodule Man.Web.TemplateControllerTest do
     test "renders mustache templates in json format", %{conn: conn} do
       template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
       conn = post(conn, template_path(conn, :render, template), %{"h1" => "some data", "h2" => "another data"})
+
       assert %{
-        "body" => "<div><h1>some data</h1><h2>another data</h2></div>",
-        "params" => %{}
-      } = json_response(conn, 200)
+               "body" => "<div><h1>some data</h1><h2>another data</h2></div>",
+               "params" => %{}
+             } = json_response(conn, 200)
     end
 
     test "renders mustache templates in html format", %{raw_conn: conn} do
@@ -282,6 +302,7 @@ defmodule Man.Web.TemplateControllerTest do
         # Hello
         world
       """
+
       template = FixturesFactory.create(:template, syntax: "markdown", body: body)
       conn = post(conn, template_path(conn, :render, template), %{})
       assert %{"body" => "<p>  # Hello\n  world</p>\n", "params" => %{}} = json_response(conn, 200)
@@ -292,6 +313,7 @@ defmodule Man.Web.TemplateControllerTest do
         # Hello
         world
       """
+
       template = FixturesFactory.create(:template, syntax: "markdown", body: body)
       req_attrs = %{"format" => "text/html"}
       conn = post(conn, template_path(conn, :render, template), req_attrs)
@@ -304,10 +326,11 @@ defmodule Man.Web.TemplateControllerTest do
       body = "<div><h1><%= @h1 %></h1><h2><%= @h2 %></h2></div>"
       template = FixturesFactory.create(:template, syntax: "iex", body: body)
       conn = post(conn, template_path(conn, :render, template), %{"h1" => "some data", "h2" => "another data"})
+
       assert %{
-        "body" => "<div><h1>some data</h1><h2>another data</h2></div>",
-        "params" => %{}
-      } = json_response(conn, 200)
+               "body" => "<div><h1>some data</h1><h2>another data</h2></div>",
+               "params" => %{}
+             } = json_response(conn, 200)
     end
 
     test "in html format", %{raw_conn: conn} do
@@ -348,32 +371,39 @@ defmodule Man.Web.TemplateControllerTest do
     template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
     req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "some/format"}
     conn = post(conn, template_path(conn, :render, template), req_attrs)
+
     assert %{
-      "invalid" => [
-        %{"entry" => "Content-Type", "entry_type" => "header"}
-      ],
-      "type" => "content_type_invalid"
-    } = json_response(conn, 415)
+             "invalid" => [
+               %{"entry" => "Content-Type", "entry_type" => "header"}
+             ],
+             "type" => "content_type_invalid"
+           } = json_response(conn, 415)
   end
 
   test "validates template attributes with json schema", %{conn: conn} do
     body = "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>"
     template = FixturesFactory.create(:template, body: body, validation_schema: @validation_schema)
     conn = post(conn, template_path(conn, :render, template), %{"h2" => "another data"})
+
     assert %{
-      "invalid" => [
-        %{"entry" => "$", "entry_type" => "json_data_property", "rules" => [
-          %{"description" => "required property h1 was not present", "params" => [], "rule" => "required"}
-        ]}
-      ],
-      "type" => "validation_failed"
-    } = json_response(conn, 422)
+             "invalid" => [
+               %{
+                 "entry" => "$.h1",
+                 "entry_type" => "json_data_property",
+                 "rules" => [
+                   %{"description" => "required property h1 was not present", "params" => [], "rule" => "required"}
+                 ]
+               }
+             ],
+             "type" => "validation_failed"
+           } = json_response(conn, 422)
   end
 
   test "takes locale from Accept-Language header", %{conn: conn} do
     body = "<div><h1>{{l10n.hello}} {{h1}}</h1><h2>{{h2}}</h2></div>"
     locales = [%{"code" => "es_ES", "params" => %{"hello" => "Hola"}}]
     template = FixturesFactory.create(:template, body: body, locales: locales)
+
     conn =
       conn
       |> put_req_header("accept-language", "es_ES")
@@ -387,32 +417,36 @@ defmodule Man.Web.TemplateControllerTest do
     locales = [%{"code" => "es_ES", "params" => %{"hello" => "Hola"}}]
     template = FixturesFactory.create(:template, body: body, locales: locales)
     conn = post(conn, template_path(conn, :render, template), %{"h1" => "world"})
+
     assert %{
-      "body" => "<div><h1>Hola world</h1><h2></h2></div>",
-      "params" => %{"l10n" => %{"hello" => "Hola"}}
-    } = json_response(conn, 200)
+             "body" => "<div><h1>Hola world</h1><h2></h2></div>",
+             "params" => %{"l10n" => %{"hello" => "Hola"}}
+           } = json_response(conn, 200)
   end
 
   test "localizes templates with multiple locales", %{conn: conn} do
     body = "<div><h1>{{l10n.hello}} {{h1}}</h1><h2>{{h2}}</h2></div>"
+
     locales = [
       %{"code" => "es_ES", "params" => %{"hello" => "Hola"}},
-      %{"code" => "en_US", "params" => %{"hello" => "Hello"}},
+      %{"code" => "en_US", "params" => %{"hello" => "Hello"}}
     ]
 
     template = FixturesFactory.create(:template, body: body, locales: locales)
     conn = post(conn, template_path(conn, :render, template), %{"h1" => "world", "locale" => "en_US"})
+
     assert %{
-      "body" => "<div><h1>Hello world</h1><h2></h2></div>",
-      "params" => %{"l10n" => %{"hello" => "Hello"}}
-    } = json_response(conn, 200)
+             "body" => "<div><h1>Hello world</h1><h2></h2></div>",
+             "params" => %{"l10n" => %{"hello" => "Hello"}}
+           } = json_response(conn, 200)
   end
 
   test "returns error when locale is not set", %{conn: conn} do
     body = "<div><h1>{{l10n.hello}} {{h1}}</h1><h2>{{h2}}</h2></div>"
+
     locales = [
       %{"code" => "es_ES", "params" => %{"hello" => "Hola"}},
-      %{"code" => "en_US", "params" => %{"hello" => "Hello"}},
+      %{"code" => "en_US", "params" => %{"hello" => "Hello"}}
     ]
 
     template = FixturesFactory.create(:template, body: body, locales: locales)
@@ -422,6 +456,7 @@ defmodule Man.Web.TemplateControllerTest do
 
   test "may cache PDF output", %{raw_conn: conn} do
     Application.put_env(:man_api, :cache_pdf_output, true)
+
     on_exit(fn ->
       Application.put_env(:man_api, :cache_pdf_output, false)
     end)
@@ -436,8 +471,8 @@ defmodule Man.Web.TemplateControllerTest do
     {time3, _result} = :timer.tc(fn -> post(conn, template_path(conn, :render, template), req_attrs) end)
 
     # More than in 10 times faster (~600x on my laptop, ~50x on Travis-CI)
-    assert (time1/time2) > 10
-    assert (time1/time3) > 10
+    assert time1 / time2 > 10
+    assert time1 / time3 > 10
 
     assert <<37, 80, 68, 70, 45, 49, 46, 52, 10, _rest::binary>> = response(result1, 200)
     assert <<37, 80, 68, 70, 45, 49, 46, 52, 10, _rest::binary>> = response(result2, 200)

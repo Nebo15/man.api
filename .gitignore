@@ -47,3 +47,4 @@ uploads/
 *id_rsa*
 *.key
 *.csr
+.elixir_ls
