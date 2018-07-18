@@ -11,22 +11,27 @@ addons:
   apt:
     packages:
       - wkhtmltopdf
+      - docker-ce
 elixir:
-  - 1.4.2
+  - 1.5.2
 otp_release:
-  - 19.2
+  - 20.1
+notifications:
+  slack:
+    rooms:
+      - secure: "X1blJFdb5wpHSOinf25Do2JeOSHJZKH4mi+tjgdllABOFVi0bQpsiUa2DeMNeZ11mYuiwur48IPkpVJI/CjgLiZxGldrRwp+7zav0WXB6kLcWgK2dR1I1f9qhWOAojAnbnzcQ/kKCYJ2GGnA+mO/Pf6yi+qYaJVjkMZTr0QxKFXHx8+4X7lLJkw9r1C2Q0KlgwQ08hrLjXG3a77+dnc214aMN3Y8z9pDaqwx5szHEkHV/uJVWJSPiQD3xQRhEpadS5SykOAxlIzggPvDpplW+xcUmvVl5RtEw9RXJ+0/nwNwauexzk9Xj3RKYv0tt5QFubQRY7WhbijTabtS8Gp6Mvle4CohV2IbAhK7byRJ+iJ4Abmi4taz/iPBIlRESvK1NeX1Dn+EpznWRd1LvUnK/G6j2M0W2/tnn3XCl0IcWbtsL4oEeH4aXIDI8o3FQ1nhbe0WzfuLcC5JrSzp80zbWvidOR3J7LzKBGj+id2eMNN+uEf/eOiuP0FylJbxLBsLA5fIIbdkkDmRd9VtgfAI05FeHSCbHCnpBfuOGrRHU61DroYsGUkvFI+ZTuCVT6nKpSKfwyxYkaPpr3FUy4hNFvS2C3Noj4JVrkfbAGIw336e84PO4lfnwwjW9AefpgD6SMNu7q0x3dyRMjTWJpSQbdJQOZJMRmuU3q9uwIBafCw="
+    on_success: always
 env:
   global:
+    - Chart=man
     - MIX_ENV=test
-    - MAIN_BRANCHES="master develop staging" # Branches on which you want version to be incremented
-    - RELEASE_BRANCH="master"
+    - MAIN_BRANCHES="master develop preprod" # Branches on which you want version to be incremented
+    - RELEASE_BRANCH="develop"
     # Docker
-    - DOCKER_HUB_ACCOUNT=nebo15
-    - secure: "UUwsEKx6jWERyz/fNXPoEj5HOQZM6W7uYiYm0AaEOaXvkgwtEHappMuk+18Z3qKLkCKYp3UvZw1teGIpd9lwHwn7DPiql1IKWB2LTmH5T6OyMLESzzlSLeC+xSojQpFOkB+ubloA8hW0PRA5AX27VvCdgirWlFIKhwsM5jWMmrJWU+ds5gjw7+eZB4L8E1pi77JoHmEW1MOSp2FRZssMi2f36cPmY5A9mryA9rRCVr+4MsKDZqfOdZH5zi426nooGmQ2DEBpnyELBqxyYcvwiy2qOceiMZYgaCLI5RypcFmWdwmEbJvJExfhmNal+rmft0RXN/CNugu0yuru8/klhGC/Q5ec/HfjazVydRCtKK9Ro6zsKTUHWfc1OCXKvRUEeTzZZ4slAsWPjWs8Lqt/q57EA3k3SJNBe2JUQLyW5K73yA0p//ftr5c3h7ifstvrCulcKrtScuJEm5RCDrBz8o5tocptbHwlDXiB8npInBZu/OBBHsY0sAsQgsf90G0xT7XDwx8zH6lWx9KhtV30/+P8JDa2UghxOquL/WQgxrMPnbM8YokhzxLa8MJ5mPBkipKmFca7CjEzBAfP/dPNOHCC1bInMiLclA2WFV1FvynF7dFMWN/vQm11pfkkDBPzbTSC319UWLFZ6ucqj73P+9WGMPxxSKX1KIZo+c+Z5RY="
+    - DOCKER_HUB_ACCOUNT=edenlabllc
+    - secure: "sK/G0Xf1vkNa+tYFU/zKqvuqupfd9xFRJoULXbC1THlOkP57W+Btt6pVRtKmn1L7ZTCf+QPHO/uNLuwzu5e7w5A4oQjiNDLQwVhsAa0C2w8LPW4ujJiBYec+Y0nGwZgreVVUAG5OAj3Cm2caibumN6u3Zxngu9vJ3uF/QyoFD9XYqVq48+o/ydabNieTgvHIhaw1vE0wF3kUzzqDAW2VgCtE1lFEd0wtuliUH9R0wztQSOqPIBD98ckJTxwFssFCLxQgpDYJvdHGi9uZxWeD5YLO7DAmZJDf6xs2QL90xUKivYBJ5qytbEoycTSVkgeYwF5bh0pdBno5u0qk5qPFeOi4jx+e8miugoLc2SMsTrH1G/dkkxbktNLB5cQhEPPxT6MWWFWuv9BZfp80slPDQ6W/e8+Q9Zzf9k8Si5nIPDRzBXSZ9FqUlJg7FtXBA9MCxUXHT4Hxjz6DDeO/fEHrRKuH1Ms6UVQBoQiMxsDpAvaTrcrQwV9AvJdVp1Txom3kotZ1UjJUTm9xQ8JVAlxEJ1pXYFVutMlKVOBcWLihl5SnbjdYW17Ilgu0QIVOuuy9mRtp1PXDC8uso5ZTegn3DhS/5UHP8DD+LcMkNLi74frozaAIGUFm0Lygx8vH/bkYG0+rqip5HoiHUldGOIN8G0mXJLMPNjLcArpr2tr46BE="
     # GitHub
-    - secure: "DxPmEizaZqP0PO2Vs+BL973lt5LINPwBHSlAn+W0TZFhkC3MkwHulJuUaaWs9rhxZFfJkp1PcEC4S9KYbkG9Ba5rY1YPZivKLhVJeEvxdEATsvx/JKSzUJX6quRpGV9Z8M74BQoCuMo0hcV8610/Kyg9dj5T9a+F3wuEJ3qli4CIO1QpEKk2DkL1s2kOnOSzyxV2eZbNw2k9g4w/wEntm7FZu1z25g7hvXCcQ4NeOzmtE3aOKv1UtGSJDXevcLj0y1y+WUHDgFWrilgz8s9SFD4MRUCxP29PzCVed9rMUqdpNediDrNdmINjOEO1zmEaVngP3zUq0sEQ+0+yqmM0JM4tKFinwpCA1LYcuw1qj7rH92ZDVyxMJCQbOxHLQVhnUFpglZzu4FZDUE/PedazZx/FvgbPZNV5G7pvohZDxwnk8QHXsRcNgmlisjXPl5j3wseddjlYM71jX6G1DECL7nPNAapXyhx5p9ON/DCnlJXYxlMHPpkDqu59x02sVok8UBedile2VWYSjU8pQl7V6wCZfjsV1NZGsCpncP48ml+Jpl1Sy8zJws+Itt6zsM07HWzy0IQXKvlS6GRwXM7+z14kI4SjE94+B83AJF+qJoPnQoKcu4SuVGRz1HTuo1Bg7czoib+UXU/PAztOYLHVAJ+S02TeaFGnpyql2z2FPp8="
-    # Heroku
-    - secure: "kE0xqy+D+0iKSi/FWlXYu6mADRhMk0OyiEuxOpUPrpLJ+VxlYpNeDQBf/AV6YpsNpE3X++9eo28Sc9AyFOrRGLPXHu2PUdUa/YsZp/TQOXckX1S+dy+jOR1NK/tkfSyG8+Fb6ekMqt5hBsMwC7r/2FJf0Ht658RwgiWIGI1a587OpmbSl2MAclwAsL8rWR8v7M6F+P1chIVfoyF2YnbhBmY7frcnqOSaXpqRGNS2+oqSDVJ3bUTINoT/tcN41hR5+7fC8pl+bOz1dPsDm9IpXEheK3fHIb0N7SAGV1qt9oEap9hCQ+eq3yxe7paR9enDok40Q86ch6N2uf3u6z3afqEKAAzfBB4hKd5WqT+8q9QIgvVapVciOzQ4VqwGGAHmZsKq5VUEdAmdi1/+T2YLcpz4/+OYomZ2boOmHKlS8y5c83PzwUfqp+0aeh9lwzYdJAEHBNzb7jGXUH+7vxQwvc4yaB+RKSwI4Ex+s2MDTmS99Ui18DvDuAxcdpG0uqvgi+2pT+DxCjlebuFUYgPK0IQtqJrbVZOsMlwUeQQyQoEQhjGtl3vfTYBOH8zDyOtHL2z5jyoA9J366cT6yOSOU85+mNyCeRdThCQ907dGxt6cj7hn9b94hhGvGABg4z527BvRQQlngyAbQr71UqyEUzx+QrJ0oFdEqhnputNtjr4="
+    - secure:  "RgjL/L950UuNcbw8StxhXnAmjCD9npx1xaXyLAQivTOvrp2t8K6SIx6ch5ZrhYRFpRC3yuDmYUcWyVvnyELnaamunmw28dZ33cXyjFdfZHt20NPoxgGHLllDrCKL2vIQ1Fm0IYHeL+gVupDVn8sygXuBZ4sUvgv0TlfZFBkl27a2Llw6IlBXgKTsC9AKDRi9/IbuSEqMkh84VpdbXy1cSD7N/jVfHGRHES89gFBqjf6Pi7Zpp7/vIklQx//7vvEqxMqf0l3mxRc84oBoKORKr/0pmTLUCrvEIM8t8V6DUaiWbCkFY7ecSC5ipbThMoZNIcy90Usi3CUTLMHEap0NfLzpZb4eUJ+nGf2cBwpY+s43SnTPb4OQqGo91WEPPfWii+8dOZDHBbpeF5VaEw78LwpL4oHHt6fajVFGth1GbDbWnCzz5SGsk0hR9m5RPWHp1B2OisgTXZGHzuAaM3PkYkllkAZ2wGSbU2zru7dZ0upcUTO66BkIoLUB5E5fjEUhbcKM7n7o5OvzJrxi4+9N9xnFy5DKe39cXrysd+hEum9/w9C/wbDbMBbVvkDnyPXf8r2J9EGil0K9CQWs5MdOqJcFMRAhO5LD8dVBVonUfmPDyRo0U9E1YmJfIgZ/XliPVXwjQ1doIUKDiKdcOUYURJxNp9AUn7S2THbvLvrREjE="
 branches:
   # Releases are generated automatically, stop infinite build loop
   except:
@@ -40,37 +45,21 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 script:
   # Increment version in mix.exs
-  - ./bin/ci/version-increment.sh
+  - ./bin/ci/version-increment.sh || travis_terminate 1
   # Install dependencies
-  - mix deps.get
+  - mix deps.get || travis_terminate 1
   # Run all tests except pending ones
-  - mix test --exclude pending --trace
-  # Submit code coverage report to Coveralls
-  # Add --pro if you using private repo.
-  - mix coveralls.travis --exclude pending
-  # Run static code analysis
-  - mix credo --strict
-  # Check code style
-  - mix dogma
+  - ./bin/mix_tests.sh || travis_terminate 1
   # Build Docker container
-  - ./bin/build.sh
+  - ./bin/build.sh || travis_terminate 1
   # Initialize DB for Docker container
   - MIX_ENV=dev mix ecto.setup
   # Run Docker container
-  - sudo ./bin/start.sh
-  - sleep 5
-  - docker ps
-  - RUNNING_CONTAINERS=`docker ps | wc -l`;
-    if [ "${RUNNING_CONTAINERS//[[:space:]]/}" == "1" ]; then
-      echo "[E] Container is not started\!";
-      docker logs man_api --details --since 5h;
-      exit 1;
-    fi;
+  - sudo ./bin/start.sh || travis_terminate 1
   # Run acceptance tests on Docker container
   - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
-after_failure:
-  - docker logs man_api --details --since 5h
-after_success:
   # Submit Docker container to Docker Hub and create GitHub Release by pushing tag with changelog
-  - ./bin/ci/push.sh
-  - ./bin/ci/deploy.sh
+  - ./bin/ci/push.sh || travis_terminate 1
+  # CD to Dev
+  - openssl aes-256-cbc -K $encrypted_7f8388603e86_key -iv $encrypted_7f8388603e86_iv -in eHealth-8110bd102a69.json.enc -out eHealth-8110bd102a69.json -d
+  - sudo ./bin/deploy.sh || travis_terminate 1

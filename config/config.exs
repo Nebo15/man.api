@@ -24,8 +24,7 @@ use Mix.Config
 #
 #     :var_name, "${ENV_VAR_NAME}"
 
-config :man_api,
-  ecto_repos: [Man.Repo]
+config :man_api, ecto_repos: [Man.Repo]
 
 # Configure your database
 config :man_api, Man.Repo,
@@ -34,7 +33,8 @@ config :man_api, Man.Repo,
   username: {:system, "DB_USER", "postgres"},
   password: {:system, "DB_PASSWORD", "postgres"},
   hostname: {:system, "DB_HOST", "localhost"},
-  port: {:system, :integer, "DB_PORT", 5432}
+  port: {:system, :integer, "DB_PORT", 5432},
+  loggers: [{Ecto.LoggerJSON, :log, [:info]}]
 
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
@@ -51,26 +51,18 @@ config :man_api, Man.Web.Endpoint,
   render_errors: [view: EView.Views.PhoenixError, accepts: ~w(json)]
 
 # Cache PDF output that is costly to render
-config :man_api,
-  cache_pdf_output: {:system, :boolean, "CACHE_PDF_OUTPUT", false}
+config :man_api, cache_pdf_output: {:system, :boolean, "CACHE_PDF_OUTPUT", false}
 
 # Configures Elixir's Logger
 config :logger, :console,
-  format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
-
-# Configure JSON Logger back-end
-config :logger_json, :backend,
-  on_init: {Man, :load_from_system_env, []},
-  json_encoder: Poison,
-  metadata: :all
+  format: "$message\n",
+  handle_otp_reports: true,
+  level: :info
 
 # This requires installing wkhtmltopdf onto developers machine
-config :pdf_generator,
-    wkhtml_path: "wkhtmltopdf"
+config :pdf_generator, wkhtml_path: "wkhtmltopdf"
 
-config :porcelain,
-  driver: Porcelain.Driver.Basic
+config :porcelain, driver: Porcelain.Driver.Basic
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment
@@ -78,4 +70,4 @@ config :porcelain,
 # Configuration from the imported file will override the ones defined
 # here (which is why it is important to import them last).
 #
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

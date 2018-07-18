@@ -1,37 +1,56 @@
 defmodule Man.Mixfile do
   use Mix.Project
 
-  @version "0.1.34"
+  @version "1.78.1"
 
   def project do
-    [app: :man_api,
-     package: package(),
-     version: @version,
-     elixir: "~> 1.4",
-     elixirc_paths: elixirc_paths(Mix.env),
-     compilers: [:phoenix] ++ Mix.compilers,
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     aliases: aliases(),
-     deps: deps(),
-     test_coverage: [tool: ExCoveralls],
-     preferred_cli_env: [coveralls: :test],
-     docs: [source_ref: "v#\{@version\}", main: "readme", extras: ["README.md"]]]
+    [
+      app: :man_api,
+      package: package(),
+      version: @version,
+      elixir: "~> 1.5",
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix] ++ Mix.compilers(),
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      aliases: aliases(),
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [coveralls: :test],
+      docs: [source_ref: "v#\{@version\}", main: "readme", extras: ["README.md"]]
+    ]
   end
 
   # Configuration for the OTP application
   #
   # Type "mix help compile.app" for more information
   def application do
-    [extra_applications: [:logger, :logger_json, :confex, :runtime_tools, :ecto, :postgrex, :ecto_paging,
-                          :cowboy, :httpoison, :poison, :phoenix, :misc_random,
-                          :eview, :phoenix_ecto, :bbmustache, :earmark, :pdf_generator],
-     mod: {Man, []}]
+    [
+      extra_applications: [
+        :logger,
+        :confex,
+        :runtime_tools,
+        :ecto,
+        :postgrex,
+        :ecto_paging,
+        :cowboy,
+        :httpoison,
+        :poison,
+        :phoenix,
+        :misc_random,
+        :eview,
+        :phoenix_ecto,
+        :bbmustache,
+        :earmark,
+        :pdf_generator
+      ],
+      mod: {Man, []}
+    ]
   end
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Dependencies can be Hex packages:
   #
@@ -47,34 +66,38 @@ defmodule Man.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:distillery, "~> 1.2"},
-     {:confex, "~> 2.0"},
-     {:ecto, "~> 2.1"},
-     {:postgrex, "~> 0.13.2"},
-     {:cowboy, "~> 1.1"},
-     {:httpoison, "~> 0.11.1"},
-     {:poison, "~> 3.1"},
-     {:phoenix, "~> 1.3.0-rc"},
-     {:eview, "~> 0.10.1"},
-     {:phoenix_ecto, "~> 3.2"},
-     {:nex_json_schema, "~> 0.6.0"},
-     {:logger_json, "~> 0.4.0"},
-     {:bbmustache, "~> 1.4"},
-     {:earmark, "~> 1.2"},
-     {:ecto_paging, "~> 0.6.1"},
-     {:pdf_generator, "~> 0.3.5"},
-     {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
-     {:dogma, ">= 0.1.12", only: [:dev, :test]},
-     {:credo, ">= 0.5.1", only: [:dev, :test]}]
+    [
+      {:distillery, "~> 1.4.0"},
+      {:confex, "~> 2.0"},
+      {:ecto, "~> 2.1"},
+      {:postgrex, "~> 0.13.2"},
+      {:cowboy, "~> 1.1"},
+      {:httpoison, "~> 0.11.1"},
+      {:poison, "~> 3.1"},
+      {:phoenix, "~> 1.3.0-rc"},
+      {:eview, "~> 0.12.2"},
+      {:phoenix_ecto, "~> 3.2"},
+      {:nex_json_schema, ">= 0.7.2"},
+      {:bbmustache, "~> 1.4"},
+      {:earmark, "~> 1.2"},
+      {:ecto_paging, "~> 0.6.1"},
+      {:pdf_generator, "~> 0.3.5"},
+      {:plug_logger_json, "~> 0.5"},
+      {:ecto_logger_json, "~> 0.1"},
+      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
+      {:credo, ">= 0.5.1", only: [:dev, :test], runtime: false}
+    ]
   end
 
   # Settings for publishing in Hex package manager:
   defp package do
-    [contributors: ["Nebo #15"],
-     maintainers: ["Nebo #15"],
-     licenses: ["LISENSE.md"],
-     links: %{github: "https://github.com/Nebo15/man.api"},
-     files: ~w(lib LICENSE.md mix.exs README.md)]
+    [
+      contributors: ["Nebo #15"],
+      maintainers: ["Nebo #15"],
+      licenses: ["LISENSE.md"],
+      links: %{github: "https://github.com/Nebo15/man.api"},
+      files: ~w(lib LICENSE.md mix.exs README.md)
+    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
@@ -84,8 +107,10 @@ defmodule Man.Mixfile do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-     "ecto.reset": ["ecto.drop", "ecto.setup"],
-     "test":       ["ecto.create --quiet", "ecto.migrate", "test"]]
+    [
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+    ]
   end
 end

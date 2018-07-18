@@ -4,28 +4,32 @@ defmodule Man.RepoTest do
   alias Man.Repo
 
   setup do
-    %{config: [
-      database: "db",
-      username: "name",
-      password: "pwd",
-      hostname: "host",
-      port: "port",
-    ]}
+    %{
+      config: [
+        database: "db",
+        username: "name",
+        password: "pwd",
+        hostname: "host",
+        port: "port"
+      ]
+    }
   end
 
   test "DATABASE_URL environment variable is overriding defaults", %{config: config} do
     System.put_env("DATABASE_URL", "postgres://my_user:password@pghost:1234/db_name")
+
     on_exit(fn ->
       System.delete_env("DATABASE_URL")
     end)
 
-    assert {:ok, [
-      username: "my_user",
-      password: "password",
-      database: "db_name",
-      hostname: "pghost",
-      port: 1234
-    ]} = Repo.init(Repo, config)
+    assert {:ok,
+            [
+              username: "my_user",
+              password: "password",
+              database: "db_name",
+              hostname: "pghost",
+              port: 1234
+            ]} = Repo.init(Repo, config)
   end
 
   test "raises when database name is not set", %{config: config} do
