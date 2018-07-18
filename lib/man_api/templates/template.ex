@@ -2,6 +2,8 @@ defmodule Man.Templates.Template do
   @moduledoc false
   use Ecto.Schema
 
+  import Ecto.Changeset
+
   schema "templates" do
     field(:title, :string)
     field(:description, :string)
@@ -16,5 +18,15 @@ defmodule Man.Templates.Template do
     end
 
     timestamps()
+  end
+
+  def changeset(%__MODULE__{} = template, attrs) do
+    template
+    |> cast(attrs, ~w(title description syntax body validation_schema)a)
+    |> cast_embed(:locales, with: &locale_changeset/2)
+  end
+
+  def locale_changeset(%Man.Templates.Template.Locale{} = locale, attrs) do
+    cast(locale, attrs, ~w(code params)a)
   end
 end
