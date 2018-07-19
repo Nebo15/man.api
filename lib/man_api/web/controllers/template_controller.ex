@@ -1,11 +1,12 @@
 defmodule Man.Web.TemplateController do
   @moduledoc false
+
   use Man.Web, :controller
-  alias Man.Templates.API
-  alias Man.Templates.Template
-  alias Man.Templates.Renderer
-  alias Plug.Conn
   alias Ecto.Paging
+  alias Man.Templates.API
+  alias Man.Templates.Renderer
+  alias Man.Templates.Template
+  alias Plug.Conn
 
   action_fallback(Man.Web.FallbackController)
 

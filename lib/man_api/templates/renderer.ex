@@ -1,8 +1,9 @@
 defmodule Man.Templates.Renderer do
   @moduledoc false
+
+  alias Man.Cache
   alias Man.Templates.Template
   alias Man.Templates.Template.Locale
-  alias Man.Cache
   alias NExJsonSchema.Validator
 
   @doc """

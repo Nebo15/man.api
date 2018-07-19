@@ -7,15 +7,15 @@ services:
   - docker
   - postgresql
 addons:
-  postgresql: "9.5"
+  postgresql: "9.6"
   apt:
     packages:
       - wkhtmltopdf
       - docker-ce
 elixir:
-  - 1.5.2
+  - 1.6.6
 otp_release:
-  - 20.1
+  - 20.3.8
 notifications:
   slack:
     rooms:
@@ -23,12 +23,10 @@ notifications:
     on_success: always
 env:
   global:
-    - Chart=man
     - MIX_ENV=test
-    - MAIN_BRANCHES="master develop preprod" # Branches on which you want version to be incremented
-    - RELEASE_BRANCH="develop"
-    # Docker
-    - DOCKER_HUB_ACCOUNT=edenlabllc
+    - DOCKER_NAMESPACE=edenlabllc
+    - APPS='{"man_api":"man"}'
+    - POSTGRES_VERSION=9.6
     - secure: "sK/G0Xf1vkNa+tYFU/zKqvuqupfd9xFRJoULXbC1THlOkP57W+Btt6pVRtKmn1L7ZTCf+QPHO/uNLuwzu5e7w5A4oQjiNDLQwVhsAa0C2w8LPW4ujJiBYec+Y0nGwZgreVVUAG5OAj3Cm2caibumN6u3Zxngu9vJ3uF/QyoFD9XYqVq48+o/ydabNieTgvHIhaw1vE0wF3kUzzqDAW2VgCtE1lFEd0wtuliUH9R0wztQSOqPIBD98ckJTxwFssFCLxQgpDYJvdHGi9uZxWeD5YLO7DAmZJDf6xs2QL90xUKivYBJ5qytbEoycTSVkgeYwF5bh0pdBno5u0qk5qPFeOi4jx+e8miugoLc2SMsTrH1G/dkkxbktNLB5cQhEPPxT6MWWFWuv9BZfp80slPDQ6W/e8+Q9Zzf9k8Si5nIPDRzBXSZ9FqUlJg7FtXBA9MCxUXHT4Hxjz6DDeO/fEHrRKuH1Ms6UVQBoQiMxsDpAvaTrcrQwV9AvJdVp1Txom3kotZ1UjJUTm9xQ8JVAlxEJ1pXYFVutMlKVOBcWLihl5SnbjdYW17Ilgu0QIVOuuy9mRtp1PXDC8uso5ZTegn3DhS/5UHP8DD+LcMkNLi74frozaAIGUFm0Lygx8vH/bkYG0+rqip5HoiHUldGOIN8G0mXJLMPNjLcArpr2tr46BE="
     # GitHub
     - secure:  "RgjL/L950UuNcbw8StxhXnAmjCD9npx1xaXyLAQivTOvrp2t8K6SIx6ch5ZrhYRFpRC3yuDmYUcWyVvnyELnaamunmw28dZ33cXyjFdfZHt20NPoxgGHLllDrCKL2vIQ1Fm0IYHeL+gVupDVn8sygXuBZ4sUvgv0TlfZFBkl27a2Llw6IlBXgKTsC9AKDRi9/IbuSEqMkh84VpdbXy1cSD7N/jVfHGRHES89gFBqjf6Pi7Zpp7/vIklQx//7vvEqxMqf0l3mxRc84oBoKORKr/0pmTLUCrvEIM8t8V6DUaiWbCkFY7ecSC5ipbThMoZNIcy90Usi3CUTLMHEap0NfLzpZb4eUJ+nGf2cBwpY+s43SnTPb4OQqGo91WEPPfWii+8dOZDHBbpeF5VaEw78LwpL4oHHt6fajVFGth1GbDbWnCzz5SGsk0hR9m5RPWHp1B2OisgTXZGHzuAaM3PkYkllkAZ2wGSbU2zru7dZ0upcUTO66BkIoLUB5E5fjEUhbcKM7n7o5OvzJrxi4+9N9xnFy5DKe39cXrysd+hEum9/w9C/wbDbMBbVvkDnyPXf8r2J9EGil0K9CQWs5MdOqJcFMRAhO5LD8dVBVonUfmPDyRo0U9E1YmJfIgZ/XliPVXwjQ1doIUKDiKdcOUYURJxNp9AUn7S2THbvLvrREjE="
@@ -37,29 +35,19 @@ branches:
   except:
     - /[0-9]*\.[0-9]*\.[0-9]*/
 before_install:
-  # Expose MQ and DB to Docker container
-  - sudo ./bin/ci/init-db.sh
-before_script:
-  # Run X server to for wkhtmltopdf
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-script:
-  # Increment version in mix.exs
-  - ./bin/ci/version-increment.sh || travis_terminate 1
-  # Install dependencies
-  - mix deps.get || travis_terminate 1
-  # Run all tests except pending ones
-  - ./bin/mix_tests.sh || travis_terminate 1
-  # Build Docker container
-  - ./bin/build.sh || travis_terminate 1
-  # Initialize DB for Docker container
-  - MIX_ENV=dev mix ecto.setup
-  # Run Docker container
-  - sudo ./bin/start.sh || travis_terminate 1
-  # Run acceptance tests on Docker container
-  - "CONTAINER_HTTP_HOST=localhost CONTAINER_HTTP_PORT=4000 mix test test/acceptance"
-  # Submit Docker container to Docker Hub and create GitHub Release by pushing tag with changelog
-  - ./bin/ci/push.sh || travis_terminate 1
-  # CD to Dev
-  - openssl aes-256-cbc -K $encrypted_7f8388603e86_key -iv $encrypted_7f8388603e86_iv -in eHealth-8110bd102a69.json.enc -out eHealth-8110bd102a69.json -d
-  - sudo ./bin/deploy.sh || travis_terminate 1
+  - sudo apt-get install jq
+  - curl -s https://raw.githubusercontent.com/edenlabllc/ci-utils/umbrella/init-db.sh -o init-db.sh; sudo sh ./init-db.sh
+jobs:
+  include:
+    - stage: "test and build"
+      # run tests
+      script:
+      - "export DISPLAY=:99.0"
+      - "sh -e /etc/init.d/xvfb start"
+      - (curl -s https://raw.githubusercontent.com/edenlabllc/ci-utils/umbrella/tests.sh -o tests.sh; bash ./tests.sh) || travis_terminate 1
+      # Build Docker container
+    - stage: "test and build"
+      # "Decrypting deploy key..."
+      script:
+      - openssl aes-256-cbc -K $encrypted_7f8388603e86_key -iv $encrypted_7f8388603e86_iv -in eHealth-8110bd102a69.json.enc -out eHealth-8110bd102a69.json -d
+      - (curl -s https://raw.githubusercontent.com/edenlabllc/ci-utils/umbrella/docker.sh -o docker.sh; bash ./docker.sh) || travis_terminate 1

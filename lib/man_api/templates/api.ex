@@ -2,11 +2,12 @@ defmodule Man.Templates.API do
   @moduledoc """
   The boundary for the TemplateAPI system.
   """
+
   import Ecto.{Query, Changeset}, warn: false
-  alias Man.Repo
-  alias Man.Templates.Template
   alias Ecto.Multi
   alias Ecto.Paging
+  alias Man.Repo
+  alias Man.Templates.Template
 
   @fields [:title, :description, :syntax, :body, :validation_schema, :labels]
   @required_fields [:title, :syntax, :body]

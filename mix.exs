@@ -1,14 +1,12 @@
 defmodule Man.Mixfile do
   use Mix.Project
 
-  @version "1.78.1"
-
   def project do
     [
       app: :man_api,
       package: package(),
-      version: @version,
-      elixir: "~> 1.5",
+      version: "0.1.0",
+      elixir: "~> 1.6",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix] ++ Mix.compilers(),
       build_embedded: Mix.env() == :prod,
@@ -26,24 +24,7 @@ defmodule Man.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [
-      extra_applications: [
-        :logger,
-        :confex,
-        :runtime_tools,
-        :ecto,
-        :postgrex,
-        :ecto_paging,
-        :cowboy,
-        :httpoison,
-        :poison,
-        :phoenix,
-        :misc_random,
-        :eview,
-        :phoenix_ecto,
-        :bbmustache,
-        :earmark,
-        :pdf_generator
-      ],
+      extra_applications: [:logger, :runtime_tools],
       mod: {Man, []}
     ]
   end
@@ -72,7 +53,7 @@ defmodule Man.Mixfile do
       {:ecto, "~> 2.1"},
       {:postgrex, "~> 0.13.2"},
       {:cowboy, "~> 1.1"},
-      {:httpoison, "~> 0.11.1"},
+      {:httpoison, "~> 1.2"},
       {:poison, "~> 3.1"},
       {:phoenix, "~> 1.3.0-rc"},
       {:eview, "~> 0.12.2"},
@@ -84,8 +65,8 @@ defmodule Man.Mixfile do
       {:pdf_generator, "~> 0.3.5"},
       {:plug_logger_json, "~> 0.5"},
       {:ecto_logger_json, "~> 0.1"},
-      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
-      {:credo, ">= 0.5.1", only: [:dev, :test], runtime: false}
+      {:excoveralls, "~> 0.8.1", only: [:dev, :test]},
+      {:credo, "~> 0.9.3", only: [:dev, :test]}
     ]
   end
 
