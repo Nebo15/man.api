@@ -24,7 +24,7 @@ defmodule Man.Web.TemplateControllerTest do
   end
 
   test "lists and filters all entries on index", %{conn: conn} do
-    assert [_] =
+    assert [_, _] =
              conn
              |> get(template_path(conn, :index))
              |> json_response(200)
@@ -33,7 +33,7 @@ defmodule Man.Web.TemplateControllerTest do
     %Template{id: id1} = FixturesFactory.create(:template)
     %Template{id: id2} = FixturesFactory.create(:template, title: "other title", labels: ["label/one", "label/two"])
 
-    assert [_, %{"id" => ^id1}, %{"id" => ^id2}] =
+    assert [_, _, %{"id" => ^id1}, %{"id" => ^id2}] =
              conn
              |> get(template_path(conn, :index))
              |> json_response(200)
@@ -61,27 +61,27 @@ defmodule Man.Web.TemplateControllerTest do
     %Template{id: id4} = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
     %Template{id: id5} = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
 
-    assert [_, %{"id" => ^id1}] =
+    assert [_, _, %{"id" => ^id1}] =
              conn
-             |> get(template_path(conn, :index), %{"limit" => 2})
+             |> get(template_path(conn, :index), %{"limit" => 3})
              |> json_response(200)
              |> Map.get("data")
 
-    assert [%{"id" => ^id3}, %{"id" => ^id4}] =
+    assert [%{"id" => ^id3}, %{"id" => ^id4}, _] =
              conn
-             |> get(template_path(conn, :index), %{"limit" => 2, "starting_after" => id2})
+             |> get(template_path(conn, :index), %{"limit" => 3, "starting_after" => id2})
              |> json_response(200)
              |> Map.get("data")
 
-    assert [%{"id" => ^id3}, %{"id" => ^id4}] =
+    assert [_, %{"id" => ^id3}, %{"id" => ^id4}] =
              conn
-             |> get(template_path(conn, :index), %{"limit" => 2, "ending_before" => id5})
+             |> get(template_path(conn, :index), %{"limit" => 3, "ending_before" => id5})
              |> json_response(200)
              |> Map.get("data")
 
-    assert [_, %{"id" => ^id1}] =
+    assert [_, _, %{"id" => ^id1}] =
              conn
-             |> get(template_path(conn, :index), %{"limit" => 2})
+             |> get(template_path(conn, :index), %{"limit" => 3})
              |> json_response(200)
              |> Map.get("data")
   end
