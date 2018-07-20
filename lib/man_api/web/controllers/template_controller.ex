@@ -2,23 +2,18 @@ defmodule Man.Web.TemplateController do
   @moduledoc false
 
   use Man.Web, :controller
-  alias Ecto.Paging
   alias Man.Templates.API
   alias Man.Templates.Renderer
   alias Man.Templates.Template
   alias Plug.Conn
+  alias Scrivener.Page
 
   action_fallback(Man.Web.FallbackController)
 
   def index(conn, params) do
-    paging = get_paging(params)
-
-    {templates, paging} =
-      params
-      |> Map.take(["title", "labels"])
-      |> API.list_templates(paging)
-
-    render(conn, "index.json", templates: templates, paging: paging)
+    with %Page{} = paging <- API.list_templates(params) do
+      render(conn, "index.json", templates: paging.entries, paging: paging)
+    end
   end
 
   def create(conn, %{"template" => template_params}) do
@@ -71,21 +66,6 @@ defmodule Man.Web.TemplateController do
       |> put_resp_content_type(format)
       |> send_resp(200, output)
     end
-  end
-
-  defp get_paging(params) do
-    limit = Map.get(params, "limit", 50)
-    limit = if limit > 50, do: 50, else: limit
-    starting_after = Map.get(params, "starting_after")
-    ending_before = Map.get(params, "ending_before")
-
-    %Paging{
-      limit: limit,
-      cursors: %Ecto.Paging.Cursors{
-        starting_after: starting_after,
-        ending_before: ending_before
-      }
-    }
   end
 
   defp get_header_or_param(conn, params, header, param) do

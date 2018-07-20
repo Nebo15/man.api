@@ -3,8 +3,7 @@ defmodule Man.Templates.APITest do
   alias Man.Templates.API
   alias Man.Templates.Template
   alias Man.FixturesFactory
-  alias Ecto.Paging
-  alias Ecto.Paging.Cursors
+  alias Scrivener.Page
 
   @create_attrs %{body: "some body", validation_schema: %{}, title: "some title"}
   @update_attrs %{body: "some updated body", validation_schema: %{}, title: "some title"}
@@ -12,19 +11,19 @@ defmodule Man.Templates.APITest do
 
   describe "list_templates/1" do
     test "returns all templates" do
-      assert {[_, _], _paging} = API.list_templates()
+      assert %Page{entries: [_, _]} = API.list_templates()
       template = FixturesFactory.create(:template)
-      assert {[_, _, ^template], _paging} = API.list_templates()
+      assert %Page{entries: [_, _, ^template]} = API.list_templates()
     end
 
     test "filters by title" do
       template1 = FixturesFactory.create(:template)
       template2 = FixturesFactory.create(:template, title: "other title")
 
-      assert {[_, _, ^template1, ^template2], _paging} = API.list_templates(%{"title" => nil})
-      assert {[], _paging} = API.list_templates(%{"title" => "unknown title"})
-      assert {[^template1], _paging} = API.list_templates(%{"title" => "some"})
-      assert {[^template2], _paging} = API.list_templates(%{"title" => "other"})
+      assert %Page{entries: [_, _, ^template1, ^template2]} = API.list_templates(%{"title" => nil})
+      assert %Page{entries: []} = API.list_templates(%{"title" => "unknown title"})
+      assert %Page{entries: [^template1]} = API.list_templates(%{"title" => "some"})
+      assert %Page{entries: [^template2]} = API.list_templates(%{"title" => "other"})
     end
 
     test "filters by labels" do
@@ -32,27 +31,23 @@ defmodule Man.Templates.APITest do
       template2 = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
       template3 = FixturesFactory.create(:template, labels: ["label/one", "label/three"])
 
-      assert {[_, _, ^template1, ^template2, ^template3], _paging} = API.list_templates(%{"labels" => nil})
-      assert {[], _paging} = API.list_templates(%{"labels" => "unknown label"})
-      assert {[^template2], _paging} = API.list_templates(%{"labels" => "label/two"})
-      assert {[^template2, ^template3], _paging} = API.list_templates(%{"labels" => "label/one"})
+      assert %Page{entries: [_, _, ^template1, ^template2, ^template3]} = API.list_templates(%{"labels" => nil})
+      assert %Page{entries: []} = API.list_templates(%{"labels" => "unknown label"})
+      assert %Page{entries: [^template2]} = API.list_templates(%{"labels" => "label/two"})
+      assert %Page{entries: [^template2, ^template3]} = API.list_templates(%{"labels" => "label/one"})
     end
 
     test "paginates results" do
-      template1 = FixturesFactory.create(:template)
-      template2 = FixturesFactory.create(:template)
-      template3 = FixturesFactory.create(:template)
-      template4 = FixturesFactory.create(:template)
-      template5 = FixturesFactory.create(:template)
+      template1 = FixturesFactory.create(:template, title: "test")
+      template2 = FixturesFactory.create(:template, title: "test")
+      template3 = FixturesFactory.create(:template, title: "test")
+      template4 = FixturesFactory.create(:template, title: "test")
 
-      assert {[_, _, ^template1], _paging} = API.list_templates(%{}, %Paging{limit: 3})
-      assert {[_, _, ^template1, ^template2], _paging} = API.list_templates(%{}, %Paging{limit: 4})
+      assert %Page{entries: [^template1, _, _]} = API.list_templates(%{"title" => "test", "page_size" => 3})
+      assert %Page{entries: [^template1, ^template2, _, _]} = API.list_templates(%{"title" => "test", "page_size" => 4})
 
-      assert {[^template3, ^template4], _paging} =
-               API.list_templates(%{}, %Paging{limit: 2, cursors: %Cursors{starting_after: template2.id}})
-
-      assert {[^template3, ^template4], _paging} =
-               API.list_templates(%{}, %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}})
+      assert %Page{entries: [^template3, ^template4]} =
+               API.list_templates(%{"title" => "test", "page" => 2, "page_size" => 2})
     end
 
     test "paginates with filters" do
@@ -62,29 +57,26 @@ defmodule Man.Templates.APITest do
       template4 = FixturesFactory.create(:template, labels: ["label/one"], title: "title four")
       template5 = FixturesFactory.create(:template, labels: ["label/one"], title: "title five")
 
-      assert {[^template3, ^template4], _paging} =
-               API.list_templates(%{"title" => "title"}, %Paging{
-                 limit: 2,
-                 cursors: %Cursors{ending_before: template5.id}
+      assert %Page{entries: [^template3, ^template4]} =
+               API.list_templates(%{"page_size" => 2, "page" => 2, "title" => "title"})
+
+      assert %Page{entries: []} = API.list_templates(%{"page_size" => 2, "page" => 2, "title" => "five"})
+
+      assert %Page{entries: [^template5]} = API.list_templates(%{"page_size" => 2, "title" => "five"})
+
+      assert %Page{entries: [^template3, ^template4]} =
+               API.list_templates(%{
+                 "page_size" => 2,
+                 "page" => 2,
+                 "labels" => "label/one"
                })
 
-      assert {[], _paging} =
-               API.list_templates(%{"title" => "five"}, %Paging{
-                 limit: 2,
-                 cursors: %Cursors{ending_before: template5.id}
+      assert %Page{entries: [^template3]} =
+               API.list_templates(%{
+                 "page_size" => 1,
+                 "page" => 2,
+                 "labels" => "label/two"
                })
-
-      assert {[^template5], _paging} =
-               API.list_templates(%{"title" => "five"}, %Paging{
-                 limit: 2,
-                 cursors: %Cursors{starting_after: template4.id}
-               })
-
-      paging = %Paging{limit: 2, cursors: %Cursors{ending_before: template5.id}}
-      assert {[^template3, ^template4], _paging} = API.list_templates(%{"labels" => "label/one"}, paging)
-
-      paging = %Paging{limit: 1, cursors: %Cursors{ending_before: template5.id}}
-      assert {[^template3], _paging} = API.list_templates(%{"labels" => "label/two"}, paging)
     end
   end
 

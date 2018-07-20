@@ -5,7 +5,6 @@ defmodule Man.Templates.API do
 
   import Ecto.{Query, Changeset}, warn: false
   alias Ecto.Multi
-  alias Ecto.Paging
   alias Man.Repo
   alias Man.Templates.Template
 
@@ -19,15 +18,31 @@ defmodule Man.Templates.API do
 
   ## Examples
 
-      iex> list_templates()
-      {[%Template{}, ...], %Ecto.Paging{}}
+      iex> params = %{"page_size" => "2", "page" => "1"}
+      iex> list_templates(params)
+      %Scrivener.Page{
+        entries: [
+          %Template{...},
+          %Template{...},
+        ],
+        page_number: 1,
+        page_size: 2,
+        total_entries: 3,
+        total_pages: 2
+      }
 
   """
-  def list_templates(conditions \\ %{}, %Paging{} = paging \\ %Paging{limit: 50}) do
+
+  def list_templates, do: list_templates(%{})
+
+  def list_templates(params) do
+    conditions = Map.take(params, ["title", "labels"])
+    page_params = Map.take(params, ["page", "page_size"])
+
     Template
     |> maybe_filter_title(conditions)
     |> maybe_filter_labels(conditions)
-    |> Repo.page(paging)
+    |> Repo.paginate(page_params)
   end
 
   defp maybe_filter_title(query, %{"title" => title}) when is_binary(title) do

@@ -58,6 +58,7 @@ defmodule Man.Mixfile do
       {:phoenix, "~> 1.3.0-rc"},
       {:eview, "~> 0.12.2"},
       {:phoenix_ecto, "~> 3.2"},
+      {:scrivener_ecto, "~> 1.0"},
       {:nex_json_schema, ">= 0.7.2"},
       {:bbmustache, "~> 1.4"},
       {:earmark, "~> 1.2"},
