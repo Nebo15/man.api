@@ -4,7 +4,11 @@ defmodule Man.Web.TemplateControllerTest do
   alias Man.FixturesFactory
 
   @update_attrs %{body: "some updated body", validation_schema: %{}, title: "some title"}
-  @replace_attrs %{body: "some replaced body", validation_schema: %{}, title: "some replaced title"}
+  @replace_attrs %{
+    body: "some replaced body",
+    validation_schema: %{},
+    title: "some replaced title"
+  }
   @invalid_attrs %{body: nil, validation_schema: nil, title: nil, labels: [1, 2, 3]}
   @empty_rendered_template "<div><h1></h1><h2></h2></div>"
   @validation_schema %{
@@ -31,6 +35,7 @@ defmodule Man.Web.TemplateControllerTest do
              |> Map.get("data")
 
     %Template{id: id1} = FixturesFactory.create(:template)
+
     %Template{id: id2} = FixturesFactory.create(:template, title: "other title", labels: ["label/one", "label/two"])
 
     assert [_, _, %{"id" => ^id1}, %{"id" => ^id2}] =
@@ -54,36 +59,33 @@ defmodule Man.Web.TemplateControllerTest do
              |> Map.get("data")
   end
 
-  test "paginates entries on index", %{conn: conn} do
-    %Template{id: id1} = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
-    %Template{id: id2} = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
-    %Template{id: id3} = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
-    %Template{id: id4} = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
-    %Template{id: id5} = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
+  test "paginates entries on pages", %{conn: conn} do
+    for _ <- 1..5 do
+      FixturesFactory.create(:template, title: "test")
+    end
 
-    assert [_, _, %{"id" => ^id1}] =
-             conn
-             |> get(template_path(conn, :index), %{"limit" => 3})
-             |> json_response(200)
-             |> Map.get("data")
+    page_size = 2
+    page = 2
 
-    assert [%{"id" => ^id3}, %{"id" => ^id4}, _] =
-             conn
-             |> get(template_path(conn, :index), %{"limit" => 3, "starting_after" => id2})
-             |> json_response(200)
-             |> Map.get("data")
+    resp =
+      conn
+      |> get(
+        template_path(conn, :index, %{
+          "page_size" => Integer.to_string(page_size),
+          "page" => Integer.to_string(page),
+          "title" => "test"
+        })
+      )
+      |> json_response(200)
 
-    assert [_, %{"id" => ^id3}, %{"id" => ^id4}] =
-             conn
-             |> get(template_path(conn, :index), %{"limit" => 3, "ending_before" => id5})
-             |> json_response(200)
-             |> Map.get("data")
+    assert resp["data"]
 
-    assert [_, _, %{"id" => ^id1}] =
-             conn
-             |> get(template_path(conn, :index), %{"limit" => 3})
-             |> json_response(200)
-             |> Map.get("data")
+    assert %{
+             "page_size" => ^page_size,
+             "page_number" => ^page,
+             "total_entries" => 5,
+             "total_pages" => 3
+           } = resp["paging"]
   end
 
   test "creates template and renders template when data is valid", %{conn: conn} do
@@ -133,7 +135,11 @@ defmodule Man.Web.TemplateControllerTest do
                    "entry" => "$.labels",
                    "entry_type" => "json_data_property",
                    "rules" => [
-                     %{"description" => "is invalid", "params" => ["strings_array"], "rule" => "cast"}
+                     %{
+                       "description" => "is invalid",
+                       "params" => ["strings_array"],
+                       "rule" => "cast"
+                     }
                    ]
                  },
                  %{
@@ -168,7 +174,11 @@ defmodule Man.Web.TemplateControllerTest do
                    "entry" => "$.locales",
                    "entry_type" => "json_data_property",
                    "rules" => [
-                     %{"description" => "contains duplicate fields", "params" => [], "rule" => ["unique"]}
+                     %{
+                       "description" => "contains duplicate fields",
+                       "params" => [],
+                       "rule" => ["unique"]
+                     }
                    ]
                  }
                ],
@@ -261,7 +271,12 @@ defmodule Man.Web.TemplateControllerTest do
   describe "renders mustache templates" do
     test "renders mustache templates in json format", %{conn: conn} do
       template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
-      conn = post(conn, template_path(conn, :render, template), %{"h1" => "some data", "h2" => "another data"})
+
+      conn =
+        post(conn, template_path(conn, :render, template), %{
+          "h1" => "some data",
+          "h2" => "another data"
+        })
 
       assert %{
                "body" => "<div><h1>some data</h1><h2>another data</h2></div>",
@@ -271,6 +286,7 @@ defmodule Man.Web.TemplateControllerTest do
 
     test "renders mustache templates in html format", %{raw_conn: conn} do
       template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+
       req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "text/html"}
       conn = post(conn, template_path(conn, :render, template), req_attrs)
       assert "<div><h1>some data</h1><h2>another data</h2></div>" == html_response(conn, 200)
@@ -278,6 +294,7 @@ defmodule Man.Web.TemplateControllerTest do
 
     test "renders mustache templates in PDF format", %{raw_conn: conn} do
       template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+
       req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "application/pdf"}
       conn = post(conn, template_path(conn, :render, template), req_attrs)
       assert <<37, 80, 68, 70, 45, 49, 46, 52, 10, _rest::binary>> = response(conn, 200)
@@ -285,6 +302,7 @@ defmodule Man.Web.TemplateControllerTest do
 
     test "renders mustache templates in PDF format set in Accept header", %{raw_conn: conn} do
       template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+
       req_attrs = %{"h1" => "some data", "h2" => "another data"}
 
       conn =
@@ -305,6 +323,7 @@ defmodule Man.Web.TemplateControllerTest do
 
       template = FixturesFactory.create(:template, syntax: "markdown", body: body)
       conn = post(conn, template_path(conn, :render, template), %{})
+
       assert %{"body" => "<p>  # Hello\n  world</p>\n", "params" => %{}} = json_response(conn, 200)
     end
 
@@ -325,7 +344,12 @@ defmodule Man.Web.TemplateControllerTest do
     test "in json format", %{conn: conn} do
       body = "<div><h1><%= @h1 %></h1><h2><%= @h2 %></h2></div>"
       template = FixturesFactory.create(:template, syntax: "iex", body: body)
-      conn = post(conn, template_path(conn, :render, template), %{"h1" => "some data", "h2" => "another data"})
+
+      conn =
+        post(conn, template_path(conn, :render, template), %{
+          "h1" => "some data",
+          "h2" => "another data"
+        })
 
       assert %{
                "body" => "<div><h1>some data</h1><h2>another data</h2></div>",
@@ -351,6 +375,7 @@ defmodule Man.Web.TemplateControllerTest do
 
   test "renders templates with missing attributes", %{conn: conn} do
     template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+
     conn = post(conn, template_path(conn, :render, template), %{})
     assert %{"body" => @empty_rendered_template} = json_response(conn, 200)
   end
@@ -369,6 +394,7 @@ defmodule Man.Web.TemplateControllerTest do
 
   test "returns error on unsupported format", %{raw_conn: conn} do
     template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+
     req_attrs = %{"h1" => "some data", "h2" => "another data", "format" => "some/format"}
     conn = post(conn, template_path(conn, :render, template), req_attrs)
 
@@ -382,7 +408,9 @@ defmodule Man.Web.TemplateControllerTest do
 
   test "validates template attributes with json schema", %{conn: conn} do
     body = "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>"
+
     template = FixturesFactory.create(:template, body: body, validation_schema: @validation_schema)
+
     conn = post(conn, template_path(conn, :render, template), %{"h2" => "another data"})
 
     assert %{
@@ -391,7 +419,11 @@ defmodule Man.Web.TemplateControllerTest do
                  "entry" => "$.h1",
                  "entry_type" => "json_data_property",
                  "rules" => [
-                   %{"description" => "required property h1 was not present", "params" => [], "rule" => "required"}
+                   %{
+                     "description" => "required property h1 was not present",
+                     "params" => [],
+                     "rule" => "required"
+                   }
                  ]
                }
              ],
@@ -433,6 +465,7 @@ defmodule Man.Web.TemplateControllerTest do
     ]
 
     template = FixturesFactory.create(:template, body: body, locales: locales)
+
     conn = post(conn, template_path(conn, :render, template), %{"h1" => "world", "locale" => "en_US"})
 
     assert %{
@@ -462,12 +495,15 @@ defmodule Man.Web.TemplateControllerTest do
     end)
 
     template = FixturesFactory.create(:template, body: "<div><h1>{{h1}}</h1><h2>{{h2}}</h2></div>")
+
     req_attrs = %{"h1" => "some data", "h2" => "another data"}
 
     conn = put_req_header(conn, "accept", "application/pdf")
 
     {time1, result1} = :timer.tc(fn -> post(conn, template_path(conn, :render, template), req_attrs) end)
+
     {time2, result2} = :timer.tc(fn -> post(conn, template_path(conn, :render, template), req_attrs) end)
+
     {time3, _result} = :timer.tc(fn -> post(conn, template_path(conn, :render, template), req_attrs) end)
 
     # More than in 10 times faster (~600x on my laptop, ~50x on Travis-CI)

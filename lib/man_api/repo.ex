@@ -5,7 +5,7 @@ defmodule Man.Repo do
   More info: https://hexdocs.pm/ecto/Ecto.Repo.html
   """
   use Ecto.Repo, otp_app: :man_api
-  use Ecto.Pagging.Repo
+  use Scrivener, page_size: 50, max_page_size: 100
 
   @doc """
   Dynamically loads the repository configuration from the environment variables.
