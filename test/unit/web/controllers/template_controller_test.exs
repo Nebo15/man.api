@@ -35,14 +35,16 @@ defmodule Man.Web.TemplateControllerTest do
              |> Map.get("data")
 
     %Template{id: id1} = FixturesFactory.create(:template)
-
     %Template{id: id2} = FixturesFactory.create(:template, title: "other title", labels: ["label/one", "label/two"])
 
-    assert [_, _, %{"id" => ^id1}, %{"id" => ^id2}] =
-             conn
-             |> get(template_path(conn, :index))
-             |> json_response(200)
-             |> Map.get("data")
+    response =
+      conn
+      |> get(template_path(conn, :index))
+      |> json_response(200)
+      |> Map.get("data")
+
+    assert Enum.find(response, fn %{"id" => id} -> id == id1 end)
+    assert Enum.find(response, fn %{"id" => id} -> id == id2 end)
 
     # Filter by title
     assert [%{"id" => ^id1}] =
