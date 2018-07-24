@@ -20,7 +20,9 @@ defmodule Man.Templates.APITest do
       template1 = FixturesFactory.create(:template)
       template2 = FixturesFactory.create(:template, title: "other title")
 
-      assert %Page{entries: [_, _, ^template1, ^template2]} = API.list_templates(%{"title" => nil})
+      result = API.list_templates(%{"title" => nil})
+      assert template1 == Enum.find(result.entries, fn %{id: id} -> id == template1.id end)
+      assert template2 == Enum.find(result.entries, fn %{id: id} -> id == template2.id end)
       assert %Page{entries: []} = API.list_templates(%{"title" => "unknown title"})
       assert %Page{entries: [^template1]} = API.list_templates(%{"title" => "some"})
       assert %Page{entries: [^template2]} = API.list_templates(%{"title" => "other"})
