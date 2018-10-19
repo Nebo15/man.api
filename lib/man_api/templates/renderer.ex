@@ -19,7 +19,7 @@ defmodule Man.Templates.Renderer do
 
   """
   def render_template(%Template{} = template, attrs) do
-    cache_pdf? = Confex.get(:man_api, :cache_pdf_output, false)
+    cache_pdf? = Confex.get_env(:man_api, :cache_pdf_output, false)
 
     with :ok <- validate_attrs(template, attrs),
          {:ok, localized_attrs} <- localize_attrs(template, attrs),

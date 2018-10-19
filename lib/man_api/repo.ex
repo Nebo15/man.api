@@ -4,6 +4,7 @@ defmodule Man.Repo do
 
   More info: https://hexdocs.pm/ecto/Ecto.Repo.html
   """
+  alias Confex.Resolver
   use Ecto.Repo, otp_app: :man_api
   use Scrivener, page_size: 50, max_page_size: 100
 
@@ -12,7 +13,7 @@ defmodule Man.Repo do
   """
   def init(_, config) do
     url = System.get_env("DATABASE_URL")
-    config = if url, do: Ecto.Repo.Supervisor.parse_url(url), else: Confex.process_env(config)
+    config = if url, do: Ecto.Repo.Supervisor.parse_url(url), else: Resolver.resolve!(config)
 
     unless config[:database] do
       raise "Set DB_NAME environment variable!"

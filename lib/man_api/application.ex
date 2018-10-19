@@ -3,6 +3,7 @@ defmodule Man do
   This is an entry point of Man application.
   """
   use Application
+  alias Confex.Resolver
   alias Man.Web.Endpoint
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
@@ -38,6 +39,6 @@ defmodule Man do
   # Loads configuration in `:on_init` callbacks and replaces `{:system, ..}` tuples via Confex
   @doc false
   def load_from_system_env(config) do
-    {:ok, Confex.process_env(config)}
+    {:ok, Resolver.resolve(config)}
   end
 end

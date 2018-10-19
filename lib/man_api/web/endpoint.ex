@@ -2,6 +2,7 @@ defmodule Man.Web.Endpoint do
   @moduledoc """
   Phoenix Endpoint for Man application.
   """
+  alias Confex.Resolver
   use Phoenix.Endpoint, otp_app: :man_api
 
   # Allow acceptance tests to run in concurrent mode
@@ -33,7 +34,7 @@ defmodule Man.Web.Endpoint do
   and must return the updated configuration.
   """
   def load_from_system_env(config) do
-    config = Confex.process_env(config)
+    config = Resolver.resolve!(config)
 
     unless config[:secret_key_base] do
       raise "Set SECRET_KEY environment variable!"

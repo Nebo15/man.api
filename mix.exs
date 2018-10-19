@@ -49,7 +49,7 @@ defmodule Man.Mixfile do
   defp deps do
     [
       {:distillery, "~> 1.4.0"},
-      {:confex, "~> 2.0"},
+      {:confex, "~> 3.2"},
       {:ecto, "~> 2.1"},
       {:postgrex, "~> 0.13.2"},
       {:cowboy, "~> 1.1"},
