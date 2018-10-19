@@ -28,11 +28,10 @@ defmodule Man.Web.TemplateControllerTest do
   end
 
   test "lists and filters all entries on index", %{conn: conn} do
-    assert [_, _] =
-             conn
-             |> get(template_path(conn, :index))
-             |> json_response(200)
-             |> Map.get("data")
+    response =
+      conn
+      |> get(template_path(conn, :index))
+      |> json_response(200)
 
     %Template{id: id1} = FixturesFactory.create(:template)
     %Template{id: id2} = FixturesFactory.create(:template, title: "other title", labels: ["label/one", "label/two"])

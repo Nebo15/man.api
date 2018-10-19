@@ -26,6 +26,8 @@ use Mix.Config
 
 config :man_api, ecto_repos: [Man.Repo]
 
+config :man_api, auth_host: {:system, "AUTH_HOST", "https://localhost"}
+
 # Configure your database
 config :man_api, Man.Repo,
   adapter: Ecto.Adapters.Postgres,

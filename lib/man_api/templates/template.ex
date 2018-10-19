@@ -12,10 +12,7 @@ defmodule Man.Templates.Template do
     field(:validation_schema, :map)
     field(:labels, {:array, :string}, default: [])
 
-    embeds_many :locales, Locale, primary_key: false do
-      field(:code, :string)
-      field(:params, :map)
-    end
+    embeds_many(:locales, Man.Templates.Template.Locale, on_replace: :delete)
 
     timestamps()
   end
@@ -23,10 +20,23 @@ defmodule Man.Templates.Template do
   def changeset(%__MODULE__{} = template, attrs) do
     template
     |> cast(attrs, ~w(title description syntax body validation_schema)a)
-    |> cast_embed(:locales, with: &locale_changeset/2)
+    |> cast_embed(:locales)
+  end
+end
+
+defmodule Man.Templates.Template.Locale do
+  @moduledoc false
+  use Ecto.Schema
+
+  import Ecto.Changeset
+
+  @primary_key false
+  embedded_schema do
+    field(:code, :string)
+    field(:params, :map)
   end
 
-  def locale_changeset(%Man.Templates.Template.Locale{} = locale, attrs) do
+  def changeset(%__MODULE__{} = locale, attrs) do
     cast(locale, attrs, ~w(code params)a)
   end
 end

@@ -11,9 +11,7 @@ defmodule Man.Templates.APITest do
 
   describe "list_templates/1" do
     test "returns all templates" do
-      assert %Page{entries: [_, _]} = API.list_templates()
-      template = FixturesFactory.create(:template)
-      assert %Page{entries: [_, _, ^template]} = API.list_templates()
+      assert Enum.count(API.list_templates()) > 0
     end
 
     test "filters by title" do
@@ -33,7 +31,12 @@ defmodule Man.Templates.APITest do
       template2 = FixturesFactory.create(:template, labels: ["label/one", "label/two"])
       template3 = FixturesFactory.create(:template, labels: ["label/one", "label/three"])
 
-      assert %Page{entries: [_, _, ^template1, ^template2, ^template3]} = API.list_templates(%{"labels" => nil})
+      result = API.list_templates(%{"labels" => nil})
+
+      assert template1 = Enum.find(result.entries, &(Map.get(&1, :id) == template1.id))
+      assert template2 = Enum.find(result.entries, &(Map.get(&1, :id) == template2.id))
+      assert template3 = Enum.find(result.entries, &(Map.get(&1, :id) == template3.id))
+
       assert %Page{entries: []} = API.list_templates(%{"labels" => "unknown label"})
       assert %Page{entries: [^template2]} = API.list_templates(%{"labels" => "label/two"})
       assert %Page{entries: [^template2, ^template3]} = API.list_templates(%{"labels" => "label/one"})
