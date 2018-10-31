@@ -14,7 +14,7 @@ defmodule Man.Repo.Migrations.DsEmailTemplate do
         "syntax" => "iex",
         "locales" => [%{"code" => "uk_UA", "params" => %{}}],
         "body" =>
-          "<!DOCTYPE html><html>Invalid signed content with id was marked as valid: <%= invalid_content_id %></html>"
+          "<!DOCTYPE html><html>Invalid signed content with id was marked as valid: <%= @invalid_content_id %></html>"
       },
       ~w(id title description syntax body)a
     )
