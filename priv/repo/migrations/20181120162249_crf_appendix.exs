@@ -6,7 +6,7 @@ defmodule Man.Repo.Migrations.CrfAppendix do
   import Ecto.Changeset
 
   def change do
-    crf_body = File.read!(Application.app_dir(:man_api, "priv/static"), "/CRPF_appendix.html.eex")
+    crf_body = File.read!(Application.app_dir(:man_api, "priv/static/CRPF_appendix.html.eex"))
 
     %Template{}
     |> cast(
