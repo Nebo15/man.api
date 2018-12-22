@@ -30,7 +30,7 @@ RUN apk add --no-cache \
 
 RUN apk add wkhtmltopdf \
       --update-cache \
-      --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
+      --repository http://dl-3.alpinelinux.org/alpine/edge/community/
 
 WORKDIR /app
 
