@@ -3,7 +3,7 @@ use Mix.Releases.Config,
   default_environment: :default
 
 environment :default do
-  set(pre_start_hook: "bin/hooks/pre-start.sh")
+  set(pre_start_hooks: "bin/hooks/")
   set(dev_mode: false)
   set(include_erts: true)
   set(include_src: false)
@@ -20,7 +20,8 @@ release :man_api do
 
   set(
     applications: [
-      man: :permanent
+      :runtime_tools,
+      man_api: :permanent
     ]
   )
 end

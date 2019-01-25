@@ -1,9 +1,11 @@
 %{
   configs: [
     %{
+      color: true,
       name: "default",
       files: %{
-        included: ["lib/"]
+        included: ["apps/*/lib/*"],
+        excluded: ["apps/*/lib/tasks/tasks.ex"]
       },
       checks: [
         {Credo.Check.Design.TagTODO, exit_status: 0},
