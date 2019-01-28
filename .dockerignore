@@ -34,5 +34,4 @@ coveralls.json
 .travis.yml
 bin/ci
 bin/build.sh
-bin/install-git-hooks.sh
 bin/start.sh
