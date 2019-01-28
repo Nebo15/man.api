@@ -8,6 +8,12 @@ use Mix.Config
 # configure all applications here, we prefer to delegate
 # back to each application for organization purposes.
 
+# Configures Elixir's Logger
+config :logger, :console,
+  format: "$message\n",
+  handle_otp_reports: true,
+  level: :info
+
 config :git_ops,
   mix_project: Man.MixProject,
   changelog_file: "CHANGELOG.md",
